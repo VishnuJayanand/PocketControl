@@ -1,4 +1,4 @@
-package com.droidlabs.moneycontrol;
+package com.droidlabs.pocketcontrol;
 
 import org.junit.Test;
 
