@@ -1,4 +1,4 @@
-package com.droidlabs.moneycontrol;
+package com.droidlabs.pocketcontrol;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
