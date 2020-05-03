@@ -26,3 +26,8 @@ Our plan for the week of 04.05 until 10.05 is as follows:
 - Implement the basic set of screens in the application;
 - Implement a basic top navigation menu;
 - Design the wireframes for the application;
+
+## 4. Agenda for TA meeting:
+- Provide updates regarding the project progress: basic setup and working configuration.
+- Discuss wireframes and necessary app screens
+- Questions related to class diagrams
