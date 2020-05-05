@@ -77,10 +77,13 @@ public class DBHelper extends SQLiteOpenHelper {
             "create table " + TransactionTableContract.TABLE_NAME + "(" +
                 TransactionTableContract.ID_COL + " INTEGER primary key autoincrement," +
                 TransactionTableContract.VALUE_COL + " REAL not null," +
-                TransactionTableContract.TEXT_NOTE_COL + " TEXT," +
+                TransactionTableContract.TEXT_NOTE_COL + " TEXT);"
+                    /*
                 TransactionTableContract.CATEGORY_COL + " INTEGER," +
                 " foreign key (" + TransactionTableContract.CATEGORY_COL + ") references " +
                 CategoryTableContract.TABLE_NAME + "(" + CategoryTableContract.ID_COL + "));"
+                     */
+
         );
     }
 
