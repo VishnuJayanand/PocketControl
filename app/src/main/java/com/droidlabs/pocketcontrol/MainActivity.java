@@ -2,13 +2,10 @@ package com.droidlabs.pocketcontrol;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-
-import java.sql.SQLData;
 
 /**
  * Main activity of the app.
@@ -21,9 +18,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
-        DBHelper _db = new DBHelper(this);
+        DBHelper dbHelper = new DBHelper(this);
 
-        SQLiteDatabase db = _db.getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         checkForTables(db);
 
@@ -32,7 +29,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void checkForTables(SQLiteDatabase db){
+    /**
+     * Prints all the tables in the database.
+     * @param db database instance.
+     */
+    private void checkForTables(final SQLiteDatabase db) {
 
         String sql = "SELECT name FROM sqlite_master WHERE type='table'";
         Cursor mCursor = db.rawQuery(sql, null);

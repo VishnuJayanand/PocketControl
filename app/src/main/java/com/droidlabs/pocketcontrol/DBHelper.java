@@ -9,9 +9,7 @@ import androidx.annotation.Nullable;
 /**
  * Helper class for DB management.
  */
-public class DBHelper extends SQLiteOpenHelper {
-
-    private SQLiteDatabase db;
+public final class DBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "PocketControl.db";
     private static final int DB_VERSION = 1;
@@ -49,73 +47,98 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String TRANSACTION_IS_RECURRING_COL = "is_recurring";
     private static final String TRANSACTION_RECURRING_INTERVAL_DAYS_COL = "recurring_interval_days";
 
-    public DBHelper(@Nullable Context context) {
+    /**
+     * Constructor for DBHelper.
+     * @param context context to be passed. Normally "this" from MainActivity
+     */
+    public DBHelper(final @Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-        db = getWritableDatabase();
+        SQLiteDatabase privateDb = getWritableDatabase();
     }
 
+    /**
+     * Initializes the database tables.
+     * @param db instance of SQLiteDatabase
+     */
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(final SQLiteDatabase db) {
 
         db.execSQL(
-                "CREATE TABLE " + ICON_TABLE_NAME + "("
-                        + ICON_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                        + ICON_NAME_COL+ " TEXT NOT NULL,"
-                        + ICON_COLOR_COL + " TEXT)"
+            "CREATE TABLE " + ICON_TABLE_NAME + "("
+                + ICON_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + ICON_NAME_COL + " TEXT NOT NULL,"
+                + ICON_COLOR_COL + " TEXT)"
         );
 
         db.execSQL(
-                "CREATE TABLE " + CURRENCY_TABLE_NAME + "("
-                        + CURRENCY_THREE_LETTER_CODE_COL + " CHAR(3) PRIMARY KEY,"
-                        + CURRENCY_IS_DEFAULT_COL + " BOOLEAN,"
-                        + CURRENCY_TO_DEFAULT_RATE_COL + " REAL)"
+            "CREATE TABLE " + CURRENCY_TABLE_NAME + "("
+                + CURRENCY_THREE_LETTER_CODE_COL + " CHAR(3) PRIMARY KEY,"
+                + CURRENCY_IS_DEFAULT_COL + " BOOLEAN,"
+                + CURRENCY_TO_DEFAULT_RATE_COL + " REAL)"
         );
 
         db.execSQL(
-                "CREATE TABLE " + PAYMENT_MODE_TABLE_NAME + "("
-                        + PAYMENT_MODE_NAME_COL + " TEXT PRIMARY KEY,"
-                        + PAYMENT_MODE_ICON_COL + " INTEGER,"
-                        + buildForeignKeyFragment(PAYMENT_MODE_ICON_COL, ICON_TABLE_NAME, ICON_ID_COL) + ")"
+            "CREATE TABLE " + PAYMENT_MODE_TABLE_NAME + "("
+                + PAYMENT_MODE_NAME_COL + " TEXT PRIMARY KEY,"
+                + PAYMENT_MODE_ICON_COL + " INTEGER,"
+                + buildForeignKeyFragment(PAYMENT_MODE_ICON_COL, ICON_TABLE_NAME, ICON_ID_COL) + ")"
         );
 
         db.execSQL(
-                "CREATE TABLE " + CATEGORY_TABLE_NAME + "("
-                        + CATEGORY_NAME_COL + " TEXT PRIMARY KEY,"
-                        + CATEGORY_ICON_COL + " INTEGER,"
-                        + buildForeignKeyFragment(CATEGORY_ICON_COL, ICON_TABLE_NAME, ICON_ID_COL) + ")"
+            "CREATE TABLE " + CATEGORY_TABLE_NAME + "("
+                + CATEGORY_NAME_COL + " TEXT PRIMARY KEY,"
+                + CATEGORY_ICON_COL + " INTEGER,"
+                + buildForeignKeyFragment(CATEGORY_ICON_COL, ICON_TABLE_NAME, ICON_ID_COL) + ")"
         );
 
         db.execSQL(
-                "CREATE TABLE " + BUDGET_TABLE_NAME + "("
-                        + BUDGET_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                        + BUDGET_MAX_AMOUNT_COL + " REAL NOT NULL,"
-                        + BUDGET_DESCRIPTION_COL + " TEXT,"
-                        + BUDGET_IS_GLOBAL_COL + " BOOLEAN,"
-                        + BUDGET_CATEGORY_COL + " TEXT,"
-                        + buildForeignKeyFragment(BUDGET_CATEGORY_COL, CATEGORY_TABLE_NAME, CATEGORY_NAME_COL) + ")"
+            "CREATE TABLE " + BUDGET_TABLE_NAME + "("
+                + BUDGET_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + BUDGET_MAX_AMOUNT_COL + " REAL NOT NULL,"
+                + BUDGET_DESCRIPTION_COL + " TEXT,"
+                + BUDGET_IS_GLOBAL_COL + " BOOLEAN,"
+                + BUDGET_CATEGORY_COL + " TEXT,"
+                + buildForeignKeyFragment(BUDGET_CATEGORY_COL, CATEGORY_TABLE_NAME, CATEGORY_NAME_COL) + ")"
         );
 
         db.execSQL(
-                "CREATE TABLE " + TRANSACTION_TABLE_NAME + "("
-                        + TRANSACTION_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                        + TRANSACTION_AMOUNT_COL + " REAL NOT NULL,"
-                        + TRANSACTION_TEXT_NOTE_COL + " TEXT,"
-                        + TRANSACTION_CATEGORY_COL + " TEXT,"
-                        + TRANSACTION_IS_RECURRING_COL + " BOOLEAN,"
-                        + TRANSACTION_RECURRING_INTERVAL_DAYS_COL + " INTEGER,"
-                        + buildForeignKeyFragment(TRANSACTION_CATEGORY_COL, CATEGORY_TABLE_NAME, CATEGORY_NAME_COL) + ")"
+            "CREATE TABLE " + TRANSACTION_TABLE_NAME + "("
+                + TRANSACTION_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TRANSACTION_AMOUNT_COL + " REAL NOT NULL,"
+                + TRANSACTION_TEXT_NOTE_COL + " TEXT,"
+                + TRANSACTION_CATEGORY_COL + " TEXT,"
+                + TRANSACTION_IS_RECURRING_COL + " BOOLEAN,"
+                + TRANSACTION_RECURRING_INTERVAL_DAYS_COL + " INTEGER,"
+                + buildForeignKeyFragment(TRANSACTION_CATEGORY_COL, CATEGORY_TABLE_NAME, CATEGORY_NAME_COL) + ")"
         );
     }
 
+    /**
+     * Upgrade method for the database. Please read super for documentation.
+     * @param db database instance
+     * @param oldVersion old version of the database
+     * @param newVersion new version of the database
+     */
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS icons");
         db.execSQL("DROP TABLE IF EXISTS categories");
         db.execSQL("DROP TABLE IF EXISTS transactions");
         onCreate(db);
     }
 
-    private String buildForeignKeyFragment(String fkCol, String targetTable, String targetTableIdCol) {
+    /**
+     * Builds an SQL command to add a foreign key.
+     * @param fkCol column to be used as a foreign key.
+     * @param targetTable name of the target table.
+     * @param targetTableIdCol name of the primary key column in the target table.
+     * @return SQL command for foreign keys.
+     */
+    private String buildForeignKeyFragment(
+        final String fkCol,
+        final String targetTable,
+        final String targetTableIdCol
+    ) {
         return "FOREIGN KEY(" + fkCol + ") REFERENCES " + targetTable + "(" + targetTableIdCol + ")";
     }
 }
