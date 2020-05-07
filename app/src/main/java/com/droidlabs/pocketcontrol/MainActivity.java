@@ -7,10 +7,8 @@ import android.os.Bundle;
  * Main activity of the app.
  */
 public class MainActivity extends AppCompatActivity {
-    /**
-     * DBHelper instance
-     */
-    DBHelper db;
+
+    private DBHelper db;
 
     /**
      * Method to create an app instance.

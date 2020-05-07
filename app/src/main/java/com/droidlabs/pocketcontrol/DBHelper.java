@@ -11,44 +11,17 @@ import androidx.annotation.Nullable;
  */
 public class DBHelper extends SQLiteOpenHelper {
 
-    /**
-     * DB name.
-     */
     private static final String DB_NAME = "PocketControl.db";
-
-    /**
-     * DB version.
-     */
     private static final int DB_VERSION = 1;
 
-    /**
-     * Transaction Table Contract.
-     */
     private final class TransactionTableContract {
-        /**
-         * Table name for TransactionTable.
-         */
+
         private static final String TABLE_NAME = "transactions_table";
-
-        /**
-         * ID Field.
-         */
         private static final String ID_COL = "id";
-
-        /**
-         * Transaction Table Contract
-         */
         private static final String VALUE_COL = "value";
-
-        /**
-         * Transaction Table Contract
-         */
         private static final String TEXT_NOTE_COL = "text_note";
+        // private static final String CATEGORY_COL = "category";
 
-        /**
-         * Transaction Table Contract
-         */
-        private static final String CATEGORY_COL = "category";
     }
 
     private final class CategoryTableContract {
