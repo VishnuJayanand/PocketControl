@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Pocket Control</string>
+    <string name="add_transaction">New Transaction</string>
+    <string name="hint_transaction">Transaction description...</string>
+    <string name="button_save">Save</string>
+    <string name="empty_not_saved">Transaction not saved because it is empty.</string>
 </resources>
