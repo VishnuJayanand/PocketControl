@@ -1,4 +1,4 @@
-package com.droidlabs.pocketcontrol;
+package com.droidlabs.pocketcontrol.db.transaction;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,23 +8,25 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.droidlabs.pocketcontrol.R;
+
 import java.util.List;
 
 public class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.TransactionViewHolder> {
 
     class TransactionViewHolder extends RecyclerView.ViewHolder {
-        private final TextView wordItemView;
+        private final TextView transactionItemView;
 
         private TransactionViewHolder(View itemView) {
             super(itemView);
-            wordItemView = itemView.findViewById(R.id.textView);
+            transactionItemView = itemView.findViewById(R.id.textView);
         }
     }
 
     private final LayoutInflater mInflater;
     private List<Transaction> mTransactions; // Cached copy of transactions
 
-    TransactionListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+    public TransactionListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
 
     @Override
     public TransactionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,14 +38,14 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     public void onBindViewHolder(TransactionViewHolder holder, int position) {
         if (mTransactions != null) {
             Transaction current = mTransactions.get(position);
-            holder.wordItemView.setText(current.getTextNote());
+            holder.transactionItemView.setText(current.getTextNote());
         } else {
             // Covers the case of data not being ready yet.
-            holder.wordItemView.setText("No Transaction");
+            holder.transactionItemView.setText("No Transaction");
         }
     }
 
-    void setTransactions(List<Transaction> transactions){
+    public void setTransactions(List<Transaction> transactions){
         mTransactions = transactions;
         notifyDataSetChanged();
     }

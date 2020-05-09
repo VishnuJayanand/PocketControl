@@ -1,8 +1,10 @@
-package com.droidlabs.pocketcontrol;
+package com.droidlabs.pocketcontrol.db.transaction;
 
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+
+import com.droidlabs.pocketcontrol.PocketControlDB;
 
 import java.util.List;
 

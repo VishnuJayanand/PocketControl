@@ -10,20 +10,26 @@
         android:id="@+id/edit_transaction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/min_height"
+        android:layout_margin="@dimen/big_padding"
+        android:layout_marginTop="92dp"
         android:fontFamily="sans-serif-light"
         android:hint="@string/hint_transaction"
         android:inputType="textAutoComplete"
-        android:layout_margin="@dimen/big_padding"
-        android:textSize="18sp" />
+        android:minHeight="@dimen/min_height"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
 
     <Button
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/big_padding"
+        android:layout_marginTop="108dp"
         android:background="@color/colorPrimary"
         android:text="@string/button_save"
-        android:layout_margin="@dimen/big_padding"
-        android:textColor="@color/buttonLabel" />
+        android:textColor="@color/buttonLabel"
+        app:layout_constraintTop_toBottomOf="@+id/edit_transaction"
+        tools:layout_editor_absoluteX="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

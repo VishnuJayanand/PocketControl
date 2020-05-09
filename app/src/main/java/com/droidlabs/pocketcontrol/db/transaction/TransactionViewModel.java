@@ -1,4 +1,4 @@
-package com.droidlabs.pocketcontrol;
+package com.droidlabs.pocketcontrol.db.transaction;
 
 import android.app.Application;
 
@@ -18,7 +18,7 @@ public class TransactionViewModel extends AndroidViewModel {
         mAllTransactions = mRepository.getAllTransactions();
     }
 
-    LiveData<List<Transaction>> getAllTransactions() {
+    public LiveData<List<Transaction>> getAllTransactions() {
         return mAllTransactions;
     }
 

@@ -8,6 +8,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

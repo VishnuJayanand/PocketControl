@@ -1,4 +1,4 @@
-package com.droidlabs.pocketcontrol;
+package com.droidlabs.pocketcontrol.db.transaction;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
