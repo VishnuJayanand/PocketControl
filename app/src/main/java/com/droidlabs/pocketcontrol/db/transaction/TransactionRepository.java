@@ -4,7 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.droidlabs.pocketcontrol.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.PocketControlDB;
 
 import java.util.List;
 

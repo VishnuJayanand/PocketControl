@@ -1,4 +1,4 @@
-package com.droidlabs.pocketcontrol;
+package com.droidlabs.pocketcontrol.db;
 
 import android.content.Context;
 
@@ -27,10 +27,10 @@ public abstract class PocketControlDB extends RoomDatabase {
 
     private static volatile PocketControlDB INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
-    static final ExecutorService databaseWriteExecutor =
+    public static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+    public static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
@@ -51,7 +51,7 @@ public abstract class PocketControlDB extends RoomDatabase {
         }
     };
 
-    static PocketControlDB getDatabase(final Context context) {
+    public static PocketControlDB getDatabase(final Context context) {
         if (INSTANCE == null) {
             synchronized (PocketControlDB.class) {
                 if (INSTANCE == null) {

@@ -1,30 +1,24 @@
 package com.droidlabs.pocketcontrol;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
-import com.droidlabs.pocketcontrol.db.transaction.Transaction;
-import com.droidlabs.pocketcontrol.db.transaction.TransactionListAdapter;
-import com.droidlabs.pocketcontrol.db.transaction.TransactionViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.fragment.app.Fragment;
+import android.view.MenuItem;
 
-import java.util.List;
+import com.droidlabs.pocketcontrol.ui.budget.BudgetFragment;
+import com.droidlabs.pocketcontrol.ui.categories.CategoriesFragment;
+import com.droidlabs.pocketcontrol.ui.home.HomeFragment;
+import com.droidlabs.pocketcontrol.ui.settings.SettingsFragment;
+import com.droidlabs.pocketcontrol.ui.transaction.TransactionFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
  * Main activity of the app.
  */
 public class MainActivity extends AppCompatActivity {
-
-    private TransactionViewModel mTransactionViewModel;
-    public static final int NEW_WORD_ACTIVITY_REQUEST_CODE = 1;
 
     /**
      * Method to create an app instance.
@@ -34,41 +28,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        final TransactionListAdapter adapter = new TransactionListAdapter(this);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-        mTransactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
-
-        mTransactionViewModel.getAllTransactions().observe(this, new Observer<List<Transaction>>() {
-            @Override
-            public void onChanged(List<Transaction> transactions) {
-                adapter.setTransactions(transactions);
-            }
-        });
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, NewTransactionActivitiy.class);
-                startActivityForResult(intent, NEW_WORD_ACTIVITY_REQUEST_CODE);
-            }
-        });
+        getSupportFragmentManager().beginTransaction().replace(
+                R.id.fragment_container, new HomeFragment()).commit();
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(
+                final @NonNull MenuItem menuItem) {
+            Fragment selecetedFragment = null;
 
-        if (requestCode == NEW_WORD_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Transaction transaction = new Transaction(data.getStringExtra(NewTransactionActivitiy.EXTRA_REPLY), 700);
-            mTransactionViewModel.insert(transaction);
-        } else {
-            Toast.makeText(
-                    getApplicationContext(),
-                    R.string.empty_not_saved,
-                    Toast.LENGTH_LONG).show();
+            switch (menuItem.getItemId()) {
+                case R.id.nav_budget:
+                    selecetedFragment = new BudgetFragment();
+                    break;
+                case R.id.nav_categories:
+                    selecetedFragment = new CategoriesFragment();
+                    break;
+                case R.id.nav_home:
+                    selecetedFragment = new HomeFragment();
+                    break;
+                case R.id.nav_settings:
+                    selecetedFragment = new SettingsFragment();
+                    break;
+                case R.id.nav_transaction:
+                    selecetedFragment = new TransactionFragment();
+                    break;
+                default :
+                    break;
+            }
+
+            getSupportFragmentManager().beginTransaction().replace(
+                    R.id.fragment_container, selecetedFragment).commit();
+
+            return true;
         }
-    }
+    };
 }
