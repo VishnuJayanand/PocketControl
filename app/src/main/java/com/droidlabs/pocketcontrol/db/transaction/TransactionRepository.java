@@ -10,22 +10,34 @@ import java.util.List;
 
 public class TransactionRepository {
 
-    private TransactionDao mTransactionDao;
-    private LiveData<List<Transaction>> mAllTransactions;
+    private TransactionDao transactionDao;
+    private LiveData<List<Transaction>> allTransactions;
 
-    TransactionRepository(Application application) {
+    /**
+     * Transaction repository constructor.
+     * @param application application to be used.
+     */
+    TransactionRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
-        mTransactionDao = db.transactionDao();
-        mAllTransactions = mTransactionDao.getAllTransactions();
+        transactionDao = db.transactionDao();
+        allTransactions = transactionDao.getAllTransactions();
     }
 
-    LiveData<List<Transaction>> getAllTransactions() {
-        return mAllTransactions;
+    /**
+     * Get all transactions from the database.
+     * @return all transactions in the database.
+     */
+    public LiveData<List<Transaction>> getAllTransactions() {
+        return allTransactions;
     }
 
-    void insert(final Transaction transaction) {
-        PocketControlDB.databaseWriteExecutor.execute(() -> {
-            mTransactionDao.insert(transaction);
+    /**
+     * Insert a new transaction in the database.
+     * @param transaction transaction to be saved.
+     */
+    public void insert(final Transaction transaction) {
+        PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
+            transactionDao.insert(transaction);
         });
     }
 }

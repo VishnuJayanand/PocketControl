@@ -6,38 +6,54 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
 
 import java.util.List;
 
-public class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.TransactionViewHolder> {
+public final class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.TransactionViewHolder> {
 
-    class TransactionViewHolder extends RecyclerView.ViewHolder {
+    final class TransactionViewHolder extends RecyclerView.ViewHolder {
         private final TextView transactionItemView;
 
-        private TransactionViewHolder(View itemView) {
+        /**
+         * Transaction view holder.
+         * @param itemView view that will hold the transaction list.
+         */
+        private TransactionViewHolder(final View itemView) {
             super(itemView);
             transactionItemView = itemView.findViewById(R.id.textView);
         }
     }
 
-    private final LayoutInflater mInflater;
-    private List<Transaction> mTransactions; // Cached copy of transactions
+    private final LayoutInflater layoutInflater;
+    private List<Transaction> transactions; // Cached copy of transactions
 
-    public TransactionListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
-
-    @Override
-    public TransactionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
-        return new TransactionViewHolder(itemView);
+    /**
+     * Constructor.
+     * @param context context to be used (normally "this").
+     */
+    public TransactionListAdapter(final Context context) {
+        layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
-    public void onBindViewHolder(TransactionViewHolder holder, int position) {
-        if (mTransactions != null) {
-            Transaction current = mTransactions.get(position);
+    public @NonNull TransactionViewHolder onCreateViewHolder(final @NonNull ViewGroup parent, final int viewType) {
+        View itemView = layoutInflater.inflate(R.layout.recyclerview_item, parent, false);
+        return new TransactionViewHolder(itemView);
+    }
+
+    /**
+     * Initializer for transactions to be displayed.
+     * @param holder view holder.
+     * @param position position of transactions.
+     */
+    @Override
+    public void onBindViewHolder(final @NonNull TransactionViewHolder holder, final int position) {
+        if (transactions != null) {
+            Transaction current = transactions.get(position);
             holder.transactionItemView.setText(current.getTextNote());
         } else {
             // Covers the case of data not being ready yet.
@@ -45,17 +61,23 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         }
     }
 
-    public void setTransactions(List<Transaction> transactions){
-        mTransactions = transactions;
+    /**
+     * Transactions setter.
+     * @param transactionList transactions from db.
+     */
+    public void setTransactions(final List<Transaction> transactionList) {
+        this.transactions = transactionList;
         notifyDataSetChanged();
     }
 
     // getItemCount() is called many times, and when it is first called,
-    // mWords has not been updated (means initially, it's null, and we can't return null).
+    // transactions has not been updated (means initially, it's null, and we can't return null).
     @Override
     public int getItemCount() {
-        if (mTransactions != null)
-            return mTransactions.size();
-        else return 0;
+        if (transactions != null) {
+            return transactions.size();
+        } else {
+            return 0;
+        }
     }
 }

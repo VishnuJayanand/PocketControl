@@ -9,20 +9,32 @@ import java.util.List;
 
 public class TransactionViewModel extends AndroidViewModel {
 
-    private TransactionRepository mRepository;
-    private LiveData<List<Transaction>> mAllTransactions;
+    private TransactionRepository repository;
+    private LiveData<List<Transaction>> allTransactions;
 
-    public TransactionViewModel(Application application) {
+    /**
+     * View model constructor.
+     * @param application application to be used.
+     */
+    public TransactionViewModel(final Application application) {
         super(application);
-        mRepository = new TransactionRepository(application);
-        mAllTransactions = mRepository.getAllTransactions();
+        this.repository = new TransactionRepository(application);
+        allTransactions = repository.getAllTransactions();
     }
 
+    /**
+     * Get all transactions.
+     * @return return all transactions from the database.
+     */
     public LiveData<List<Transaction>> getAllTransactions() {
-        return mAllTransactions;
+        return allTransactions;
     }
 
-    public void insert(Transaction transaction) {
-        mRepository.insert(transaction);
+    /**
+     * Insert a new transaction in the database.
+     * @param transaction transaction to be added.
+     */
+    public void insert(final Transaction transaction) {
+        repository.insert(transaction);
     }
 }
