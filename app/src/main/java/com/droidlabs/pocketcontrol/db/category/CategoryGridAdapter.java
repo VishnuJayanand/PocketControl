@@ -1,4 +1,4 @@
-package com.droidlabs.pocketcontrol;
+package com.droidlabs.pocketcontrol.db.category;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,9 +10,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.droidlabs.pocketcontrol.R;
+
 import java.util.List;
 
-public class CategoryAdapter extends ArrayAdapter<Category> {
+public class CategoryGridAdapter extends ArrayAdapter<com.droidlabs.pocketcontrol.db.category.Category> {
 
     private Context mContext;
     private int mResource;
@@ -24,7 +26,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
      * @param resource resource
      * @param objects list of category
      */
-    public CategoryAdapter(final @NonNull Context context, final int resource, final  @NonNull List<Category> objects) {
+    public CategoryGridAdapter(final @NonNull Context context, final int resource, final  @NonNull List<com.droidlabs.pocketcontrol.db.category.Category> objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.mResource = resource;
@@ -33,22 +35,22 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     /**
      * method to get the view and set imageId, title for ImageView and Title.
      * @param position position
-     * @param convertView the view
+     * @param view the view
      * @param parent parent
      * @return the view
      */
     @NonNull
     @Override
-    public View getView(final int position, View convertView, final  @NonNull ViewGroup parent) {
+    public View getView(final int position, View view, final  @NonNull ViewGroup parent) {
         //get the Category information:
-        int imageId = getItem(position).getImageId();
-        String title = getItem(position).getTitle();
+        int imageId = getItem(position).getIcon();
+        String title = getItem(position).getName();
 
         //Create the Category object with the information
 //        Category category = new Category(imageId, title);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        convertView = inflater.inflate(mResource, parent, false);
+        View convertView = inflater.inflate(mResource, parent, false);
 
         TextView textView = (TextView) convertView.findViewById(R.id.txtTitle);
         ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);

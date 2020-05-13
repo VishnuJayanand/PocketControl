@@ -11,12 +11,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
-            android:id="@+id/transactionTitle"
+            android:id="@+id/transactionDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginTop="5dp"
-            android:text="Transaction Title"
+            android:text="Transaction Date"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#0A0A0B"
             android:textSize="20sp"
@@ -45,19 +45,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#4D4D50"
                 android:textSize="12sp"/>
-            <TextView
-                android:id="@+id/transactionDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:paddingLeft="10dp"
-                android:paddingBottom="20dp"
-                android:paddingTop="8dp"
-                android:text="@string/transaction_date"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#4D4D50"
-                android:textSize="12sp"
-                tools:ignore="RtlHardcoded" />
+
 
         </LinearLayout>
     </LinearLayout>
