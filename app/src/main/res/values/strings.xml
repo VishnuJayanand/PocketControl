@@ -1,4 +1,7 @@
 <resources>
+    <string name="add_more_category_so_that_you_can_have_a_more_detailed_overview_of_your_expense">Add more category so that you can have a more detailed overview of your expense.</string>
+    <string name="transaction_date">Transaction Date</string>
+    <string name="category_title">Category Title</string>
     <string name="app_name">Pocket Control</string>
     <string name="add_transaction">New Transaction</string>
     <string name="hint_transaction">Transaction description...</string>

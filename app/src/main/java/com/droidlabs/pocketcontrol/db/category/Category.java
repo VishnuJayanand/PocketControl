@@ -33,7 +33,19 @@ public class Category {
     // Foreign keys
     @ColumnInfo(name = "icon")
     @Nullable
-    private String icon;
+    private int icon;
+
+    /**
+     * Category constructor.
+     * @param categoryId id int
+     * @param categoryName name String
+     * @param categoryIcon icon int
+     */
+    public Category(final int categoryId, final String categoryName, final int categoryIcon) {
+        this.id = categoryId;
+        this.name = categoryName;
+        this.icon = categoryIcon;
+    }
 
     /**
      * Empty category constructor.
@@ -69,7 +81,7 @@ public class Category {
      * Icon getter.
      * @return icon id.
      */
-    public String getIcon() {
+    public int getIcon() {
         return icon;
     }
 
@@ -83,17 +95,17 @@ public class Category {
 
     /**
      * Category name setter.
-     * @param categoryName category name.
+     * @param catName category name.
      */
-    public void setName(final String categoryName) {
-        this.name = categoryName;
+    public void setName(final String catName) {
+        this.name = catName;
     }
 
     /**
      * Category icon setter.
      * @param categoryIcon category icon id.
      */
-    public void setIcon(final @Nullable  String categoryIcon) {
+    public void setIcon(final @Nullable  int categoryIcon) {
         this.icon = categoryIcon;
     }
 }
