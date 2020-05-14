@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+
+import android.os.Handler;
 import android.view.MenuItem;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetFragment;
 import com.droidlabs.pocketcontrol.ui.categories.CategoriesFragment;
@@ -13,21 +15,21 @@ import com.droidlabs.pocketcontrol.ui.settings.SettingsFragment;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.fragment.app.Fragment;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
-import android.view.MenuItem;
-
-import com.droidlabs.pocketcontrol.ui.budget.BudgetFragment;
-import com.droidlabs.pocketcontrol.ui.categories.CategoriesFragment;
-import com.droidlabs.pocketcontrol.ui.home.HomeFragment;
-import com.droidlabs.pocketcontrol.ui.settings.SettingsFragment;
-import com.droidlabs.pocketcontrol.ui.transaction.TransactionFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
  * Main activity of the app.
  */
 public class MainActivity extends AppCompatActivity {
+
+    //Variables for splash screen
+    private Animation topAnimation, bottomAnimation;
+    private ImageView appImage, teamImage;
+    private static final int TIMER = 4000;
 
     /**
      * Method to create an app instance.
@@ -35,13 +37,31 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.splash_screen);
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        //Animation
+        topAnimation = AnimationUtils.loadAnimation(this, R.anim.top_animation);
+        bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
 
-        getSupportFragmentManager().beginTransaction().replace(
-                R.id.fragment_container, new HomeFragment()).commit();
+        //Hooks
+        appImage = findViewById(R.id.appname);
+        teamImage = findViewById(R.id.teamname);
+
+        appImage.setAnimation(topAnimation);
+        teamImage.setAnimation(bottomAnimation);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setContentView(R.layout.activity_main);
+                BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+                bottomNav.setOnNavigationItemSelectedListener(navListener);
+
+                getSupportFragmentManager().beginTransaction().replace(
+                        R.id.fragment_container, new HomeFragment()).commit();
+            }
+        }, TIMER);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
