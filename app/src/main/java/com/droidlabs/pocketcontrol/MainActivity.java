@@ -2,9 +2,21 @@ package com.droidlabs.pocketcontrol;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.MenuItem;
+import com.droidlabs.pocketcontrol.ui.budget.BudgetFragment;
+import com.droidlabs.pocketcontrol.ui.categories.CategoriesFragment;
+import com.droidlabs.pocketcontrol.ui.home.HomeFragment;
+import com.droidlabs.pocketcontrol.ui.settings.SettingsFragment;
+import com.droidlabs.pocketcontrol.ui.transaction.TransactionFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.MenuItem;
+
 import com.droidlabs.pocketcontrol.ui.budget.BudgetFragment;
 import com.droidlabs.pocketcontrol.ui.categories.CategoriesFragment;
 import com.droidlabs.pocketcontrol.ui.home.HomeFragment;
