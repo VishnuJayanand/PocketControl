@@ -59,24 +59,24 @@ public class Transaction {
 
     /**
      * Transaction constructor with amount, type, category and date.
-     * @param id int transaction id
-     * @param amount float transaction amount
-     * @param type int transaction type
-     * @param category String transaction String
-     * @param date Date transaction date
+     * @param transactionId int transaction id
+     * @param transactionAmount float transaction amount
+     * @param transactionType int transaction type
+     * @param transactionCategory String transaction String
+     * @param transactionDate Date transaction date
      */
-    public Transaction(final int id, final Float amount, final Integer type, final @Nullable String category, final String date) {
-        this.id = id;
-        this.amount = amount;
-        this.type = type;
-        this.category = category;
-        this.date = date;
+    public Transaction(final int transactionId, final Float transactionAmount, final Integer transactionType,
+                       final @Nullable String transactionCategory, final String transactionDate) {
+        this.id = transactionId;
+        this.amount = transactionAmount;
+        this.type = transactionType;
+        this.category = transactionCategory;
+        this.date = transactionDate;
     }
 
     /**
      * Empty transaction constructor.
      */
-    @Ignore
     public Transaction() { }
 
     /**

@@ -23,7 +23,8 @@ public final class TransactionListAdapter extends ArrayAdapter<Transaction> {
      * @param resource int
      * @param objects list of Transaction
      */
-    public TransactionListAdapter(final @NonNull Context context, final int resource, final  @NonNull List<Transaction> objects) {
+    public TransactionListAdapter(
+            final @NonNull Context context, final int resource, final  @NonNull List<Transaction> objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.mResource = resource;
@@ -36,7 +37,7 @@ public final class TransactionListAdapter extends ArrayAdapter<Transaction> {
      * @param parent View Group
      * @return convert View
      */
-    public View getView(final int position, View view, final  @NonNull ViewGroup parent) {
+    public View getView(final int position, final View view, final  @NonNull ViewGroup parent) {
         //get the Category information:
         String date = getItem(position).getDate();
         int type = getItem(position).getType();
@@ -73,10 +74,11 @@ public final class TransactionListAdapter extends ArrayAdapter<Transaction> {
         String typeAsString = "";
         if (type == 1) {
             transactionType.setTextColor(Color.parseColor("#F44336"));
-             typeAsString = "Expense";  }
-        else {
+             typeAsString = "Expense";
+        } else {
             transactionType.setTextColor(Color.parseColor("#4CAF50"));
-            typeAsString = "Income";  }
+            typeAsString = "Income";
+        }
         transactionType.setText(typeAsString);
         return convertView;
     }

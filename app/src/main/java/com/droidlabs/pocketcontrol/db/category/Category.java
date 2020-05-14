@@ -36,21 +36,20 @@ public class Category {
     private int icon;
 
     /**
-     * Full category constructor.
-     * @param id category id
-     * @param name category name
-     * @param icon category icon
+     * Category constructor.
+     * @param categoryId id int
+     * @param categoryName name String
+     * @param categoryIcon icon int
      */
-    public Category(final int id, final String name, final int icon) {
-        this.id = id;
-        this.name = name;
-        this.icon = icon;
+    public Category(final int categoryId, final String categoryName, final int categoryIcon) {
+        this.id = categoryId;
+        this.name = categoryName;
+        this.icon = categoryIcon;
     }
 
     /**
      * Empty category constructor.
      */
-    @Ignore
     public Category() { }
 
     /**

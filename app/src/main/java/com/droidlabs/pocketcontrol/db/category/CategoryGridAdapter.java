@@ -26,7 +26,8 @@ public class CategoryGridAdapter extends ArrayAdapter<com.droidlabs.pocketcontro
      * @param resource resource
      * @param objects list of category
      */
-    public CategoryGridAdapter(final @NonNull Context context, final int resource, final  @NonNull List<com.droidlabs.pocketcontrol.db.category.Category> objects) {
+    public CategoryGridAdapter(final @NonNull Context context, final int resource,
+                               final  @NonNull List<com.droidlabs.pocketcontrol.db.category.Category> objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.mResource = resource;
@@ -41,7 +42,7 @@ public class CategoryGridAdapter extends ArrayAdapter<com.droidlabs.pocketcontro
      */
     @NonNull
     @Override
-    public View getView(final int position, View view, final  @NonNull ViewGroup parent) {
+    public View getView(final int position, final View view, final  @NonNull ViewGroup parent) {
         //get the Category information:
         int imageId = getItem(position).getIcon();
         String title = getItem(position).getName();
