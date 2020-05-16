@@ -27,6 +27,26 @@ The presenter is graded regarding the following categories:
 
 If additional presenters are supporting the presentation, they will also be graded. They followin the general grading, but may have a modifier depending on their individual performance.
 
+## Blogs
+
+Blogs are graded regarding their completeness regarding *Content* and  their quality regarding *Style* and *Structure*.
+
+* *Content* depends if the required content was presented
+* *Structure* graded how well the blog is structured. Especially, if the blog is easily accesible and if all the content is linked and structured using sub-pages as necessary
+* *Style* grades the quality of the presentation, especially the usage of highlighting, subsections, images and tables to prevent the blog form becoming a "Wall of Text"
+
+## Weekly Reports
+
+For each weekly report, there is one grade. The grade relates to mainly content regarding the sub-sections specified in the lecture and the [README.md](./../reports/README.md) in the reports folder. Minor elevation and deduction of the grade is possible based on style and usage of media.
+
 ## Graded Presentations
 
 1. ![Team Presentation Results](./team.png)
+
+## Graded Blogs
+
+1. ![Team Presentation Blog Results](./team_blog.png)
+
+## Weekly Report Grades
+
+![Weekly Report Results](./reports.png)
