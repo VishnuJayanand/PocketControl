@@ -17,7 +17,7 @@ public class CategoryRepository {
      * Category repository constructor.
      * @param application application to be used.
      */
-    CategoryRepository(final Application application) {
+    public CategoryRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
         categoryDao = db.categoryDao();
         allCategories = categoryDao.getAllCategories();
@@ -39,5 +39,13 @@ public class CategoryRepository {
         PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
             categoryDao.insert(category);
         });
+    }
+
+    /**
+     * Insert a new category.
+     * @param categoryId category id.
+     */
+    public void getSingleCategory(final int categoryId) {
+        categoryDao.getSingleCategory(categoryId);
     }
 }
