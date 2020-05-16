@@ -1,0 +1,81 @@
+apply plugin: 'com.android.application'
+apply plugin: 'checkstyle'
+apply plugin: 'com.github.spotbugs'
+apply plugin: 'pmd'
+
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "com.droidlabs.pocketcontrol"
+        minSdkVersion 24
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+}
+
+task checkstyle(type: Checkstyle) {
+    configFile = rootProject.file('static-analysis/checkstyle.xml')
+
+    source 'src/main/java'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    classpath = files()
+}
+
+sourceSets {
+    main {
+        java.srcDirs = []
+    }
+}
+
+spotbugs {
+    ignoreFailures = true
+    reportsDir = file("$project.buildDir/SpotBugsReports")
+    effort = "max"
+    reportLevel = "high"
+}
+
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    dependsOn 'assembleDebug'
+    classes = files("$project.buildDir/intermediates/javac") // Important to use this path
+    source = fileTree('src/main/java')
+    reports {
+        // Enable HTML report only
+        html.enabled = true
+        xml.enabled = false
+    }
+}
+
+pmd {
+    ruleSetFiles rootProject.file("static-analysis/pmd-rules.xml")
+    ruleSets = []
+}
+
+task staticAnalysis(type: GradleBuild) {
+    tasks = [
+            'clean',
+            'checkstyle',
+            'pmd',
+            'spotbugsMain',
+    ]
+}
