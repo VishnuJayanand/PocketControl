@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey;
 
 import com.droidlabs.pocketcontrol.db.category.Category;
 
+
 import static androidx.room.ForeignKey.SET_NULL;
 
 @Entity(
@@ -52,6 +53,26 @@ public class Transaction {
     @ColumnInfo(name = "category")
     @Nullable
     private String category;
+
+    @ColumnInfo(name = "date")
+    private String date;
+
+    /**
+     * Transaction constructor with amount, type, category and date.
+     * @param transactionId int transaction id
+     * @param transactionAmount float transaction amount
+     * @param transactionType int transaction type
+     * @param transactionCategory String transaction String
+     * @param transactionDate Date transaction date
+     */
+    public Transaction(final int transactionId, final Float transactionAmount, final Integer transactionType,
+                       final @Nullable String transactionCategory, final String transactionDate) {
+        this.id = transactionId;
+        this.amount = transactionAmount;
+        this.type = transactionType;
+        this.category = transactionCategory;
+        this.date = transactionDate;
+    }
 
     /**
      * Empty transaction constructor.
@@ -224,5 +245,21 @@ public class Transaction {
      */
     public void setCategory(final @Nullable String categoryId) {
         this.category = categoryId;
+    }
+
+    /**
+     * Date  getter.
+     * @return transaction date
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * Date setter.
+     * @param tDate transaction date
+     */
+    public void setDate(final String tDate) {
+        this.date = tDate;
     }
 }
