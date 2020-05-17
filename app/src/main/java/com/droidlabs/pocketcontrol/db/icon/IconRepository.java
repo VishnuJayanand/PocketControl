@@ -2,8 +2,6 @@ package com.droidlabs.pocketcontrol.db.icon;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
 public class IconRepository {
 
     private IconDao iconDao;
-    private LiveData<List<Icon>> allIcons;
+    private List<Icon> allIcons;
 
     /**
      * Icon repository constructor.
@@ -27,7 +25,7 @@ public class IconRepository {
      * Return all saved icons.
      * @return all saved icons.
      */
-    public LiveData<List<Icon>> getAllIcons() {
+    public List<Icon> getAllIcons() {
         return allIcons;
     }
 

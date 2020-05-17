@@ -2,8 +2,6 @@ package com.droidlabs.pocketcontrol.db.transaction;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
 public class TransactionRepository {
 
     private TransactionDao transactionDao;
-    private LiveData<List<Transaction>> allTransactions;
+    private List<Transaction> allTransactions;
 
     /**
      * Transaction repository constructor.
@@ -27,7 +25,7 @@ public class TransactionRepository {
      * Get all transactions from the database.
      * @return all transactions in the database.
      */
-    public LiveData<List<Transaction>> getAllTransactions() {
+    public List<Transaction> getAllTransactions() {
         return allTransactions;
     }
 

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +19,6 @@ import com.droidlabs.pocketcontrol.db.category.CategoryViewModel;
 import android.widget.GridView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public final class CategoriesFragment extends Fragment {
     private ArrayList<Category> cartegoriesList = new ArrayList<>();
@@ -45,12 +43,7 @@ public final class CategoriesFragment extends Fragment {
 
         final CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
-        categoryViewModel.getAllCategories().observe(getViewLifecycleOwner(), new Observer<List<Category>>() {
-            @Override
-            public void onChanged(final List<Category> categories) {
-                adapter.setCategories(categories);
-            }
-        });
+        adapter.setCategories(categoryViewModel.getAllCategories());
 
         return view;
     }
