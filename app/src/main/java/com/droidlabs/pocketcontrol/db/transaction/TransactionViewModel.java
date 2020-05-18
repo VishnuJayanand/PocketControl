@@ -3,14 +3,13 @@ package com.droidlabs.pocketcontrol.db.transaction;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
 public class TransactionViewModel extends AndroidViewModel {
 
     private TransactionRepository repository;
-    private LiveData<List<Transaction>> allTransactions;
+    private List<Transaction> allTransactions;
 
     /**
      * View model constructor.
@@ -26,7 +25,7 @@ public class TransactionViewModel extends AndroidViewModel {
      * Get all transactions.
      * @return return all transactions from the database.
      */
-    public LiveData<List<Transaction>> getAllTransactions() {
+    public List<Transaction> getAllTransactions() {
         return allTransactions;
     }
 

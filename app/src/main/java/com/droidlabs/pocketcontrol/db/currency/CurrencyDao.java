@@ -1,6 +1,5 @@
 package com.droidlabs.pocketcontrol.db.currency;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -28,5 +27,5 @@ public interface CurrencyDao {
      * @return list of currencies.
      */
     @Query("SELECT * FROM currencies")
-    LiveData<List<Currency>> getAllCurrencies();
+    List<Currency> getAllCurrencies();
 }

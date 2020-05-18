@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
 import android.view.MenuItem;
+
+import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetFragment;
 import com.droidlabs.pocketcontrol.ui.categories.CategoriesFragment;
 import com.droidlabs.pocketcontrol.ui.home.HomeFragment;
@@ -62,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
                         R.id.fragment_container, new HomeFragment()).commit();
             }
         }, TIMER);
+
+        PocketControlDB db = PocketControlDB.getDatabase(this);
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =

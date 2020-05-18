@@ -1,6 +1,5 @@
 package com.droidlabs.pocketcontrol.db.icon;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -28,5 +27,5 @@ public interface IconDao {
      * @return list of saved icons.
      */
     @Query("SELECT * FROM icons")
-    LiveData<List<Icon>> getAllIcons();
+    List<Icon> getAllIcons();
 }

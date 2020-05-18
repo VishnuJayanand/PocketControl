@@ -1,6 +1,5 @@
 package com.droidlabs.pocketcontrol.db.transaction;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -29,5 +28,5 @@ public interface TransactionDao {
      * @return all transactions.
      */
     @Query("SELECT * FROM transactions")
-    LiveData<List<Transaction>> getAllTransactions();
+    List<Transaction> getAllTransactions();
 }

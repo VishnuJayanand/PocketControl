@@ -3,24 +3,11 @@ package com.droidlabs.pocketcontrol.db.category;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.droidlabs.pocketcontrol.db.icon.Icon;
-
-import static androidx.room.ForeignKey.SET_NULL;
-
 @Entity(
-    tableName = "categories",
-    foreignKeys = @ForeignKey(
-        entity = Icon.class,
-        parentColumns = "id",
-        childColumns = "icon",
-        onDelete = SET_NULL
-    ),
-    indices = {@Index("icon")}
+    tableName = "categories"
 )
 public class Category {
 
@@ -59,6 +46,17 @@ public class Category {
     @Ignore
     public Category(final String categoryName) {
         this.name = categoryName;
+    }
+
+    /**
+     * Category constructor.
+     * @param categoryName category name.
+     * @param iconName icon name.
+     */
+    @Ignore
+    public Category(final String categoryName, final int iconName) {
+        this.name = categoryName;
+        this.icon = iconName;
     }
 
     /**
@@ -105,7 +103,7 @@ public class Category {
      * Category icon setter.
      * @param categoryIcon category icon id.
      */
-    public void setIcon(final @Nullable  int categoryIcon) {
+    public void setIcon(final int categoryIcon) {
         this.icon = categoryIcon;
     }
 }

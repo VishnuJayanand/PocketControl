@@ -7,50 +7,44 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryGridAdapter;
+import com.droidlabs.pocketcontrol.db.category.CategoryViewModel;
 
 import android.widget.GridView;
 
 import java.util.ArrayList;
 
-public class CategoriesFragment extends Fragment {
+public final class CategoriesFragment extends Fragment {
     private ArrayList<Category> cartegoriesList = new ArrayList<>();
     private GridView gridView;
+    private CategoryGridAdapter adapter;
+
     @Nullable
     @Override
-    public final View onCreateView(
-        final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+        final LayoutInflater inf,
+        final @Nullable ViewGroup container,
+        final @Nullable Bundle savedInstanceState
+    ) {
         View view = inf.inflate(R.layout.category_gridview, container, false);
-//        createListCategory();
+        RecyclerView recyclerView = view.findViewById(R.id.categoryGridView);
+
         //Create the adapter for Cartegory.
-        CategoryGridAdapter adapter = new CategoryGridAdapter(getContext(),
-                R.layout.category_griditem, cartegoriesList);
+        adapter = new CategoryGridAdapter(getActivity());
         //Set the adapter to gridView
-        gridView = view.findViewById(R.id.categoryGridView);
-        gridView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+
+        final CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+
+        adapter.setCategories(categoryViewModel.getAllCategories());
+
         return view;
     }
-
-    //This Category list is to help visualize the UI
-
-    /**
-     * Create a Category list for example.
-     */
-//    public void createListCategory() {
-//        Category health = new Category(1, "Health", R.drawable.health);
-//        Category transport = new Category(2, "Transport", R.drawable.transport);
-//        Category shopping = new Category(3, "Shopping", R.drawable.shopping);
-//        Category food = new Category(4, "Food", R.drawable.food);
-//        Category study = new Category(5, "Study", R.drawable.study);
-//        Category rent = new Category(6, "Rent", R.drawable.rent);
-//
-//        cartegoriesList.add(health);
-//        cartegoriesList.add(transport);
-//        cartegoriesList.add(shopping);
-//        cartegoriesList.add(food);
-//        cartegoriesList.add(study);
-//        cartegoriesList.add(rent);
-//    }
 }

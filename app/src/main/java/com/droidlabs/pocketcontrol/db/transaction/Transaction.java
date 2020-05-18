@@ -47,27 +47,29 @@ public class Transaction {
 
     // 1 - Expense, 2 - Income
     @ColumnInfo(name = "type", defaultValue = "1")
-    private Integer type;
+    private int type;
+
+    @ColumnInfo(name = "date")
+    private String date;
 
     // Foreign keys
     @ColumnInfo(name = "category")
     @Nullable
     private String category;
 
-    @ColumnInfo(name = "date")
-    private String date;
-
     /**
      * Transaction constructor with amount, type, category and date.
-     * @param transactionId int transaction id
      * @param transactionAmount float transaction amount
      * @param transactionType int transaction type
      * @param transactionCategory String transaction String
      * @param transactionDate Date transaction date
      */
-    public Transaction(final int transactionId, final Float transactionAmount, final Integer transactionType,
-                       final @Nullable String transactionCategory, final String transactionDate) {
-        this.id = transactionId;
+    public Transaction(
+            final Float transactionAmount,
+            final Integer transactionType,
+            final @Nullable String transactionCategory,
+            final String transactionDate
+    ) {
         this.amount = transactionAmount;
         this.type = transactionType;
         this.category = transactionCategory;

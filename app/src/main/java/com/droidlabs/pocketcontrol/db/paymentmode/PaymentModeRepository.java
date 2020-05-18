@@ -2,8 +2,6 @@ package com.droidlabs.pocketcontrol.db.paymentmode;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
 public class PaymentModeRepository {
 
     private PaymentModeDao paymentModeDao;
-    private LiveData<List<PaymentMode>> allPaymentModes;
+    private List<PaymentMode> allPaymentModes;
 
     /**
      * Payment mode repository constructor.
@@ -27,7 +25,7 @@ public class PaymentModeRepository {
      * Retrieve all payment modes.
      * @return all payment modes.
      */
-    public LiveData<List<PaymentMode>> getAllPaymentModes() {
+    public List<PaymentMode> getAllPaymentModes() {
         return allPaymentModes;
     }
 
