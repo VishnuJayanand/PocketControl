@@ -55,8 +55,8 @@ public final class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGrid
     }
 
     /**
-     * Transactions setter.
-     * @param categoryList transactions from db.
+     * Categories setter.
+     * @param categoryList categories from db.
      */
     public void setCategories(final List<Category> categoryList) {
         this.categories = categoryList;

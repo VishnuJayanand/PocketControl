@@ -8,7 +8,6 @@ import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +18,6 @@ import com.droidlabs.pocketcontrol.db.transaction.TransactionListAdapter;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class TransactionFragment extends Fragment {
@@ -37,18 +35,14 @@ public class TransactionFragment extends Fragment {
 
         //Create the adapter for Transaction
         final TransactionListAdapter adapter = new TransactionListAdapter(getActivity());
+
         //Set the adapter to list view
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         final TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
-        transactionViewModel.getAllTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {
-            @Override
-            public void onChanged(final List<Transaction> transactions) {
-                adapter.setTransactions(transactions);
-            }
-        });
+        adapter.setTransactions(transactionViewModel.getAllTransactions());
 
         return view;
     }

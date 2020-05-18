@@ -1,6 +1,5 @@
 package com.droidlabs.pocketcontrol.db.category;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -31,7 +30,7 @@ public interface CategoryDao {
      * @return list of categories.
      */
     @Query("SELECT * FROM categories")
-    LiveData<List<Category>> getAllCategories();
+    List<Category> getAllCategories();
 
     /**
      * Get single category.

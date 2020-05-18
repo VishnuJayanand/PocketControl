@@ -3,14 +3,13 @@ package com.droidlabs.pocketcontrol.db.category;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
 public class CategoryViewModel extends AndroidViewModel {
 
     private CategoryRepository repository;
-    private LiveData<List<Category>> allCategories;
+    private List<Category> allCategories;
 
     /**
      * View model constructor.
@@ -26,7 +25,7 @@ public class CategoryViewModel extends AndroidViewModel {
      * Get all categories.
      * @return return all transactions from the database.
      */
-    public LiveData<List<Category>> getAllCategories() {
+    public List<Category> getAllCategories() {
         return allCategories;
     }
 

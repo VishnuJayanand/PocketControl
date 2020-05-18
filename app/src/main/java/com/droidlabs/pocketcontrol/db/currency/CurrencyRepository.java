@@ -2,8 +2,6 @@ package com.droidlabs.pocketcontrol.db.currency;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
 public class CurrencyRepository {
 
     private CurrencyDao currencyDao;
-    private LiveData<List<Currency>> allCurrencies;
+    private List<Currency> allCurrencies;
 
     /**
      * Currency repository constructor.
@@ -27,7 +25,7 @@ public class CurrencyRepository {
      * Get all currencies.
      * @return all saved currencies.
      */
-    public LiveData<List<Currency>> getAllCurrencies() {
+    public List<Currency> getAllCurrencies() {
         return allCurrencies;
     }
 

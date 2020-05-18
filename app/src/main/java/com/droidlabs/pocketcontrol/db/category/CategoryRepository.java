@@ -2,8 +2,6 @@ package com.droidlabs.pocketcontrol.db.category;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
 public class CategoryRepository {
 
     private CategoryDao categoryDao;
-    private LiveData<List<Category>> allCategories;
+    private List<Category> allCategories;
 
     /**
      * Category repository constructor.
@@ -27,7 +25,7 @@ public class CategoryRepository {
      * Get all the saved categories.
      * @return list of saved categories.
      */
-    public LiveData<List<Category>> getAllCategories() {
+    public List<Category> getAllCategories() {
         return allCategories;
     }
 
