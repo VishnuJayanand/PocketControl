@@ -63,10 +63,6 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             String amountToString = Float.toString(amount);
             String typeAsString = "";
 
-            if (amount >= 0) {
-                holder.transactionAmount.setTextColor(Color.parseColor("#4CAF50"));
-                amountToString = " +" + amountToString;
-            }
 
             if (type == 1) {
                 holder.transactionType.setTextColor(Color.parseColor("#F44336"));
@@ -74,9 +70,12 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             } else {
                 holder.transactionType.setTextColor(Color.parseColor("#4CAF50"));
                 typeAsString = "Income";
+                holder.transactionAmount.setTextColor(Color.parseColor("#4CAF50"));
+                amountToString = " +" + amountToString;
             }
 
             if (category != null) {
+
                 Category category1 = categoryDao.getSingleCategory(parseInt(category));
                 holder.transactionCategoryTitle.setText(category1.getName());
                 holder.transactionCategoryImage.setImageResource(category1.getIcon());

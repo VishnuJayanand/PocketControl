@@ -40,10 +40,18 @@ public class CategoryRepository {
     }
 
     /**
-     * Insert a new category.
+     * get a  category.
      * @param categoryId category id.
      */
     public void getSingleCategory(final int categoryId) {
         categoryDao.getSingleCategory(categoryId);
+    }
+
+    /**
+     * get a category.
+     * @param categoryName category id.
+     */
+    public void getSingleCategory(final String categoryName) {
+        categoryDao.getSingleCategory(categoryName);
     }
 }

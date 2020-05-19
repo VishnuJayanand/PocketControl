@@ -63,17 +63,20 @@ public class Transaction {
      * @param transactionType int transaction type
      * @param transactionCategory String transaction String
      * @param transactionDate Date transaction date
+     * @param transactionNote String transaction note
      */
     public Transaction(
             final Float transactionAmount,
             final Integer transactionType,
             final @Nullable String transactionCategory,
-            final String transactionDate
+            final String transactionDate,
+            final @Nullable String transactionNote
     ) {
         this.amount = transactionAmount;
         this.type = transactionType;
         this.category = transactionCategory;
         this.date = transactionDate;
+        this.textNote = transactionNote;
     }
 
     /**

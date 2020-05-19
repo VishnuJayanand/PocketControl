@@ -31,7 +31,7 @@ public final class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGrid
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(final @NonNull ViewGroup parent, final int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.category_gridview, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.category_griditem, parent, false);
         return new CategoryViewHolder(itemView);
     }
 
