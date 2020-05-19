@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/budget_activty"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:background="@color/inputContrastBackground"
+        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="20dp"
+                android:text="ADD BUDGET"
+                android:textSize="30dp" />
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/inputContrastBackground"
+                android:stretchColumns="1">
+
+                <!-- Name -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/inputBorderThickness"
+                    android:background="@color/inputBorder" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:background="@color/inputBackground">
+
+                    <View
+                        android:layout_width="@dimen/inputBorderThickness"
+                        android:layout_height="match_parent"
+                        android:background="@color/inputBorder"
+                        android:gravity="start" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_column="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/budgetNameEdit"
+                            android:padding="@dimen/inputPadding"
+                            android:text="Name"
+                            android:textSize="@dimen/inputSize" />
+
+                        <EditText
+                            android:id="@+id/budgetNameEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:padding="@dimen/inputPadding"
+                            android:textSize="@dimen/inputSize" />
+
+                        <TextView
+                            android:id="@+id/budgetNameView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/inputPadding"
+                            android:textIsSelectable="true"
+                            android:textSize="@dimen/inputSize" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/inputBorderThickness"
+                        android:layout_height="match_parent"
+                        android:background="@color/inputBorder"
+                        android:gravity="end" />
+                </TableRow>
+                <!-- Category -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/inputBorderThickness"
+                    android:background="@color/inputBorder" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:background="@color/inputBackground">
+
+                    <View
+                        android:layout_width="@dimen/inputBorderThickness"
+                        android:layout_height="match_parent"
+                        android:background="@color/inputBorder"
+                        android:gravity="start" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_column="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/budgetNameEdit"
+                            android:padding="@dimen/inputPadding"
+                            android:text="Category"
+                            android:textSize="@dimen/inputSize" />
+
+                        <EditText
+                            android:id="@+id/budgetCategoryEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapCharacters"
+                            android:padding="@dimen/inputPadding"
+                            android:textSize="@dimen/inputSize" />
+
+                        <TextView
+                            android:id="@+id/budgetCategoryView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/inputPadding"
+                            android:textIsSelectable="true"
+                            android:textSize="@dimen/inputSize" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/inputBorderThickness"
+                        android:layout_height="match_parent"
+                        android:background="@color/inputBorder"
+                        android:gravity="end" />
+                </TableRow>
+                <!-- Value -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/inputBorderThickness"
+                    android:background="@color/inputBorder" />
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:background="@color/inputBackground">
+
+                    <View
+                        android:layout_width="@dimen/inputBorderThickness"
+                        android:layout_height="match_parent"
+                        android:background="@color/inputBorder"
+                        android:gravity="start" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_column="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/budgetNameEdit"
+                            android:padding="@dimen/inputPadding"
+                            android:text="Value"
+                            android:textSize="@dimen/inputSize" />
+
+                        <EditText
+                            android:id="@+id/budgetValueEdit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:padding="@dimen/inputPadding"
+                            android:textSize="@dimen/inputSize" />
+
+                        <TextView
+                            android:id="@+id/valueView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/inputPadding"
+                            android:textIsSelectable="true"
+                            android:textSize="@dimen/inputSize" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/inputBorderThickness"
+                        android:layout_height="match_parent"
+                        android:background="@color/inputBorder"
+                        android:gravity="end" />
+                </TableRow>
+
+                <View
+                    android:layout_height="@dimen/inputBorderThickness"
+                    android:background="@color/inputBorder" />
+
+                <!-- Ending spacer -->
+                <TableRow android:background="@color/inputContrastBackground">
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="10dip" />
+                </TableRow>
+            </TableLayout>
+
+            <Button
+                android:id="@+id/save_button"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="125dp"
+                android:layout_marginTop="50dp"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="SAVE" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

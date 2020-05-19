@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="buttonLabel">#FFFFFF</color>
+    <color name="inputContrastBackground">#F8F8F8</color>
+    <color name="inputBackground">#FFFFFF</color>
+    <color name="inputBorder">#DDDDDD</color>
 </resources>
