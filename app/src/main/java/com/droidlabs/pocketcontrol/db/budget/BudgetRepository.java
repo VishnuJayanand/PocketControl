@@ -1,11 +1,7 @@
 package com.droidlabs.pocketcontrol.db.budget;
 
 import android.app.Application;
-
-import androidx.lifecycle.LiveData;
-
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
-
 import java.util.List;
 
 /**
@@ -14,7 +10,7 @@ import java.util.List;
 public class BudgetRepository {
 
     private BudgetDao budgetDao;
-    private LiveData<List<Budget>> allBudgets;
+    private List<Budget> allBudgets;
 
     /**
      * Creates a new budget repository.
@@ -30,7 +26,7 @@ public class BudgetRepository {
      * Get all budgets saved on the DB.
      * @return list of saved budgets.
      */
-    public LiveData<List<Budget>> getAllBudgets() {
+    public List<Budget> getAllBudgets() {
         return allBudgets;
     }
 

@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,7 +46,18 @@ public class TransactionFragment extends Fragment {
         final TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
         adapter.setTransactions(transactionViewModel.getAllTransactions());
-
+        LinearLayout layout = view.findViewById(R.id.addTransactionButton);
+        layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v)  {
+                Fragment fragment = new AddTransactionFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
         return view;
     }
 }
