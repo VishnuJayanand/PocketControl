@@ -1,4 +1,4 @@
-package com.droidlabs.pocketcontrol.db.category;
+package com.droidlabs.pocketcontrol.ui.categories;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
+import com.droidlabs.pocketcontrol.db.category.Category;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package com.droidlabs.pocketcontrol.db.category;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -105,5 +106,15 @@ public class Category {
      */
     public void setIcon(final int categoryIcon) {
         this.icon = categoryIcon;
+    }
+
+    /**
+     * Override toString class method to return category name.
+     * @return category name
+     */
+    @NonNull
+    @Override
+    public String toString() {
+        return getName();
     }
 }

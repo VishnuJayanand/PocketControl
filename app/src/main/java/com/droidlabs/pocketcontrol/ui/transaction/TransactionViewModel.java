@@ -1,8 +1,11 @@
-package com.droidlabs.pocketcontrol.db.transaction;
+package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
+
+import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.db.transaction.TransactionRepository;
 
 import java.util.List;
 
@@ -27,6 +30,15 @@ public class TransactionViewModel extends AndroidViewModel {
      */
     public List<Transaction> getAllTransactions() {
         return allTransactions;
+    }
+
+    /**
+     * Get transactions by category ID.
+     * @param categoryId category ID
+     * @return return all transactions with the specified category ID.
+     */
+    public List<Transaction> getTransactionsByCategoryId(final String categoryId) {
+        return repository.getTransactionsByCategoryId(categoryId);
     }
 
     /**

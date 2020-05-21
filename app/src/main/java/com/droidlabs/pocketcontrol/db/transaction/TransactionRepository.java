@@ -15,7 +15,7 @@ public class TransactionRepository {
      * Transaction repository constructor.
      * @param application application to be used.
      */
-    TransactionRepository(final Application application) {
+    public TransactionRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
         transactionDao = db.transactionDao();
         allTransactions = transactionDao.getAllTransactions();
@@ -27,6 +27,15 @@ public class TransactionRepository {
      */
     public List<Transaction> getAllTransactions() {
         return allTransactions;
+    }
+
+    /**
+     * Get transactions by categoryID.
+     * @param categoryId category id.
+     * @return all transactions with the corresponding categoryID.
+     */
+    public List<Transaction> getTransactionsByCategoryId(final String categoryId) {
+        return transactionDao.getTransactionsByCategoryId(categoryId);
     }
 
     /**

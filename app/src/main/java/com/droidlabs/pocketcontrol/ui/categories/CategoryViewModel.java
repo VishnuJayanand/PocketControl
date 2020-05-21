@@ -1,8 +1,11 @@
-package com.droidlabs.pocketcontrol.db.category;
+package com.droidlabs.pocketcontrol.ui.categories;
 
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
+
+import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.category.CategoryRepository;
 
 import java.util.List;
 

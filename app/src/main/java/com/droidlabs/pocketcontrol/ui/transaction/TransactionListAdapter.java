@@ -1,4 +1,4 @@
-package com.droidlabs.pocketcontrol.db.transaction;
+package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -15,6 +15,7 @@ import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
+import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 
 import java.util.List;
 
