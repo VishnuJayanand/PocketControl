@@ -3,24 +3,11 @@ package com.droidlabs.pocketcontrol.db.category;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.droidlabs.pocketcontrol.db.icon.Icon;
-
-import static androidx.room.ForeignKey.SET_NULL;
-
 @Entity(
-    tableName = "categories",
-    foreignKeys = @ForeignKey(
-        entity = Icon.class,
-        parentColumns = "id",
-        childColumns = "icon",
-        onDelete = SET_NULL
-    ),
-    indices = {@Index("icon")}
+    tableName = "categories"
 )
 public class Category {
 
@@ -33,7 +20,19 @@ public class Category {
     // Foreign keys
     @ColumnInfo(name = "icon")
     @Nullable
-    private String icon;
+    private int icon;
+
+    /**
+     * Category constructor.
+     * @param categoryId id int
+     * @param categoryName name String
+     * @param categoryIcon icon int
+     */
+    public Category(final int categoryId, final String categoryName, final int categoryIcon) {
+        this.id = categoryId;
+        this.name = categoryName;
+        this.icon = categoryIcon;
+    }
 
     /**
      * Empty category constructor.
@@ -47,6 +46,17 @@ public class Category {
     @Ignore
     public Category(final String categoryName) {
         this.name = categoryName;
+    }
+
+    /**
+     * Category constructor.
+     * @param categoryName category name.
+     * @param iconName icon name.
+     */
+    @Ignore
+    public Category(final String categoryName, final int iconName) {
+        this.name = categoryName;
+        this.icon = iconName;
     }
 
     /**
@@ -69,7 +79,7 @@ public class Category {
      * Icon getter.
      * @return icon id.
      */
-    public String getIcon() {
+    public int getIcon() {
         return icon;
     }
 
@@ -83,17 +93,17 @@ public class Category {
 
     /**
      * Category name setter.
-     * @param categoryName category name.
+     * @param catName category name.
      */
-    public void setName(final String categoryName) {
-        this.name = categoryName;
+    public void setName(final String catName) {
+        this.name = catName;
     }
 
     /**
      * Category icon setter.
      * @param categoryIcon category icon id.
      */
-    public void setIcon(final @Nullable  String categoryIcon) {
+    public void setIcon(final int categoryIcon) {
         this.icon = categoryIcon;
     }
 }

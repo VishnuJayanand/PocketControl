@@ -1,6 +1,5 @@
 package com.droidlabs.pocketcontrol.db.category;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -10,12 +9,15 @@ import java.util.List;
 
 @Dao
 public interface CategoryDao {
+
+    // TODO: move to @Query decorator to allow for default values;
     /**
      * Insert a new category into the database.
      * @param category category to be saved.
+     * @return category ID
      */
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    void insert(Category category);
+    long insert(Category category);
 
     /**
      * Delete all categories from the database.
@@ -28,5 +30,28 @@ public interface CategoryDao {
      * @return list of categories.
      */
     @Query("SELECT * FROM categories")
-    LiveData<List<Category>> getAllCategories();
+    List<Category> getAllCategories();
+
+    /**
+     * Get single category.
+     * @param id category ID
+     * @return Single category matching the ID
+     */
+    @Query("SELECT * FROM categories WHERE id=:id")
+    Category getSingleCategory(int id);
+
+    /**
+     * Get single category.
+     * @param name category name
+     * @return Single category matching with name
+     */
+    @Query("SELECT * FROM categories WHERE name=:name")
+    Category getSingleCategory(String name);
+
+    /**
+     * Get all categories name from the database.
+     * @return list of categories name.
+     */
+    @Query("SELECT name FROM categories")
+    String[] getCategoriesName();
 }

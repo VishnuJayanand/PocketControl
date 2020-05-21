@@ -8,6 +8,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.budget.BudgetDao;
 import com.droidlabs.pocketcontrol.db.category.Category;
@@ -83,15 +84,10 @@ public abstract class PocketControlDB extends RoomDatabase {
 
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
-        public void onOpen(final @NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
+        public void onCreate(final @NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
 
-            DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populateBudgets);
-            DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populateCategories);
-            DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populateCurrencies);
-            DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populateIcons);
-            DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populatePaymentModes);
-            DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populateTransactions);
+            DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populateDatabase);
         }
     };
 
@@ -107,6 +103,7 @@ public abstract class PocketControlDB extends RoomDatabase {
                     dbInstance = Room.databaseBuilder(context.getApplicationContext(),
                             PocketControlDB.class, DB_NAME)
                             .addCallback(sRoomDatabaseCallback)
+                            .allowMainThreadQueries()
                             .build();
                 }
             }
@@ -117,81 +114,60 @@ public abstract class PocketControlDB extends RoomDatabase {
     /**
      * Populates the database at startup.
      */
-    public static void populateDatabase() {
-        DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populateBudgets);
-        DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populateCategories);
-        DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populateCurrencies);
-        DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populateIcons);
-        DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populatePaymentModes);
-        DATABASE_WRITE_EXECUTOR.execute(PocketControlDB::populateTransactions);
-    }
+    private static void populateDatabase() {
+        BudgetDao budgetDao = dbInstance.budgetDao();
+        CategoryDao categoryDao = dbInstance.categoryDao();
+        CurrencyDao currencyDao = dbInstance.currencyDao();
+        IconDao iconDao = dbInstance.iconDao();
+        PaymentModeDao paymentModeDao = dbInstance.paymentModeDao();
+        TransactionDao transactionDao = dbInstance.transactionDao();
 
-    /**
-     * Populates budgets at startup.
-     */
-    private static void populateBudgets() {
-        BudgetDao dao = dbInstance.budgetDao();
-        dao.deleteAll();
+        budgetDao.deleteAll();
+        categoryDao.deleteAll();
+        currencyDao.deleteAll();
+        iconDao.deleteAll();
+        paymentModeDao.deleteAll();
+        transactionDao.deleteAll();
 
-        Budget budget = new Budget(0f, "", true);
-        dao.insert(budget);
-    }
+        String today = "13-05-2020";
 
-    /**
-     * Populates categories at startup.
-     */
-    private static void populateCategories() {
-        CategoryDao dao = dbInstance.categoryDao();
-        dao.deleteAll();
+        Budget budget = new Budget(700f, "Monthly budget", true);
+        budgetDao.insert(budget);
 
-        Category category = new Category("Category 1");
-        dao.insert(category);
-    }
+        Category health = new Category(1, "Health", R.drawable.health);
+        Category transport = new Category(2, "Transport", R.drawable.transport);
+        Category shopping = new Category(3, "Shopping", R.drawable.shopping);
+        Category food = new Category(4, "Food", R.drawable.food);
+        Category study = new Category(5, "Study", R.drawable.study);
+        Category rent = new Category(6, "Rent", R.drawable.rent);
 
-    /**
-     * Populates currencies at startup.
-     */
-    private static void populateCurrencies() {
-        CurrencyDao dao = dbInstance.currencyDao();
-        dao.deleteAll();
+        long healthCatId = categoryDao.insert(health);
+        long transportCatId = categoryDao.insert(transport);
+        long shoppingCatId = categoryDao.insert(shopping);
+        long foodId = categoryDao.insert(food);
+        long studyCatId = categoryDao.insert(study);
+        long rentCatId = categoryDao.insert(rent);
 
         Currency currency = new Currency("EUR");
-        dao.insert(currency);
-    }
-
-    /**
-     * Populates icons at startup.
-     */
-    private static void populateIcons() {
-        IconDao dao = dbInstance.iconDao();
-        dao.deleteAll();
+        currencyDao.insert(currency);
 
         Icon icon = new Icon("icon_1");
-        dao.insert(icon);
-    }
-
-    /**
-     * Populates payment modes at startup.
-     */
-    private static void populatePaymentModes() {
-        PaymentModeDao dao = dbInstance.paymentModeDao();
-        dao.deleteAll();
+        iconDao.insert(icon);
 
         PaymentMode paymentMode = new PaymentMode("Credit card");
-        dao.insert(paymentMode);
+        paymentModeDao.insert(paymentMode);
+
+        Transaction transactionA = new Transaction(300f, 2, String.valueOf(rentCatId), today, "");
+        Transaction transactionB = new Transaction(-200f, 1, String.valueOf(shoppingCatId), today, "");
+        Transaction transactionC = new Transaction(100f, 2, String.valueOf(studyCatId), today, "");
+        Transaction transactionD = new Transaction(-250f, 1, String.valueOf(transportCatId), today, "");
+        Transaction transactionE = new Transaction(-250f, 1, String.valueOf(healthCatId), today, "");
+        Transaction transactionF = new Transaction(-250f, 1, String.valueOf(foodId), today, "");
+        transactionDao.insert(transactionA);
+        transactionDao.insert(transactionB);
+        transactionDao.insert(transactionC);
+        transactionDao.insert(transactionD);
+        transactionDao.insert(transactionE);
+        transactionDao.insert(transactionF);
     }
-
-    /**
-     * Populates transactions at startup.
-     */
-    private static void populateTransactions() {
-        TransactionDao dao = dbInstance.transactionDao();
-        dao.deleteAll();
-
-        Transaction transaction = new Transaction(0, "Transaction 1");
-        dao.insert(transaction);
-        transaction = new Transaction(0, "Transaction 2");
-        dao.insert(transaction);
-    }
-
 }

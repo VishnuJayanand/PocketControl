@@ -1,11 +1,9 @@
 package com.droidlabs.pocketcontrol.db.budget;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
 import java.util.List;
 
 @Dao
@@ -28,5 +26,5 @@ public interface BudgetDao {
      * @return list of budgets saved on db.
      */
     @Query("SELECT * FROM budgets")
-    LiveData<List<Budget>> getAllBudgets();
+    List<Budget> getAllBudgets();
 }

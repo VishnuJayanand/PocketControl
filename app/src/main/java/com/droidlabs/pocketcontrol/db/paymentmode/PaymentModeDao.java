@@ -1,6 +1,5 @@
 package com.droidlabs.pocketcontrol.db.paymentmode;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -28,5 +27,5 @@ public interface PaymentModeDao {
      * @return all payment modes.
      */
     @Query("SELECT * FROM payment_modes")
-    LiveData<List<PaymentMode>> getAllPaymentModes();
+    List<PaymentMode> getAllPaymentModes();
 }
