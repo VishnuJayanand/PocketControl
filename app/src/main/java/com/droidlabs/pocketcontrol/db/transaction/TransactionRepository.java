@@ -15,7 +15,7 @@ public class TransactionRepository {
      * Transaction repository constructor.
      * @param application application to be used.
      */
-    TransactionRepository(final Application application) {
+    public TransactionRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
         transactionDao = db.transactionDao();
         allTransactions = transactionDao.getAllTransactions();
