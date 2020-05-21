@@ -16,6 +16,7 @@ import com.droidlabs.pocketcontrol.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.charset.Charset;
 
 
 public class SettingsFragment extends Fragment {
@@ -28,8 +29,12 @@ public class SettingsFragment extends Fragment {
         button.setOnClickListener(this::export);
         return v;
     }
+    /**
+     * Creating adapter for Budget.
+     * @param view view
+     */
 
-    public void export(View view) {
+    public void export(final View view) {
         //generate data
         StringBuilder data = new StringBuilder();
         data.append("Time,Distance");
@@ -40,7 +45,7 @@ public class SettingsFragment extends Fragment {
         try {
             //saving the file into device
             FileOutputStream out = getContext().openFileOutput("data.csv", Context.MODE_PRIVATE);
-            out.write((data.toString()).getBytes());
+            out.write((data.toString()).getBytes(Charset.forName("UTF-8")));
             out.close();
 
             //exporting
