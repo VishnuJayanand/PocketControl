@@ -29,4 +29,12 @@ public interface TransactionDao {
      */
     @Query("SELECT * FROM transactions")
     List<Transaction> getAllTransactions();
+
+    /**
+     * Retrieve all transactions from a specified category.
+     * @param categoryId category id
+     * @return list of transactions with matching categoryId
+     */
+    @Query("SELECT * FROM transactions WHERE category=:categoryId")
+    List<Transaction> getTransactionsByCategoryId(String categoryId);
 }

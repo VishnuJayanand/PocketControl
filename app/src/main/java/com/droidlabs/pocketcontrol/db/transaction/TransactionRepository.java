@@ -30,6 +30,15 @@ public class TransactionRepository {
     }
 
     /**
+     * Get transactions by categoryID.
+     * @param categoryId category id.
+     * @return all transactions with the corresponding categoryID.
+     */
+    public List<Transaction> getTransactionsByCategoryId(final String categoryId) {
+        return transactionDao.getTransactionsByCategoryId(categoryId);
+    }
+
+    /**
      * Insert a new transaction in the database.
      * @param transaction transaction to be saved.
      */
