@@ -33,6 +33,15 @@ public class TransactionViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get transactions by category ID.
+     * @param categoryId category ID
+     * @return return all transactions with the specified category ID.
+     */
+    public List<Transaction> getTransactionsByCategoryId(final String categoryId) {
+        return repository.getTransactionsByCategoryId(categoryId);
+    }
+
+    /**
      * Insert a new transaction in the database.
      * @param transaction transaction to be added.
      */
