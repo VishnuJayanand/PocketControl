@@ -14,8 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.category.CategoryGridAdapter;
-import com.droidlabs.pocketcontrol.db.category.CategoryViewModel;
+
 import android.widget.GridView;
 import android.widget.LinearLayout;
 public final class CategoriesFragment extends Fragment {

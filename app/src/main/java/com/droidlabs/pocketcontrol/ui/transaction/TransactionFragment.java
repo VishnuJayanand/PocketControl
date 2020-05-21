@@ -17,8 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
-import com.droidlabs.pocketcontrol.db.transaction.TransactionListAdapter;
-import com.droidlabs.pocketcontrol.db.transaction.TransactionViewModel;
 
 import java.util.ArrayList;
 

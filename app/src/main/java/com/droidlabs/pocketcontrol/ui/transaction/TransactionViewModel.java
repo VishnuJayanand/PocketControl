@@ -1,8 +1,11 @@
-package com.droidlabs.pocketcontrol.db.transaction;
+package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
+
+import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.db.transaction.TransactionRepository;
 
 import java.util.List;
 
