@@ -1,5 +1,4 @@
 package com.droidlabs.pocketcontrol.ui.settings;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
