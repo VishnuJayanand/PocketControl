@@ -39,4 +39,19 @@ public interface CategoryDao {
      */
     @Query("SELECT * FROM categories WHERE id=:id")
     Category getSingleCategory(int id);
+
+    /**
+     * Get single category.
+     * @param name category name
+     * @return Single category matching with name
+     */
+    @Query("SELECT * FROM categories WHERE name=:name")
+    Category getSingleCategory(String name);
+
+    /**
+     * Get all categories name from the database.
+     * @return list of categories name.
+     */
+    @Query("SELECT name FROM categories")
+    String[] getCategoriesName();
 }
