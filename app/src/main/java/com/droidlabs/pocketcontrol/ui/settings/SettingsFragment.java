@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
@@ -18,7 +20,13 @@ import java.io.FileOutputStream;
 import java.nio.charset.Charset;
 
 
+import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.category.CategoryDao;
+
 public class SettingsFragment extends Fragment {
+    private Spinner defaultCategory;
+    private CategoryDao categoryDao;
+
     @Nullable
     @Override
     public final View onCreateView(
@@ -26,6 +34,9 @@ public class SettingsFragment extends Fragment {
         View v = inf.inflate(R.layout.fragment_settings, container, false);
         Button button = (Button) v.findViewById(R.id.button);
         button.setOnClickListener(this::export);
+
+        categoryDao = PocketControlDB.getDatabase(getContext()).categoryDao();
+        setDefaultCategorySpinner(v);
         return v;
     }
     /**
@@ -63,4 +74,21 @@ public class SettingsFragment extends Fragment {
 
 
     }
+
+    /**
+     * This method to set the default category.
+     * @param view the transaction add layout
+     */
+    private void setDefaultCategorySpinner(final View view) {
+        //get the spinner from the xml.
+        defaultCategory = view.findViewById(R.id.defaultCategorySpinner);
+        //create a list of items for the spinner.
+        String[] dropdownItems = categoryDao.getCategoriesName();
+        ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
+        //set the spinners adapter to the previously created one.
+        defaultCategory.setAdapter(adapterCategory);
+    }
+
+
 }
