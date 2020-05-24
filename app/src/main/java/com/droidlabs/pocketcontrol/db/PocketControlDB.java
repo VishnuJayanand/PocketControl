@@ -158,11 +158,11 @@ public abstract class PocketControlDB extends RoomDatabase {
         paymentModeDao.insert(paymentMode);
 
         Transaction transactionA = new Transaction(300f, 2, String.valueOf(rentCatId), today, "");
-        Transaction transactionB = new Transaction(200f, 1, String.valueOf(shoppingCatId), today, "");
+        Transaction transactionB = new Transaction(-200f, 1, String.valueOf(shoppingCatId), today, "");
         Transaction transactionC = new Transaction(100f, 2, String.valueOf(studyCatId), today, "");
-        Transaction transactionD = new Transaction(250f, 1, String.valueOf(transportCatId), today, "");
-        Transaction transactionE = new Transaction(250f, 1, String.valueOf(healthCatId), today, "");
-        Transaction transactionF = new Transaction(250f, 1, String.valueOf(foodId), today, "");
+        Transaction transactionD = new Transaction(-250f, 1, String.valueOf(transportCatId), today, "");
+        Transaction transactionE = new Transaction(-250f, 1, String.valueOf(healthCatId), today, "");
+        Transaction transactionF = new Transaction(-250f, 1, String.valueOf(foodId), today, "");
         transactionDao.insert(transactionA);
         transactionDao.insert(transactionB);
         transactionDao.insert(transactionC);
