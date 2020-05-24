@@ -22,10 +22,16 @@ import java.nio.charset.Charset;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
+import com.droidlabs.pocketcontrol.db.currency.CurrencyDao;
+import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
 
 public class SettingsFragment extends Fragment {
     private Spinner defaultCategory;
+    private Spinner defaultCurrency;
+    private Spinner defaultPayment;
     private CategoryDao categoryDao;
+    private CurrencyDao currencyDao;
+    private PaymentModeDao paymentModeDao;
 
     @Nullable
     @Override
@@ -36,7 +42,11 @@ public class SettingsFragment extends Fragment {
         button.setOnClickListener(this::export);
 
         categoryDao = PocketControlDB.getDatabase(getContext()).categoryDao();
+        currencyDao = PocketControlDB.getDatabase(getContext()).currencyDao();
+        paymentModeDao = PocketControlDB.getDatabase(getContext()).paymentModeDao();
         setDefaultCategorySpinner(v);
+        setDefaultCurrencySpinner(v);
+        setDefaultPaymentModeSpinner(v);
         return v;
     }
     /**
@@ -90,5 +100,33 @@ public class SettingsFragment extends Fragment {
         defaultCategory.setAdapter(adapterCategory);
     }
 
+    /**
+     * This method to set the default currency.
+     * @param view the transaction add layout
+     */
+    private void setDefaultCurrencySpinner(final View view) {
+        //get the spinner from the xml.
+        defaultCurrency = view.findViewById(R.id.defaultCurrencySpinner);
+        //create a list of items for the spinner.
+        String[] dropdownItems = currencyDao.getAllCurrencyCodes();
+        ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
+        //set the spinners adapter to the previously created one.
+        defaultCurrency.setAdapter(adapterCategory);
+    }
 
+    /**
+     * This method to set the default payment mode.
+     * @param view the transaction add layout
+     */
+    private void setDefaultPaymentModeSpinner(final View view) {
+        //get the spinner from the xml.
+        defaultPayment = view.findViewById(R.id.defaultPaymentModeSpinner);
+        //create a list of items for the spinner.
+        String[] dropdownItems = paymentModeDao.getAllPaymentModeNames();
+        ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
+        //set the spinners adapter to the previously created one.
+        defaultPayment.setAdapter(adapterCategory);
+    }
 }
