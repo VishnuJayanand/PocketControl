@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
+import com.droidlabs.pocketcontrol.db.category.Category;
 
 import android.widget.GridView;
 import android.widget.LinearLayout;
-public final class CategoriesFragment extends Fragment {
+
+public final class CategoriesFragment extends Fragment implements CategoryGridAdapter.OnCategoryNoteListener {
     private GridView gridView;
     private CategoryGridAdapter adapter;
 
@@ -32,7 +34,7 @@ public final class CategoriesFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.categoryGridView);
 
         //Create the adapter for Cartegory.
-        adapter = new CategoryGridAdapter(getActivity());
+        adapter = new CategoryGridAdapter(getActivity(), this);
         //Set the adapter to gridView
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -53,5 +55,26 @@ public final class CategoriesFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    /**
+     * This method is to view the category detail fragment.
+     * @param category Category selected category
+     * @param position int selected position
+     */
+    @Override
+    public void onCategoryClick(final Category category, final int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString("categoryTitle", category.getName());
+        bundle.putInt("categoryImage", category.getIcon());
+        bundle.putInt("categoryId", category.getId());
+        //Move to category detail fragment
+        Fragment fragment = new DetailCategoryFragment();
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

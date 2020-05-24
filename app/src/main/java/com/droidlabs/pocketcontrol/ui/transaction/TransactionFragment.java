@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
@@ -20,14 +21,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class TransactionFragment extends Fragment {
-
+public class TransactionFragment extends Fragment implements TransactionListAdapter.OnTransactionNoteListener {
+    private ArrayList<Transaction> transactionsList = new ArrayList<>();
+    private ListView listView;
     private TransactionViewModel transactionViewModel;
     private CategoryViewModel categoryViewModel;
     private TransactionListAdapter transactionListAdapter;
@@ -43,7 +46,15 @@ public class TransactionFragment extends Fragment {
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
-        transactionListAdapter = new TransactionListAdapter(getActivity());
+        transactionListAdapter = new TransactionListAdapter(getActivity(), this);
+
+        //Create the adapter for Transaction
+        final TransactionListAdapter adapter = new TransactionListAdapter(getActivity(), this);
+
+        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        transactionListAdapter = new TransactionListAdapter(getActivity(), this);
+
 
         recyclerView.setAdapter(transactionListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -108,9 +119,7 @@ public class TransactionFragment extends Fragment {
                 transactionListAdapter.setTransactions(transactionViewModel.getAllTransactions());
             } else {
                 transactionListAdapter.setTransactions(
-                        transactionViewModel.getTransactionsByCategoryId(
-                                selectedCategory.getId().toString()
-                        )
+                        transactionViewModel.getTransactionsByCategoryId(selectedCategory.getId().toString())
                 );
             }
         }
@@ -119,5 +128,28 @@ public class TransactionFragment extends Fragment {
         public void onNothingSelected(final AdapterView<?> parent) {
             Log.v("SPINNER", "NOTHING SELECTED");
         }
+    }
+
+    /**
+     * This method is to view the transaction detail fragment.
+     * @param transaction Transaction selected transaction
+     * @param position int selected position
+     */
+    @Override
+    public void onTransactionClick(final Transaction transaction, final int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString("transactionDate", transaction.getDate());
+        bundle.putFloat("transactionAmount", transaction.getAmount());
+        bundle.putString("transactionNote", transaction.getTextNote());
+        bundle.putInt("transactionType", transaction.getType());
+        bundle.putString("transactionCategory", transaction.getCategory());
+        //Move to transaction detail fragment
+        Fragment fragment = new DetailTransacionFragment();
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

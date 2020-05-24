@@ -49,6 +49,10 @@ public class Transaction {
     @ColumnInfo(name = "type", defaultValue = "1")
     private int type;
 
+    // 1 - Cash, 2 - Card
+    @ColumnInfo(name = "method", defaultValue = "1")
+    private int method;
+
     @ColumnInfo(name = "date")
     private String date;
 
@@ -64,19 +68,22 @@ public class Transaction {
      * @param transactionCategory String transaction String
      * @param transactionDate Date transaction date
      * @param transactionNote String transaction note
+     * @param transactionMethod int transaction method
      */
     public Transaction(
             final Float transactionAmount,
             final Integer transactionType,
             final @Nullable String transactionCategory,
             final String transactionDate,
-            final @Nullable String transactionNote
+            final @Nullable String transactionNote,
+            final Integer transactionMethod
     ) {
         this.amount = transactionAmount;
         this.type = transactionType;
         this.category = transactionCategory;
         this.date = transactionDate;
         this.textNote = transactionNote;
+        this.method = transactionMethod;
     }
 
     /**
@@ -267,4 +274,18 @@ public class Transaction {
     public void setDate(final String tDate) {
         this.date = tDate;
     }
+
+    /**
+     * Method getter.
+     * @return int transaction method
+     */
+    public int getMethod() {
+        return method; }
+
+    /**
+     * Method setter.
+     * @param categoryMethod int transaction method
+     */
+    public void setMethod(final int categoryMethod) {
+        this.method = categoryMethod; }
 }
