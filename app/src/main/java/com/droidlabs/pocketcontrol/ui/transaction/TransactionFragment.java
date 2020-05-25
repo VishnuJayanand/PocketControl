@@ -57,14 +57,14 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
-        transactionListAdapter = new TransactionListAdapter(getActivity(), this);
+        transactionListAdapter = new TransactionListAdapter(getActivity(), this, transactionViewModel);
 
         //Create the adapter for Transaction
-        final TransactionListAdapter adapter = new TransactionListAdapter(getActivity(), this);
+        final TransactionListAdapter adapter = new TransactionListAdapter(getActivity(), this, transactionViewModel);
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
-        transactionListAdapter = new TransactionListAdapter(getActivity(), this);
+        transactionListAdapter = new TransactionListAdapter(getActivity(), this, transactionViewModel);
 
 
         recyclerView.setAdapter(transactionListAdapter);
