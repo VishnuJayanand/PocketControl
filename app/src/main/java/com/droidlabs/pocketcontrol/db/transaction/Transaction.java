@@ -279,13 +279,13 @@ public class Transaction {
      * Method getter.
      * @return int transaction method
      */
-    public int getMethod() {
+    public Integer getMethod() {
         return method; }
 
     /**
      * Method setter.
-     * @param categoryMethod int transaction method
+     * @param paymentMethod int transaction method
      */
-    public void setMethod(final int categoryMethod) {
-        this.method = categoryMethod; }
+    public void setMethod(final Integer paymentMethod) {
+        this.method = paymentMethod; }
 }
