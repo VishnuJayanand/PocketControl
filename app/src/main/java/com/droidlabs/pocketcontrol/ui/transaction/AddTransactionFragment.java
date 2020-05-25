@@ -101,7 +101,7 @@ public class AddTransactionFragment extends Fragment {
      * @param myCalendar calendar the calendar to choose date
      */
     private void updateTransactionDateLabel(final EditText editTextLayout, final Calendar myCalendar) {
-        String myFormat = "dd-MM-yy"; //In which you need put here
+        String myFormat = "dd-MM-yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
         editTextLayout.setText(sdf.format(myCalendar.getTime()));
