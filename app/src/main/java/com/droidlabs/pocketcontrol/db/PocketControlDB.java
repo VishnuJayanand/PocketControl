@@ -15,6 +15,8 @@ import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.currency.Currency;
 import com.droidlabs.pocketcontrol.db.currency.CurrencyDao;
+import com.droidlabs.pocketcontrol.db.defaults.Defaults;
+import com.droidlabs.pocketcontrol.db.defaults.DefaultsDao;
 import com.droidlabs.pocketcontrol.db.icon.Icon;
 import com.droidlabs.pocketcontrol.db.icon.IconDao;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentMode;
@@ -34,7 +36,8 @@ import java.util.concurrent.Executors;
         Currency.class,
         Icon.class,
         PaymentMode.class,
-        Transaction.class
+        Transaction.class,
+        Defaults.class
 }, version = 1, exportSchema = false)
 public abstract class PocketControlDB extends RoomDatabase {
 
@@ -73,6 +76,12 @@ public abstract class PocketControlDB extends RoomDatabase {
      * @return Transaction Dao
      */
     public abstract TransactionDao transactionDao();
+
+    /**
+     * Defaults Dao.
+     * @return Defaults Dao
+     */
+    public abstract DefaultsDao defaultsDao();
 
     private static final String DB_NAME = "PocketControl.db";
     private static final int DB_VERSION = 1;
@@ -118,6 +127,7 @@ public abstract class PocketControlDB extends RoomDatabase {
         BudgetDao budgetDao = dbInstance.budgetDao();
         CategoryDao categoryDao = dbInstance.categoryDao();
         CurrencyDao currencyDao = dbInstance.currencyDao();
+        DefaultsDao defaultsDao = dbInstance.defaultsDao();
         IconDao iconDao = dbInstance.iconDao();
         PaymentModeDao paymentModeDao = dbInstance.paymentModeDao();
         TransactionDao transactionDao = dbInstance.transactionDao();
@@ -128,6 +138,7 @@ public abstract class PocketControlDB extends RoomDatabase {
         iconDao.deleteAll();
         paymentModeDao.deleteAll();
         transactionDao.deleteAll();
+        defaultsDao.deleteAll();
 
         String today = "13-05-2020";
 
@@ -157,6 +168,9 @@ public abstract class PocketControlDB extends RoomDatabase {
         PaymentMode paymentMode = new PaymentMode("Credit card");
         paymentModeDao.insert(paymentMode);
 
+        Defaults defaultValue = new Defaults("Currency", "EUR");
+        defaultsDao.insert(defaultValue);
+
         Transaction transactionA = new Transaction(300f, 2, String.valueOf(rentCatId), today, "");
         Transaction transactionB = new Transaction(-200f, 1, String.valueOf(shoppingCatId), today, "");
         Transaction transactionC = new Transaction(100f, 2, String.valueOf(studyCatId), today, "");
@@ -170,4 +184,5 @@ public abstract class PocketControlDB extends RoomDatabase {
         transactionDao.insert(transactionE);
         transactionDao.insert(transactionF);
     }
+
 }
