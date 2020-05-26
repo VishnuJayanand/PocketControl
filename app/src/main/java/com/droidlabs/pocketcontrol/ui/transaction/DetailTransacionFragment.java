@@ -14,6 +14,7 @@ import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
+import com.droidlabs.pocketcontrol.utils.DateUtils;
 
 import static java.lang.Integer.parseInt;
 
@@ -25,7 +26,7 @@ public class DetailTransacionFragment extends Fragment {
         View view = inf.inflate(R.layout.transaction_detail, container, false);
 
         Bundle bundle = this.getArguments();
-        String date = bundle.getString("transactionDate");
+        Long date = bundle.getLong("transactionDate");
         float amount = bundle.getFloat("transactionAmount");
         String note = bundle.getString("transactionNote");
         int type = bundle.getInt("transactionType");
@@ -61,7 +62,7 @@ public class DetailTransacionFragment extends Fragment {
             transactionCategoryImage.setImageResource(category1.getIcon());
         }
 
-        transactionDate.setText(date);
+        transactionDate.setText(DateUtils.formatDate(date));
         transactionAmount.setText(amountToString);
         transactionType.setText(typeAsString);
         transactionNote.setText(note);

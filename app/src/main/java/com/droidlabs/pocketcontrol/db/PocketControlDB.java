@@ -21,6 +21,7 @@ import com.droidlabs.pocketcontrol.db.paymentmode.PaymentMode;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
+import com.droidlabs.pocketcontrol.utils.DateUtils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -129,7 +130,7 @@ public abstract class PocketControlDB extends RoomDatabase {
         paymentModeDao.deleteAll();
         transactionDao.deleteAll();
 
-        String today = "13-05-2020";
+        Long today = DateUtils.getStartOfCurrentDay().getTimeInMillis();
 
         Budget budget = new Budget(700f, "Monthly budget", true);
         budgetDao.insert(budget);

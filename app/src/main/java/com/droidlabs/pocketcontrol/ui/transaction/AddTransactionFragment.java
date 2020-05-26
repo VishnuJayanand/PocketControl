@@ -37,7 +37,7 @@ public class AddTransactionFragment extends Fragment {
     private Spinner dropdownTransactionMethod;
     private Spinner dropdownTransactionCategory;
     private EditText editText;
-    private String transactionDate;
+    private Long transactionDate;
     private CategoryDao categoryDao;
 
     @Nullable
@@ -103,8 +103,9 @@ public class AddTransactionFragment extends Fragment {
     private void updateTransactionDateLabel(final EditText editTextLayout, final Calendar myCalendar) {
         String myFormat = "dd-MM-yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        transactionDate = myCalendar.getTimeInMillis();
 
-        editTextLayout.setText(sdf.format(myCalendar.getTime()));
+        editTextLayout.setText(sdf.format(transactionDate));
     }
 
     /**
@@ -186,7 +187,6 @@ public class AddTransactionFragment extends Fragment {
             requestFocus(editText);
             return false;
         }
-        transactionDate = editText.getText().toString();
         return true;
     }
 
