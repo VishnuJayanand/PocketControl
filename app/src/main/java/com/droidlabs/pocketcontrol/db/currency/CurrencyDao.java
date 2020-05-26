@@ -28,4 +28,11 @@ public interface CurrencyDao {
      */
     @Query("SELECT * FROM currencies")
     List<Currency> getAllCurrencies();
+
+    /**
+     * Retrieve all currency codes.
+     * @return list of currency codes.
+     */
+    @Query("SELECT three_letter_code FROM currencies")
+    String[] getAllCurrencyCodes();
 }

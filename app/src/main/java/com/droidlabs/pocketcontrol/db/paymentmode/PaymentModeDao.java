@@ -28,4 +28,11 @@ public interface PaymentModeDao {
      */
     @Query("SELECT * FROM payment_modes")
     List<PaymentMode> getAllPaymentModes();
+
+    /**
+     * Retrieve all payment mode names from the database.
+     * @return all payment modes.
+     */
+    @Query("SELECT name FROM payment_modes")
+    String[] getAllPaymentModeNames();
 }
