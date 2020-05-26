@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
@@ -23,6 +24,7 @@ import java.nio.charset.Charset;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.currency.CurrencyDao;
+import com.droidlabs.pocketcontrol.db.defaults.Defaults;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
 
 public class SettingsFragment extends Fragment {
@@ -32,6 +34,7 @@ public class SettingsFragment extends Fragment {
     private CategoryDao categoryDao;
     private CurrencyDao currencyDao;
     private PaymentModeDao paymentModeDao;
+    private PocketControlDB db = PocketControlDB.getDatabase(getContext());
 
     @Nullable
     @Override
@@ -44,13 +47,33 @@ public class SettingsFragment extends Fragment {
         categoryDao = PocketControlDB.getDatabase(getContext()).categoryDao();
         currencyDao = PocketControlDB.getDatabase(getContext()).currencyDao();
         paymentModeDao = PocketControlDB.getDatabase(getContext()).paymentModeDao();
+
+        Button saveSettings = v.findViewById(R.id.addDefaults);
+
+        saveSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                String stringCategory = defaultCategory.getSelectedItem().toString();
+                String stringPaymentMode = defaultPayment.getSelectedItem().toString();
+                String stringCurrency = defaultCurrency.getSelectedItem().toString();
+
+                Defaults categoryEntry = new Defaults("Category", stringCategory);
+                Defaults paymentModeEntry = new Defaults("Payment Mode", stringPaymentMode);
+                Defaults currencyEntry = new Defaults("Currency", stringCurrency);
+                db.defaultsDao().insert(categoryEntry);
+                db.defaultsDao().insert(paymentModeEntry);
+                db.defaultsDao().insert(currencyEntry);
+                Toast.makeText(getContext(), "Settings Saved", Toast.LENGTH_SHORT).show();
+
+            }
+        });
         setDefaultCategorySpinner(v);
         setDefaultCurrencySpinner(v);
         setDefaultPaymentModeSpinner(v);
         return v;
     }
     /**
-     * Creating adapter for Budget.
+     * Creating adapter for Settings.
      * @param view view
      */
 
