@@ -29,4 +29,12 @@ public interface DefaultsDao {
      */
     @Query("SELECT * FROM defaults")
     List<Defaults> getAllDefaults();
+
+    /**
+     * Retrieve all defaults category.
+     * @return string of defaults.
+     * @param name entity name
+     */
+    @Query("SELECT default_value FROM defaults WHERE default_entity=:name")
+    String getDefaultValue(String name);
 }

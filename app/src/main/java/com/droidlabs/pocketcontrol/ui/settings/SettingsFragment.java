@@ -60,6 +60,8 @@ public class SettingsFragment extends Fragment {
                 Defaults categoryEntry = new Defaults("Category", stringCategory);
                 Defaults paymentModeEntry = new Defaults("Payment Mode", stringPaymentMode);
                 Defaults currencyEntry = new Defaults("Currency", stringCurrency);
+                /*TODO - change the insert statement'*/
+                db.defaultsDao().deleteAll();
                 db.defaultsDao().insert(categoryEntry);
                 db.defaultsDao().insert(paymentModeEntry);
                 db.defaultsDao().insert(currencyEntry);
