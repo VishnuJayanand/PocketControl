@@ -66,7 +66,6 @@ public class SettingsFragment extends Fragment {
                 db.defaultsDao().insert(paymentModeEntry);
                 db.defaultsDao().insert(currencyEntry);
                 Toast.makeText(getContext(), "Settings Saved", Toast.LENGTH_SHORT).show();
-
             }
         });
         setDefaultCategorySpinner(v);
