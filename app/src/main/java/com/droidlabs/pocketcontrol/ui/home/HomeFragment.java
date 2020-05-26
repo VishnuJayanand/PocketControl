@@ -17,13 +17,15 @@ import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
 
 import java.util.List;
+import java.util.Locale;
 
 
 public class HomeFragment extends Fragment {
 
+    private static final Locale DEFAULT_LOCATION = Locale.GERMANY;
     private PocketControlDB db = PocketControlDB.getDatabase(getContext());
     private Animation topAnimation;
-    private TextView textViewAmount, textViewExpense, textViewIncome;
+    private TextView textViewAmount, textViewExpense, textViewIncome, textViewNetBalance;
     private TransactionDao transactionDao;
     private Float totalAmount = 0f;
     private Float totalExpense = 0f;
@@ -37,11 +39,13 @@ public class HomeFragment extends Fragment {
         View view = inf.inflate(R.layout.fragment_home, container, false);
 
         textViewAmount = view.findViewById(R.id.homeScreenTop);
+        textViewNetBalance = view.findViewById(R.id.homeScreenNetBalanceText);
         textViewIncome = view.findViewById(R.id.homeScreenTotalIncome);
         textViewExpense = view.findViewById(R.id.homeScreenTotalExpense);
 
         topAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.top_animation);
         textViewAmount.setAnimation(topAnimation);
+        textViewNetBalance.setAnimation(topAnimation);
 
         transactionDao = db.transactionDao();
         allTransactions = transactionDao.getAllTransactions();
@@ -57,9 +61,9 @@ public class HomeFragment extends Fragment {
         }
         totalAmount =  totalIncome - totalExpense;
 
-        textViewExpense.setText("Totatl Expense : $ " + totalExpense.toString());
-        textViewIncome.setText("Totatl Income   : $ " + totalIncome.toString());
-        textViewAmount.setText("$ " + totalAmount.toString());
+        textViewExpense.setText(String.format(DEFAULT_LOCATION, "Total Expense:  EUR %.2f", totalExpense));
+        textViewIncome.setText(String.format(DEFAULT_LOCATION, "Total Income:    EUR %.2f", totalIncome));
+        textViewAmount.setText(String.format(DEFAULT_LOCATION, "EUR %.2f", totalAmount));
 
         return view;
     }
