@@ -15,14 +15,12 @@ import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
+import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 
 import java.util.List;
-import java.util.Locale;
-
 
 public class HomeFragment extends Fragment {
 
-    private static final Locale DEFAULT_LOCATION = Locale.GERMANY;
     private PocketControlDB db = PocketControlDB.getDatabase(getContext());
     private Animation topAnimation;
     private TextView textViewAmount, textViewExpense, textViewIncome, textViewNetBalance;
@@ -61,9 +59,9 @@ public class HomeFragment extends Fragment {
         }
         totalAmount =  totalIncome - totalExpense;
 
-        textViewExpense.setText(String.format(DEFAULT_LOCATION, "Total Expense:  EUR %.2f", totalExpense));
-        textViewIncome.setText(String.format(DEFAULT_LOCATION, "Total Income:    EUR %.2f", totalIncome));
-        textViewAmount.setText(String.format(DEFAULT_LOCATION, "EUR %.2f", totalAmount));
+        textViewExpense.setText("Total Expense:  " + CurrencyUtils.formatAmount(totalExpense));
+        textViewIncome.setText("Total Income:    " + CurrencyUtils.formatAmount(totalIncome));
+        textViewAmount.setText(CurrencyUtils.formatAmount(totalAmount));
 
         return view;
     }

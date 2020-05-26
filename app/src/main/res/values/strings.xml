@@ -3,11 +3,12 @@
     <string name="transaction_date">Transaction Date</string>
     <string name="category_title">Category Title</string>
     <string name="app_name">Pocket Control</string>
-    <string name="add_transaction">New Transaction</string>
+    <string name="add_transaction">Add transaction</string>
+    <string name="add_category">Add category</string>
     <string name="hint_transaction">Transaction description...</string>
     <string name="button_save">Save</string>
     <string name="empty_not_saved">Transaction not saved because it is empty.</string>
-    <string name="choosse_transactiontype">Choosse TransactionType :</string>
+    <string name="choosse_transactiontype">Choose TransactionType :</string>
     <string name="fraction">%1$d/%2$d</string>
     <string name="choose_transaction_method">Choose Transaction Method :</string>
     <string name="home_screen_net_balance">NET BALANCE</string>

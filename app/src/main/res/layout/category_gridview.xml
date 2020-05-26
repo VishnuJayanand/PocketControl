@@ -1,92 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_list_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFBFB">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-        <LinearLayout
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/addCategoryButton"
+            style="@style/featured_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_category" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categoryGridView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@drawable/layout_bg"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:orientation="vertical"
-                android:clickable="true"
-                android:id="@+id/addCategoryButton"
-                >
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:src="@drawable/category"
-                    android:scaleX="2"
-                    android:scaleY="1.5"/>
-
-                <TextView
-                    android:id="@+id/txtTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:text="Add Category"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#03A9F4"
-                    android:textSize="25dp"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:id="@+id/txtTitle2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:text="Add more category so that you can have a more detailed overview of your expense."
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#4C4F50"
-                    android:textSize="15dp"
-                    android:paddingBottom="20dp"/>
-
-
-            </LinearLayout>
-        </LinearLayout>
-        <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/categoryGridView"
-        android:paddingTop="20dp"
-        android:paddingBottom="10dp"
-        android:columnWidth="180dp"
-        android:gravity="center|bottom"
-        android:horizontalSpacing="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:numColumns="2"
-        android:stretchMode="spacingWidth"
-        android:verticalSpacing="60dp"
-        android:visibility="visible"
-        />
+            android:columnWidth="180dp"
+            android:gravity="center|bottom"
+            android:horizontalSpacing="10dp"
+            android:numColumns="2"
+            android:paddingTop="20dp"
+            android:paddingBottom="10dp"
+            android:stretchMode="spacingWidth"
+            android:verticalSpacing="60dp"
+            android:visibility="visible" />
 
     </LinearLayout>
-    </ScrollView>
-</FrameLayout>
+
+</RelativeLayout>

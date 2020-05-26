@@ -11,11 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -64,7 +64,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         transactionsList = transactionViewModel.getAllTransactions();
         transactionListAdapter.setTransactions(transactionsList);
 
-        LinearLayout addTransactionLayout = view.findViewById(R.id.addTransactionButton);
+        AppCompatButton addTransactionLayout = view.findViewById(R.id.addTransactionButton);
 
         addTransactionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
