@@ -1,6 +1,5 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
+import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 
 import static java.lang.Integer.parseInt;
@@ -41,17 +42,17 @@ public class DetailTransacionFragment extends Fragment {
         ImageView transactionCategoryImage = view.findViewById(R.id.transactionCategoryImage);
 
         // turn float to string
-        String amountToString = Float.toString(amount);
+        String amountToString = CurrencyUtils.formatAmount(amount, "€");
         // transaction Type
         String typeAsString = "";
         if (type == 1) {
-            transactionType.setTextColor(Color.parseColor("#F44336"));
+            transactionType.setTextColor(ContextCompat.getColor(getContext(), R.color.colorExpense));
             typeAsString = "Expense";
-            amountToString = " -" + amountToString;
+            amountToString = "- " + amountToString;
         } else {
-            transactionType.setTextColor(Color.parseColor("#4CAF50"));
+            transactionType.setTextColor(ContextCompat.getColor(getContext(), R.color.colorIncome));
             typeAsString = "Income";
-            amountToString = " +" + amountToString;
+            amountToString = "+ " + amountToString;
         }
 
         //get Category Title and Image

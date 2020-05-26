@@ -19,6 +19,7 @@ import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 
 import java.util.Calendar;
@@ -77,18 +78,13 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             String category = current.getCategory();
 
             // turn float to string
-            String amountToString = Float.toString(amount);
-            String typeAsString = "";
+            String amountToString = CurrencyUtils.formatAmount(amount, "€");
 
 
             if (type == 1) {
-                typeAsString = "Expense";
-                holder.transactionType.setTextColor(ContextCompat.getColor(context, R.color.colorExpense));
                 holder.transactionAmount.setTextColor(ContextCompat.getColor(context, R.color.colorExpense));
                 amountToString = "- " + amountToString;
             } else {
-                typeAsString = "Income";
-                holder.transactionType.setTextColor(ContextCompat.getColor(context, R.color.colorIncome));
                 holder.transactionAmount.setTextColor(ContextCompat.getColor(context, R.color.colorIncome));
                 amountToString = "+ " + amountToString;
             }
@@ -102,7 +98,6 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
 
             holder.transactionDate.setText(DateUtils.formatDate(date));
             holder.transactionAmount.setText(amountToString);
-            holder.transactionType.setText(typeAsString);
             holder.duplicateTransactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
@@ -160,7 +155,6 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
         private final TextView transactionCategoryTitle;
         private final TextView transactionDate;
         private final TextView transactionAmount;
-        private final TextView transactionType;
         private final OnTransactionNoteListener onNoteListener;
         private final ImageButton duplicateTransactionButton;
         // private final TextView transactionCurrency;
@@ -176,7 +170,6 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             transactionCategoryTitle = itemView.findViewById(R.id.transactionCategoryTitle);
             transactionDate = itemView.findViewById(R.id.transactionDate);
             transactionAmount = itemView.findViewById(R.id.transactionAmount);
-            transactionType = itemView.findViewById(R.id.transactionType);
             duplicateTransactionButton = itemView.findViewById(R.id.duplicate_transaction);
             this.onNoteListener = onTransactionNoteListener;
 

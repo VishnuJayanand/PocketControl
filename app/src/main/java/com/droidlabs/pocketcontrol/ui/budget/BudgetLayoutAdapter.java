@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
+import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
                 budgetcategory.setText((budget.getCategory()));
             }
             if (budgetvalue != null) {
-                budgetvalue.setText((budget.getMaxAmount().toString()));
+                budgetvalue.setText(CurrencyUtils.formatAmount(budget.getMaxAmount()));
             }
         }
 

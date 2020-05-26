@@ -71,33 +71,15 @@
             android:textColor="#4D4D50"
             android:textSize="15sp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/transactionType"
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical|end"
-                android:paddingRight="5dp"
-                android:text="Transaction Type"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#4D4D50"
-                android:textSize="12sp"
-                tools:ignore="RtlHardcoded" />
-
-            <ImageButton
-                android:id="@+id/duplicate_transaction"
-                style="@android:style/Widget.DeviceDefault.Light.ImageButton"
-                android:layout_width="24dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:backgroundTint="@android:color/white"
-                app:srcCompat="@drawable/ic_content_copy_black_24dp" />
-        </LinearLayout>
+        <ImageButton
+            android:id="@+id/duplicate_transaction"
+            style="@android:style/Widget.DeviceDefault.Light.ImageButton"
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_weight="0"
+            android:backgroundTint="@android:color/white"
+            app:srcCompat="@drawable/ic_content_copy_black_24dp" />
 
     </LinearLayout>
 
