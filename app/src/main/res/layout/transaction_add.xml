@@ -92,6 +92,28 @@
         >
 
         <TextView
+            android:layout_width="233dp"
+            android:layout_height="wrap_content"
+            android:paddingRight="24dp"
+            android:text="@string/choose_transaction_method"
+            android:textSize="17sp" />
+        <Spinner
+            android:id="@+id/spinnerTransactionMethod"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        >
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Choose TransactionCategory: "

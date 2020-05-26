@@ -37,8 +37,29 @@ public class TransactionViewModel extends AndroidViewModel {
      * @param categoryId category ID
      * @return return all transactions with the specified category ID.
      */
-    public List<Transaction> getTransactionsByCategoryId(final String categoryId) {
-        return repository.getTransactionsByCategoryId(categoryId);
+    public List<Transaction> filterTransactionsByCategoryId(final String categoryId) {
+        return repository.filterTransactionsByCategoryId(categoryId);
+    }
+
+    /**
+     * Get transactions by date range.
+     * @param lowerBound lower date bound.
+     * @param upperBound upper date bound.
+     * @return return all transactions within the specified date range.
+     */
+    public List<Transaction> filterTransactionsByDate(final long lowerBound, final long upperBound) {
+        return repository.filterTransactionsByDate(lowerBound, upperBound);
+    }
+
+    /**
+     * Get transactions by category ID.
+     * @param catId category ID
+     * @param lb lower date bound.
+     * @param ub upper date bound.
+     * @return return all transactions with the specified category ID and within the date range.
+     */
+    public List<Transaction> filterTransactionsByCategoryAndDate(final String catId, final long lb, final long ub) {
+        return repository.filterTransactionsByCategoryAndDate(catId, lb, ub);
     }
 
     /**
@@ -48,4 +69,5 @@ public class TransactionViewModel extends AndroidViewModel {
     public void insert(final Transaction transaction) {
         repository.insert(transaction);
     }
+
 }

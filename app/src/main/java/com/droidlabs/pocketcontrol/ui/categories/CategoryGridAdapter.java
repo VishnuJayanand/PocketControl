@@ -6,13 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
-
 import java.util.List;
 
 public final class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGridAdapter.CategoryViewHolder> {
@@ -20,20 +17,23 @@ public final class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGrid
     private List<Category> categories; // Cached copy of transactions
     private final LayoutInflater layoutInflater;
     private static final String TAG = "CategoryAdapter";
+    private OnCategoryNoteListener mOnNoteListener;
 
     /**
      * Creating adapter for Transaction.
      * @param context context
+     * @param onNoteListener onNotelistener
      */
-    public CategoryGridAdapter(final @NonNull Context context) {
+    public CategoryGridAdapter(final @NonNull Context context, final OnCategoryNoteListener onNoteListener) {
         layoutInflater = LayoutInflater.from(context);
+        this.mOnNoteListener = onNoteListener;
     }
 
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(final @NonNull ViewGroup parent, final int viewType) {
         View itemView = layoutInflater.inflate(R.layout.category_griditem, parent, false);
-        return new CategoryViewHolder(itemView);
+        return new CategoryViewHolder(itemView, mOnNoteListener);
     }
 
     /**
@@ -73,18 +73,41 @@ public final class CategoryGridAdapter extends RecyclerView.Adapter<CategoryGrid
         }
     }
 
-    final class CategoryViewHolder extends RecyclerView.ViewHolder {
+    final class CategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final ImageView categoryImage;
         private final TextView categoryTitle;
+        private final OnCategoryNoteListener onNoteListener;
 
         /**
          * Transaction view holder.
          * @param itemView view that will hold the category list.
+         * @param onCategoryNoteListener OnNoteListener
          */
-        private CategoryViewHolder(final View itemView) {
+        private CategoryViewHolder(final View itemView, final OnCategoryNoteListener onCategoryNoteListener) {
             super(itemView);
             categoryImage = itemView.findViewById(R.id.imageView);
             categoryTitle = itemView.findViewById(R.id.txtTitle);
+            this.onNoteListener = onCategoryNoteListener;
+
+            itemView.setOnClickListener(this);
         }
+
+        /**
+         * method to get catch onclick event of grid adapter.
+         * @param v view
+         */
+        @Override
+        public void onClick(final View v) {
+            onNoteListener.onCategoryClick(categories.get(getAdapterPosition()), getAdapterPosition());
+        }
+    }
+
+    public interface OnCategoryNoteListener {
+        /**
+         * This method to transfer category and position from the selected category.
+         * @param category Category selected category
+         * @param position int selected position
+         */
+        void onCategoryClick(Category category, int position);
     }
 }

@@ -23,6 +23,7 @@ import com.droidlabs.pocketcontrol.db.paymentmode.PaymentMode;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
+import com.droidlabs.pocketcontrol.utils.DateUtils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -140,7 +141,7 @@ public abstract class PocketControlDB extends RoomDatabase {
         transactionDao.deleteAll();
         defaultsDao.deleteAll();
 
-        String today = "13-05-2020";
+        Long today = DateUtils.getStartOfCurrentDay().getTimeInMillis();
 
         Budget budget = new Budget(700f, "Monthly budget", true);
         budgetDao.insert(budget);
@@ -168,15 +169,18 @@ public abstract class PocketControlDB extends RoomDatabase {
         PaymentMode paymentMode = new PaymentMode("Credit card");
         paymentModeDao.insert(paymentMode);
 
+
         Defaults defaultValue = new Defaults("Currency", "EUR");
         defaultsDao.insert(defaultValue);
 
-        Transaction transactionA = new Transaction(300f, 2, String.valueOf(rentCatId), today, "");
-        Transaction transactionB = new Transaction(-200f, 1, String.valueOf(shoppingCatId), today, "");
-        Transaction transactionC = new Transaction(100f, 2, String.valueOf(studyCatId), today, "");
-        Transaction transactionD = new Transaction(-250f, 1, String.valueOf(transportCatId), today, "");
-        Transaction transactionE = new Transaction(-250f, 1, String.valueOf(healthCatId), today, "");
-        Transaction transactionF = new Transaction(-250f, 1, String.valueOf(foodId), today, "");
+
+        Transaction transactionA = new Transaction(300f, 2, String.valueOf(rentCatId), today, "", 1);
+        Transaction transactionB = new Transaction(200f, 1, String.valueOf(shoppingCatId), today, "", 1);
+        Transaction transactionC = new Transaction(100f, 2, String.valueOf(studyCatId), today, "", 1);
+        Transaction transactionD = new Transaction(250f, 1, String.valueOf(transportCatId), today, "", 1);
+        Transaction transactionE = new Transaction(250f, 1, String.valueOf(healthCatId), today, "", 1);
+        Transaction transactionF = new Transaction(250f, 1, String.valueOf(foodId), today, "", 1);
+
         transactionDao.insert(transactionA);
         transactionDao.insert(transactionB);
         transactionDao.insert(transactionC);

@@ -34,8 +34,29 @@ public class TransactionRepository {
      * @param categoryId category id.
      * @return all transactions with the corresponding categoryID.
      */
-    public List<Transaction> getTransactionsByCategoryId(final String categoryId) {
+    public List<Transaction> filterTransactionsByCategoryId(final String categoryId) {
         return transactionDao.getTransactionsByCategoryId(categoryId);
+    }
+
+    /**
+     * Get transactions by date range.
+     * @param lb date lower bound.
+     * @param ub date upper bound.
+     * @return all transactions within date range.
+     */
+    public List<Transaction> filterTransactionsByDate(final long lb, final long ub) {
+        return transactionDao.filterTransactionsByDate(lb, ub);
+    }
+
+    /**
+     * Get transactions by category and date range.
+     * @param catId category id.
+     * @param lb date lower bound.
+     * @param ub date upper bound.
+     * @return all transactions of a certain category and within date range.
+     */
+    public List<Transaction> filterTransactionsByCategoryAndDate(final String catId, final long lb, final long ub) {
+        return transactionDao.filterTransactionsByCategoryAndDate(catId, lb, ub);
     }
 
     /**
@@ -47,4 +68,5 @@ public class TransactionRepository {
             transactionDao.insert(transaction);
         });
     }
+
 }

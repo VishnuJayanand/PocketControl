@@ -37,7 +37,7 @@ public class BudgetFragment extends Fragment {
 
         if (allBudgets.isEmpty()) {
             helpText.setVisibility(View.VISIBLE);
-            helpText.setText("You dont have any budgets at present, please add one");
+            helpText.setText("You don't have any budgets at present, please add one");
         } else {
             BudgetLayoutAdapter adapter = new BudgetLayoutAdapter(getContext(), R.layout.budget_layout, allBudgets);
             listView = (ListView) view.findViewById(R.id.budget_list);

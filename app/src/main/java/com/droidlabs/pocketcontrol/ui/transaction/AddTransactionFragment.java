@@ -32,10 +32,12 @@ public class AddTransactionFragment extends Fragment {
     private TextInputEditText tiedtTransactionAmount, tiedtTransactionNote;
     private TextInputLayout tilTransactionAmount, tilTransactionNote;
     private int transactionType;
+    private int transactionMethod;
     private Spinner dropdownTransactionType;
+    private Spinner dropdownTransactionMethod;
     private Spinner dropdownTransactionCategory;
     private EditText editText;
-    private String transactionDate;
+    private Long transactionDate;
     private CategoryDao categoryDao;
 
     @Nullable
@@ -53,6 +55,8 @@ public class AddTransactionFragment extends Fragment {
 
         //set the spinner for transactionType from the xml.
         setTransactionTypeSpinner(view);
+        //set the spinner for transactionMethod from the xml.
+        setTransactionMethodSpinner(view);
         //set thee spinner for transactionIcon from the xml.
         setTransactionCategorySpinner(view);
 
@@ -97,10 +101,11 @@ public class AddTransactionFragment extends Fragment {
      * @param myCalendar calendar the calendar to choose date
      */
     private void updateTransactionDateLabel(final EditText editTextLayout, final Calendar myCalendar) {
-        String myFormat = "dd-MM-yy"; //In which you need put here
+        String myFormat = "dd-MM-yyyy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        transactionDate = myCalendar.getTimeInMillis();
 
-        editTextLayout.setText(sdf.format(myCalendar.getTime()));
+        editTextLayout.setText(sdf.format(transactionDate));
     }
 
     /**
@@ -116,6 +121,21 @@ public class AddTransactionFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
         dropdownTransactionType.setAdapter(adapterType);
+    }
+
+    /**
+     * This method to set the spinner of Transaction Method.
+     * @param view the transaction add layout
+     */
+    private void setTransactionMethodSpinner(final View view) {
+        //get the spinner from the xml.
+        dropdownTransactionMethod = view.findViewById(R.id.spinnerTransactionMethod);
+        //create a list of items for the spinner.
+        String[] dropdownItems = new String[]{"Cash", "Card"};
+        ArrayAdapter<String> adapterType = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
+        //set the spinners adapter to the previously created one.
+        dropdownTransactionMethod.setAdapter(adapterType);
     }
 
     /**
@@ -167,7 +187,6 @@ public class AddTransactionFragment extends Fragment {
             requestFocus(editText);
             return false;
         }
-        transactionDate = editText.getText().toString();
         return true;
     }
 
@@ -184,6 +203,18 @@ public class AddTransactionFragment extends Fragment {
     }
 
     /**
+     * Method to convert transactionType.
+     */
+    private void convertTransactionMethod() {
+        String text = dropdownTransactionMethod.getSelectedItem().toString();
+        if (text == "Cash") {
+            transactionMethod = 1;
+        } else {
+            transactionMethod = 2;
+        }
+    }
+
+    /**
      * Submit method to submit the input from user.
      */
     private void submitForm() {
@@ -194,18 +225,15 @@ public class AddTransactionFragment extends Fragment {
             return;
         }
         convertTransactionType();
+        convertTransactionMethod();
         String transactionCategory = dropdownTransactionCategory.getSelectedItem().toString();
-        System.out.println(transactionCategory);
         Category selectedCategory = categoryDao.getSingleCategory(transactionCategory);
-        System.out.println(selectedCategory);
-        System.out.println(selectedCategory.getName());
-        System.out.println(selectedCategory.getId());
         int categoryId = selectedCategory.getId();
 
         int transactionAmount = Integer.parseInt(tiedtTransactionAmount.getText().toString());
         String transactionNote  = tiedtTransactionNote.getText().toString().trim() + "";
         Transaction newTransaction = new Transaction((float) transactionAmount,
-                transactionType, Integer.toString(categoryId), transactionDate, transactionNote);
+                transactionType, Integer.toString(categoryId), transactionDate, transactionNote, transactionMethod);
         //Get CategoryViewModel
         final TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         //Insert new Category in to the database
