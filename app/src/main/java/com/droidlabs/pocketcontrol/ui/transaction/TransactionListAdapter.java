@@ -19,7 +19,9 @@ import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.utils.DateUtils;
 
+import java.util.Calendar;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -68,7 +70,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             Transaction current = transactions.get(position);
 
             //get the Transaction information:
-            String date = current.getDate();
+            Long date = current.getDate();
             Integer type = current.getType();
             Float amount = current.getAmount();
             String category = current.getCategory();
@@ -96,7 +98,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
                 holder.transactionCategoryImage.setImageResource(category1.getIcon());
             }
 
-            holder.transactionDate.setText(date);
+            holder.transactionDate.setText(DateUtils.formatDate(date));
             holder.transactionAmount.setText(amountToString);
             holder.transactionType.setText(typeAsString);
             holder.duplicateTransactionButton.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +114,12 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
                                               final int dayOfMonth) {
                             // TODO Auto-generated method stub
 
-                            newTransaction.setDate(parseSelectedDate(dayOfMonth, monthOfYear, year));
+                            Calendar newTransactionDate = Calendar.getInstance();
+                            newTransactionDate.set(Calendar.YEAR, year);
+                            newTransactionDate.set(Calendar.MONTH, monthOfYear);
+                            newTransactionDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                            newTransaction.setDate(DateUtils.getStartOfDayInMS(newTransactionDate.getTimeInMillis()));
+
                             transactionViewModel.insert(newTransaction);
                         }
 
@@ -234,28 +241,5 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
         }
 
         return newTransaction;
-    }
-
-    /**
-     * Helper method to parse the date.
-     * @param day day of the month
-     * @param month month of the year (should be added +1 to correct for 0 to 11)
-     * @param year year
-     * @return parsed string
-     */
-    private String parseSelectedDate(final int day, final int month, final int year) {
-        String parsedDay = String.valueOf(day);
-        String parsedMonth = String.valueOf(month + 1);
-        String parsedYear = String.valueOf(year);
-
-        if (parsedDay.length() == 1) {
-            parsedDay = "0" + parsedDay;
-        }
-
-        if (parsedMonth.length() == 1) {
-            parsedMonth = "0" + parsedMonth;
-        }
-
-        return "" + parsedDay + "-" + parsedMonth + "-" + parsedYear;
     }
 }

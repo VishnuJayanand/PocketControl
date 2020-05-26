@@ -12,7 +12,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 
@@ -28,23 +27,23 @@ import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.utils.DateUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 
 public class TransactionFragment extends Fragment implements TransactionListAdapter.OnTransactionNoteListener {
 
     private List<Transaction> transactionsList = new ArrayList<>();
-    private ListView listView;
     private TransactionViewModel transactionViewModel;
     private CategoryViewModel categoryViewModel;
     private TransactionListAdapter transactionListAdapter;
-    private int fromDay, fromMonth, fromYear;
-    private int toDay, toMonth, toYear;
+    private EditText editTextToDate, editTextFromDate;
+    private Category selectedCategory;
+    private boolean filterByCategory = false, filterByDate = false;
+    private final Calendar fromDate = Calendar.getInstance(), toDate = Calendar.getInstance();
 
     @Override
     public final View onCreateView(
@@ -59,17 +58,8 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         transactionListAdapter = new TransactionListAdapter(getActivity(), this, transactionViewModel);
 
-        //Create the adapter for Transaction
-        final TransactionListAdapter adapter = new TransactionListAdapter(getActivity(), this, transactionViewModel);
-
-        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
-        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
-        transactionListAdapter = new TransactionListAdapter(getActivity(), this, transactionViewModel);
-
-
         recyclerView.setAdapter(transactionListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
 
         transactionsList = transactionViewModel.getAllTransactions();
         transactionListAdapter.setTransactions(transactionsList);
@@ -99,62 +89,68 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         categoryFilterSpinner.setAdapter(categoryFilterAdapter);
         categoryFilterSpinner.setOnItemSelectedListener(new SpinnerListener());
 
-        //date filter
+        // Date filter
 
-        EditText editTextToDate, editTextFromDate;
-
-        final Calendar myCalendar1 = Calendar.getInstance();
         editTextFromDate = view.findViewById(R.id.fromDate);
-        DatePickerDialog.OnDateSetListener fromdate = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(final DatePicker view, final int year, final int monthOfYear,
-                                  final int dayOfMonth) {
-                // TODO Auto-generated method stub
-                myCalendar1.set(Calendar.YEAR, year);
-                myCalendar1.set(Calendar.MONTH, monthOfYear);
-                myCalendar1.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                fromDay = dayOfMonth;
-                fromMonth = monthOfYear + 1;
-                fromYear = year;
-               updateTransactionDateLabel(editTextFromDate, myCalendar1);
-            }
+        editTextToDate = view.findViewById(R.id.toDate);
 
+        DatePickerDialog.OnDateSetListener fromDateListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(
+                    final DatePicker view,
+                    final int year,
+                    final int monthOfYear,
+                    final int dayOfMonth
+            ) {
+                // TODO Auto-generated method stub
+                fromDate.set(Calendar.YEAR, year);
+                fromDate.set(Calendar.MONTH, monthOfYear);
+                fromDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateTransactionDateLabel(editTextFromDate, fromDate);
+            }
         };
 
         editTextFromDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 // TODO Auto-generated method stub
-                new DatePickerDialog(getContext(), fromdate, myCalendar1
-                        .get(Calendar.YEAR), myCalendar1.get(Calendar.MONTH),
-                        myCalendar1.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(
+                        getContext(),
+                        fromDateListener,
+                        fromDate.get(Calendar.YEAR),
+                        fromDate.get(Calendar.MONTH),
+                        fromDate.get(Calendar.DAY_OF_MONTH)
+                ).show();
             }
         });
 
-        final Calendar myCalendar2 = Calendar.getInstance();
-        editTextToDate = view.findViewById(R.id.toDate);
-        DatePickerDialog.OnDateSetListener toDate = new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog.OnDateSetListener toDateListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(final DatePicker view, final int year, final int monthOfYear,
-                                  final int dayOfMonth) {
+            public void onDateSet(
+                    final DatePicker view,
+                    final int year,
+                    final int monthOfYear,
+                    final int dayOfMonth
+            ) {
                 // TODO Auto-generated method stub
-                myCalendar2.set(Calendar.YEAR, year);
-                myCalendar2.set(Calendar.MONTH, monthOfYear);
-                myCalendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                toDay = dayOfMonth;
-                toMonth = monthOfYear + 1;
-                toYear = year;
-                updateTransactionDateLabel(editTextToDate, myCalendar2);
-                }
+                toDate.set(Calendar.YEAR, year);
+                toDate.set(Calendar.MONTH, monthOfYear);
+                toDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateTransactionDateLabel(editTextToDate, toDate);
+            }
         };
 
         editTextToDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 // TODO Auto-generated method stub
-                new DatePickerDialog(getContext(), toDate, myCalendar2
-                        .get(Calendar.YEAR), myCalendar2.get(Calendar.MONTH),
-                        myCalendar2.get(Calendar.DAY_OF_MONTH)).show();
+                new DatePickerDialog(
+                        getContext(),
+                        toDateListener,
+                        toDate.get(Calendar.YEAR),
+                        toDate.get(Calendar.MONTH),
+                        toDate.get(Calendar.DAY_OF_MONTH)
+                ).show();
             }
         });
 
@@ -162,38 +158,18 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                List<Transaction> transactionsListFilterDate = new ArrayList<>();
-                for (Transaction transaction : transactionsList) {
+                filterByDate = !(
+                        editTextFromDate.getText().toString().equals("")
+                        && editTextToDate.getText().toString().equals("")
+                );
 
-                    String date = transaction.getDate();
-                    String[] arrOfDates = date.split("-");
-                    if (isInDateRange(arrOfDates)) {
-                        transactionsListFilterDate.add(transaction);
-                    }
-                }
-                transactionListAdapter.setTransactions(transactionsListFilterDate);
+                List<Transaction> filteredTransactions = getFilteredTransactions();
+
+                transactionListAdapter.setTransactions(filteredTransactions);
             }
         });
 
         return view;
-    }
-
-
-    /**
-     * Method to check if the date is within the period.
-     * @param arrOfDates contains the dy , month and year
-     * @return boolean
-     */
-    private boolean isInDateRange(final String[] arrOfDates) {
-        // String date format used is "dd-mm-yyyy"
-
-        int day = Integer.parseInt(arrOfDates[0]);
-        int month = Integer.parseInt(arrOfDates[1]);
-        int year = Integer.parseInt(arrOfDates[2]);
-
-        return fromDay <= day && day <= toDay && fromMonth <= month
-                && month <= toMonth && fromYear <= year && year <= toYear;
-
     }
 
     /**
@@ -203,9 +179,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
      */
     private void updateTransactionDateLabel(final EditText editTextLayout, final Calendar myCalendar) {
         String myFormat = "dd-MM-yy"; //In which you need put here
-        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-        editTextLayout.setText(sdf.format(myCalendar.getTime()));
+        editTextLayout.setText(DateUtils.formatDate(myCalendar.getTimeInMillis(), myFormat));
     }
 
     /**
@@ -233,20 +207,12 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
 
         @Override
         public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-            Category selectedCategory = (Category) parent.getItemAtPosition(position);
+            selectedCategory = (Category) parent.getItemAtPosition(position);
+            filterByCategory = selectedCategory.getId() != -1;
 
-            if (selectedCategory.getId() == -1) {
+            List<Transaction> filteredTransactions = getFilteredTransactions();
 
-                transactionsList = transactionViewModel.getAllTransactions();
-                transactionListAdapter.setTransactions(transactionsList);
-
-            } else {
-
-                transactionsList = transactionViewModel.getTransactionsByCategoryId(
-                        selectedCategory.getId().toString());
-                transactionListAdapter.setTransactions(transactionsList);
-
-            }
+            transactionListAdapter.setTransactions(filteredTransactions);
         }
 
         @Override
@@ -263,7 +229,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
     @Override
     public void onTransactionClick(final Transaction transaction, final int position) {
         Bundle bundle = new Bundle();
-        bundle.putString("transactionDate", transaction.getDate());
+        bundle.putFloat("transactionDate", transaction.getDate());
         bundle.putFloat("transactionAmount", transaction.getAmount());
         bundle.putString("transactionNote", transaction.getTextNote());
         bundle.putInt("transactionType", transaction.getType());
@@ -276,5 +242,60 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    /**
+     * Helper method to check filters and filter transactions.
+     * @return list of filtered transactions.
+     */
+    private List<Transaction> getFilteredTransactions() {
+        Log.v("FILTER", "Filter by date: " + filterByDate);
+        Log.v("FILTER", "Filter by category: " + filterByCategory);
+        if (filterByDate) {
+            long fromDateInMS, toDateInMS;
+
+            if (!editTextFromDate.getText().toString().equals("")) {
+                fromDateInMS = DateUtils.getStartOfDayInMS(fromDate.getTimeInMillis());
+            } else {
+                if (!editTextToDate.getText().toString().equals("")) {
+                    fromDateInMS = DateUtils.getStartOfDayInMS(0);
+                } else {
+                    fromDateInMS = DateUtils.getStartOfCurrentDay().getTimeInMillis();
+                }
+            }
+
+            if (!editTextToDate.getText().toString().equals("")) {
+                toDateInMS = DateUtils.getEndOfDayInMS(toDate.getTimeInMillis());
+            } else {
+                if (!editTextFromDate.getText().toString().equals("")) {
+                    if (
+                        DateUtils.getStartOfDayInMS(fromDate.getTimeInMillis())
+                        > DateUtils.getStartOfCurrentDay().getTimeInMillis()
+                    ) {
+                        toDateInMS = DateUtils.getEndOfDayInMS(fromDate.getTimeInMillis());
+                    } else {
+                        toDateInMS = DateUtils.getEndOfCurrentDay().getTimeInMillis();
+                    }
+                } else {
+                    toDateInMS = DateUtils.getEndOfCurrentDay().getTimeInMillis();
+                }
+            }
+
+            if (filterByCategory) {
+                return transactionViewModel.filterTransactionsByCategoryAndDate(
+                        selectedCategory.getId().toString(), fromDateInMS, toDateInMS
+                );
+            } else {
+                return transactionViewModel.filterTransactionsByDate(fromDateInMS, toDateInMS);
+            }
+        } else if (filterByCategory) {
+            if (selectedCategory.getId() == -1) {
+                return transactionViewModel.getAllTransactions();
+            } else {
+                return transactionViewModel.filterTransactionsByCategoryId(selectedCategory.getId().toString());
+            }
+        } else {
+            return transactionViewModel.getAllTransactions();
+        }
     }
 }

@@ -49,7 +49,7 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter.setTransactions(transactionViewModel.getTransactionsByCategoryId(String.valueOf(id)));
+        adapter.setTransactions(transactionViewModel.filterTransactionsByCategoryId(String.valueOf(id)));
 
         return view;
     }
@@ -62,7 +62,7 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
     @Override
     public void onTransactionClick(final Transaction transaction, final int position) {
         Bundle bundle = new Bundle();
-        bundle.putString("transactionDate", transaction.getDate());
+        bundle.putLong("transactionDate", transaction.getDate());
         bundle.putFloat("transactionAmount", transaction.getAmount());
         bundle.putString("transactionNote", transaction.getTextNote());
         bundle.putInt("transactionType", transaction.getType());

@@ -54,7 +54,7 @@ public class Transaction {
     private int method;
 
     @ColumnInfo(name = "date")
-    private String date;
+    private Long date;
 
     // Foreign keys
     @ColumnInfo(name = "category")
@@ -74,7 +74,7 @@ public class Transaction {
             final Float transactionAmount,
             final Integer transactionType,
             final @Nullable String transactionCategory,
-            final String transactionDate,
+            final Long transactionDate,
             final @Nullable String transactionNote,
             final Integer transactionMethod
     ) {
@@ -263,7 +263,7 @@ public class Transaction {
      * Date  getter.
      * @return transaction date
      */
-    public String getDate() {
+    public Long getDate() {
         return date;
     }
 
@@ -271,7 +271,7 @@ public class Transaction {
      * Date setter.
      * @param tDate transaction date
      */
-    public void setDate(final String tDate) {
+    public void setDate(final Long tDate) {
         this.date = tDate;
     }
 
