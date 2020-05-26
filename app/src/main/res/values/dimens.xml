@@ -8,4 +8,6 @@
     <dimen name="inputBorderThickness">2dip</dimen>
     <dimen name="inputPadding">20dip</dimen>
     <dimen name="inputSize">18sp</dimen>
+    <dimen name="home_text_net_balance">45sp</dimen>
+    <dimen name="home_text_income_expense">20sp</dimen>
 </resources>

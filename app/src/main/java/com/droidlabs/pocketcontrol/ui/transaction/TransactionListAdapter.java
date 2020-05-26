@@ -2,7 +2,6 @@ package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
@@ -68,6 +68,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
     public void onBindViewHolder(final @NonNull TransactionViewHolder holder, final int position) {
         if (transactions != null) {
             Transaction current = transactions.get(position);
+            Context context = holder.transactionAmount.getContext();
 
             //get the Transaction information:
             Long date = current.getDate();
@@ -81,14 +82,15 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
 
 
             if (type == 1) {
-                holder.transactionType.setTextColor(Color.parseColor("#F44336"));
                 typeAsString = "Expense";
-                amountToString = " -" + amountToString;
+                holder.transactionType.setTextColor(ContextCompat.getColor(context, R.color.colorExpense));
+                holder.transactionAmount.setTextColor(ContextCompat.getColor(context, R.color.colorExpense));
+                amountToString = "- " + amountToString;
             } else {
-                holder.transactionType.setTextColor(Color.parseColor("#4CAF50"));
                 typeAsString = "Income";
-                holder.transactionAmount.setTextColor(Color.parseColor("#4CAF50"));
-                amountToString = " +" + amountToString;
+                holder.transactionType.setTextColor(ContextCompat.getColor(context, R.color.colorIncome));
+                holder.transactionAmount.setTextColor(ContextCompat.getColor(context, R.color.colorIncome));
+                amountToString = "+ " + amountToString;
             }
 
             if (category != null) {
