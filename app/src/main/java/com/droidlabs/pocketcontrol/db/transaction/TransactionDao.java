@@ -27,7 +27,7 @@ public interface TransactionDao {
      * Retrieve all transactions from the database.
      * @return all transactions.
      */
-    @Query("SELECT * FROM transactions")
+    @Query("SELECT * FROM transactions ORDER BY date DESC")
     List<Transaction> getAllTransactions();
 
     /**
@@ -35,7 +35,7 @@ public interface TransactionDao {
      * @param categoryId category id
      * @return list of transactions with matching categoryId
      */
-    @Query("SELECT * FROM transactions WHERE category=:categoryId")
+    @Query("SELECT * FROM transactions WHERE category=:categoryId ORDER BY date DESC")
     List<Transaction> getTransactionsByCategoryId(String categoryId);
 
     /**
@@ -44,7 +44,7 @@ public interface TransactionDao {
      * @param upperBound upper date bound.
      * @return list of transactions within date range.
      */
-    @Query("SELECT * FROM transactions WHERE date BETWEEN :lowerBound AND :upperBound")
+    @Query("SELECT * FROM transactions WHERE date BETWEEN :lowerBound AND :upperBound ORDER BY date DESC")
     List<Transaction> filterTransactionsByDate(long lowerBound, long upperBound);
 
     /**
@@ -54,6 +54,8 @@ public interface TransactionDao {
      * @param upperBound upper date bound.
      * @return list of transactions matching the filter.
      */
-    @Query("SELECT * FROM transactions WHERE category=:categoryId AND date BETWEEN :lowerBound AND :upperBound")
+    @Query("SELECT * FROM transactions "
+            + "WHERE category=:categoryId AND date BETWEEN :lowerBound AND :upperBound "
+            + "ORDER BY date DESC")
     List<Transaction> filterTransactionsByCategoryAndDate(String categoryId, long lowerBound, long upperBound);
 }
