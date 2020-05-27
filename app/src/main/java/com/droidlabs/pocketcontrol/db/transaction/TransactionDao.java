@@ -63,4 +63,56 @@ public interface TransactionDao {
             long lowerBound,
             long upperBound
     );
+
+    /**
+     * Retrieve all transactions from a specified amount  range.
+     * @param lowerBoundAmount lower amount bound.
+     * @param upperBoundAmount upper amount bound.
+     * @return list of transactions matching the filter.
+     */
+    @Query("SELECT * FROM transactions WHERE amount >= :lowerBoundAmount AND amount <= :upperBoundAmount "
+            + "ORDER BY date DESC")
+    LiveData<List<Transaction>> filterTransactionsByAmount(float lowerBoundAmount, float upperBoundAmount);
+
+    /**
+     * Retrieve all transactions from a specified category and within a specified date range and amount.
+     * @param categoryId category id.
+     * @param lowerBound lower date bound.
+     * @param upperBound upper date bound.
+     * @param lowerBoundAmount lower amount bound.
+     * @param upperBoundAmount upper amount bound.
+     * @return list of transactions matching the filter.
+     */
+    @Query("SELECT * FROM transactions WHERE category=:categoryId AND "
+            + "(date BETWEEN :lowerBound AND :upperBound) AND "
+            + "(amount >= :lowerBoundAmount AND amount <= :upperBoundAmount) ORDER BY date DESC")
+    LiveData<List<Transaction>> filterTransactionsByCategoryAndDateAndAmount(
+            String categoryId, long lowerBound, long upperBound, float lowerBoundAmount, float upperBoundAmount);
+
+    /**
+     * Retrieve all transactions within a specified date range and amount.
+     * @param lowerBound lower date bound.
+     * @param upperBound upper date bound.
+     * @param lowerBoundAmount lower amount bound.
+     * @param upperBoundAmount upper amount bound.
+     * @return list of transactions matching the filter.
+     */
+    @Query("SELECT * FROM transactions WHERE amount >= :lowerBoundAmount AND "
+            + "amount <= :upperBoundAmount AND (date BETWEEN :lowerBound AND :upperBound)"
+            + "ORDER BY date DESC")
+    LiveData<List<Transaction>> filterTransactionsByAmountAndDate(
+            long lowerBound, long upperBound, float lowerBoundAmount, float upperBoundAmount);
+
+    /**
+     * Retrieve all transactions from a specified category within a specified amount range.
+     * @param categoryId category id.
+     * @param lowerBoundAmount lower amount bound.
+     * @param upperBoundAmount upper amount bound.
+     * @return list of transactions matching the filter.
+     */
+    @Query("SELECT * FROM transactions WHERE category=:categoryId AND "
+            + "(amount >= :lowerBoundAmount AND amount <= :upperBoundAmount)"
+            + "ORDER BY date DESC")
+    LiveData<List<Transaction>> filterTransactionsByAmountAndCategory(
+            String categoryId, float lowerBoundAmount, float upperBoundAmount);
 }

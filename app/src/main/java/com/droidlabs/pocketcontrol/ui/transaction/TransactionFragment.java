@@ -2,12 +2,15 @@ package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -41,6 +44,8 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
     private CategoryViewModel categoryViewModel;
     private TransactionListAdapter transactionListAdapter;
     private EditText editTextToDate, editTextFromDate;
+    private Button imageAmountButton;
+    private EditText editTextToAmount, editTextFromAmount;
     private final Calendar fromDate = Calendar.getInstance(), toDate = Calendar.getInstance();
 
     @Override
@@ -112,6 +117,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
                 fromDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateTransactionDateLabel(editTextFromDate, fromDate);
             }
+
         };
 
         editTextFromDate.setOnClickListener(new View.OnClickListener() {
@@ -173,8 +179,51 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
             }
         });
 
+        // Amount filter
+
+        editTextFromAmount = view.findViewById(R.id.fromAmount);
+        editTextToAmount = view.findViewById(R.id.toAmount);
+
+        imageAmountButton = view.findViewById(R.id.imageAmountButton);
+
+        editTextFromAmount.addTextChangedListener(amountTextWatcher);
+        editTextToAmount.addTextChangedListener(amountTextWatcher);
+
+        imageAmountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                float fromAmount = Float.parseFloat(editTextFromAmount.getText().toString());
+                float toAmount = Float.parseFloat(editTextToAmount.getText().toString());;
+                boolean filterByAmount = true;
+            }
+        });
+
         return view;
     }
+
+    private TextWatcher amountTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+
+            if (editTextFromAmount.getText().toString().isEmpty()
+                    ||
+                    editTextToAmount.getText().toString().isEmpty()) {
+                imageAmountButton.setEnabled(false);
+            } else {
+                imageAmountButton.setEnabled(true);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(final Editable s) {
+
+        }
+    };
 
     /**
      * Method to update the transaction date with the selected date.
