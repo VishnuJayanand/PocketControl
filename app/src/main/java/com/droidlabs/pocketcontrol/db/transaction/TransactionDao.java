@@ -27,7 +27,7 @@ public interface TransactionDao {
      * Retrieve all transactions from the database.
      * @return all transactions.
      */
-    @Query("SELECT * FROM transactions")
+    @Query("SELECT * FROM transactions ORDER BY date DESC")
     List<Transaction> getAllTransactions();
 
     /**
@@ -35,7 +35,7 @@ public interface TransactionDao {
      * @param categoryId category id
      * @return list of transactions with matching categoryId
      */
-    @Query("SELECT * FROM transactions WHERE category=:categoryId")
+    @Query("SELECT * FROM transactions WHERE category=:categoryId ORDER BY date DESC")
     List<Transaction> getTransactionsByCategoryId(String categoryId);
 
     /**
@@ -44,7 +44,7 @@ public interface TransactionDao {
      * @param upperBound upper date bound.
      * @return list of transactions within date range.
      */
-    @Query("SELECT * FROM transactions WHERE date BETWEEN :lowerBound AND :upperBound")
+    @Query("SELECT * FROM transactions WHERE date BETWEEN :lowerBound AND :upperBound ORDER BY date DESC")
     List<Transaction> filterTransactionsByDate(long lowerBound, long upperBound);
 
     /**
@@ -54,7 +54,9 @@ public interface TransactionDao {
      * @param upperBound upper date bound.
      * @return list of transactions matching the filter.
      */
-    @Query("SELECT * FROM transactions WHERE category=:categoryId AND date BETWEEN :lowerBound AND :upperBound")
+    @Query("SELECT * FROM transactions "
+            + "WHERE category=:categoryId AND date BETWEEN :lowerBound AND :upperBound "
+            + "ORDER BY date DESC")
     List<Transaction> filterTransactionsByCategoryAndDate(String categoryId, long lowerBound, long upperBound);
 
     /**
@@ -63,7 +65,8 @@ public interface TransactionDao {
      * @param upperBoundAmount upper amount bound.
      * @return list of transactions matching the filter.
      */
-    @Query("SELECT * FROM transactions WHERE amount >= :lowerBoundAmount AND amount <= :upperBoundAmount")
+    @Query("SELECT * FROM transactions WHERE amount >= :lowerBoundAmount AND amount <= :upperBoundAmount "
+            + "ORDER BY date DESC")
     List<Transaction> filterTransactionsByAmount(float lowerBoundAmount, float upperBoundAmount);
 
     /**
@@ -76,10 +79,8 @@ public interface TransactionDao {
      * @return list of transactions matching the filter.
      */
     @Query("SELECT * FROM transactions WHERE category=:categoryId AND "
-            +
-            "(date BETWEEN :lowerBound AND :upperBound) AND "
-            +
-            "(amount >= :lowerBoundAmount AND amount <= :upperBoundAmount)")
+            + "(date BETWEEN :lowerBound AND :upperBound) AND "
+            + "(amount >= :lowerBoundAmount AND amount <= :upperBoundAmount) ORDER BY date DESC")
     List<Transaction> filterTransactionsByCategoryAndDateAndAmount(
             String categoryId, long lowerBound, long upperBound, float lowerBoundAmount, float upperBoundAmount);
 
@@ -92,8 +93,8 @@ public interface TransactionDao {
      * @return list of transactions matching the filter.
      */
     @Query("SELECT * FROM transactions WHERE amount >= :lowerBoundAmount AND "
-            +
-            "amount <= :upperBoundAmount AND (date BETWEEN :lowerBound AND :upperBound)")
+            + "amount <= :upperBoundAmount AND (date BETWEEN :lowerBound AND :upperBound)"
+            + "ORDER BY date DESC")
     List<Transaction> filterTransactionsByAmountAndDate(
             long lowerBound, long upperBound, float lowerBoundAmount, float upperBoundAmount);
 
@@ -105,8 +106,8 @@ public interface TransactionDao {
      * @return list of transactions matching the filter.
      */
     @Query("SELECT * FROM transactions WHERE category=:categoryId AND "
-            +
-            "(amount >= :lowerBoundAmount AND amount <= :upperBoundAmount)")
+            + "(amount >= :lowerBoundAmount AND amount <= :upperBoundAmount)"
+            + "ORDER BY date DESC")
     List<Transaction> filterTransactionsByAmountAndCategory(
             String categoryId, float lowerBoundAmount, float upperBoundAmount);
 }
