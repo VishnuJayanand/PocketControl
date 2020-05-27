@@ -14,7 +14,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="120dp"
         android:layout_marginEnd="50dp"
-        android:src="@drawable/applogo" />
+        android:src="@drawable/app_logo_text" />
 
     <ImageView
         android:id="@+id/teamname"
@@ -26,5 +26,5 @@
         android:layout_marginStart="145dp"
         android:layout_marginEnd="145dp"
         android:layout_marginBottom="52dp"
-        android:src="@drawable/teamlogo" />
+        android:src="@drawable/team_logo_text_powered_by" />
 </RelativeLayout>
