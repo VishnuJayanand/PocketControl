@@ -1,18 +1,28 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionViewModel extends AndroidViewModel {
 
     private TransactionRepository repository;
-    private List<Transaction> allTransactions;
+    private boolean filterByCategory = false;
+    private String filterCategoryId = "";
+
+    private boolean filterByDate = false;
+    private long lowerDateBound = Long.MIN_VALUE;
+    private long upperDateBound = Long.MAX_VALUE;
 
     /**
      * View model constructor.
@@ -21,24 +31,49 @@ public class TransactionViewModel extends AndroidViewModel {
     public TransactionViewModel(final Application application) {
         super(application);
         this.repository = new TransactionRepository(application);
-        allTransactions = repository.getAllTransactions();
+    }
+
+    public LiveData<List<Transaction>> getTransactions() {
+
+        if (filterByCategory && !filterCategoryId.equals("")) {
+            if (filterByDate) {
+                return repository.filterTransactionsByCategoryAndDate(filterCategoryId, lowerDateBound, upperDateBound);
+            } else {
+                List<Transaction> list = repository.filterTransactionsByCategoryId(filterCategoryId).getValue();
+                if (list != null) {
+                    Log.v("SOMETHING", String.valueOf(list.size()));
+                }
+                return repository.filterTransactionsByCategoryId(filterCategoryId);
+            }
+        } else {
+            if (filterByDate) {
+                return repository.filterTransactionsByDate(lowerDateBound, upperDateBound);
+            } else {
+                return repository.getAllTransactions();
+            }
+        }
     }
 
     /**
      * Get all transactions.
-     * @return return all transactions from the database.
      */
-    public List<Transaction> getAllTransactions() {
-        return allTransactions;
+    public void getAllTransactions() {
+        filterByCategory = false;
+        filterByDate = false;
+
+        this.getTransactions();
     }
 
     /**
      * Get transactions by category ID.
      * @param categoryId category ID
-     * @return return all transactions with the specified category ID.
      */
-    public List<Transaction> filterTransactionsByCategoryId(final String categoryId) {
-        return repository.filterTransactionsByCategoryId(categoryId);
+    public void filterTransactionsByCategoryId(final String categoryId) {
+        Log.v("FILTER", "Filtering by category");
+        filterByCategory = true;
+        filterCategoryId = categoryId;
+
+        this.getTransactions();
     }
 
     /**
@@ -47,8 +82,12 @@ public class TransactionViewModel extends AndroidViewModel {
      * @param upperBound upper date bound.
      * @return return all transactions within the specified date range.
      */
-    public List<Transaction> filterTransactionsByDate(final long lowerBound, final long upperBound) {
-        return repository.filterTransactionsByDate(lowerBound, upperBound);
+    public LiveData<List<Transaction>> filterTransactionsByDate(final long lowerBound, final long upperBound) {
+        filterByDate = true;
+        lowerDateBound = lowerBound;
+        upperDateBound = upperBound;
+
+        return this.getTransactions();
     }
 
     /**
@@ -58,8 +97,15 @@ public class TransactionViewModel extends AndroidViewModel {
      * @param ub upper date bound.
      * @return return all transactions with the specified category ID and within the date range.
      */
-    public List<Transaction> filterTransactionsByCategoryAndDate(final String catId, final long lb, final long ub) {
-        return repository.filterTransactionsByCategoryAndDate(catId, lb, ub);
+    public LiveData<List<Transaction>> filterTransactionsByCategoryAndDate(final String catId, final long lb, final long ub) {
+        filterByDate = true;
+        filterByCategory = true;
+
+        filterCategoryId = catId;
+        lowerDateBound = lb;
+        upperDateBound = ub;
+
+        return this.getTransactions();
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.droidlabs.pocketcontrol.db.transaction;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -28,7 +29,7 @@ public interface TransactionDao {
      * @return all transactions.
      */
     @Query("SELECT * FROM transactions ORDER BY date DESC")
-    List<Transaction> getAllTransactions();
+    LiveData<List<Transaction>> getAllTransactions();
 
     /**
      * Retrieve all transactions from a specified category.
@@ -36,7 +37,7 @@ public interface TransactionDao {
      * @return list of transactions with matching categoryId
      */
     @Query("SELECT * FROM transactions WHERE category=:categoryId ORDER BY date DESC")
-    List<Transaction> getTransactionsByCategoryId(String categoryId);
+    LiveData<List<Transaction>> getTransactionsByCategoryId(String categoryId);
 
     /**
      * Retrieve all transactions within a specified date range.
@@ -45,7 +46,7 @@ public interface TransactionDao {
      * @return list of transactions within date range.
      */
     @Query("SELECT * FROM transactions WHERE date BETWEEN :lowerBound AND :upperBound ORDER BY date DESC")
-    List<Transaction> filterTransactionsByDate(long lowerBound, long upperBound);
+    LiveData<List<Transaction>> filterTransactionsByDate(long lowerBound, long upperBound);
 
     /**
      * Retrieve all transactions from a specified category and within a specified date range.
@@ -57,5 +58,5 @@ public interface TransactionDao {
     @Query("SELECT * FROM transactions "
             + "WHERE category=:categoryId AND date BETWEEN :lowerBound AND :upperBound "
             + "ORDER BY date DESC")
-    List<Transaction> filterTransactionsByCategoryAndDate(String categoryId, long lowerBound, long upperBound);
+    LiveData<List<Transaction>> filterTransactionsByCategoryAndDate(String categoryId, long lowerBound, long upperBound);
 }

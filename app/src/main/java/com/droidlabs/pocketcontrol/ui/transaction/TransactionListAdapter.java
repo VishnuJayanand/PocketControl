@@ -2,6 +2,7 @@ package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,6 +137,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
      * @param transactionList transactions from db.
      */
     public void setTransactions(final List<Transaction> transactionList) {
+        Log.v("TRANSACTIONS", String.valueOf(transactionList.size()));
         this.transactions = transactionList;
         notifyDataSetChanged();
     }

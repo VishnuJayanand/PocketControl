@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,8 @@ import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.transaction.DetailTransacionFragment;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionListAdapter;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
+
+import java.util.List;
 
 
 public class DetailCategoryFragment extends Fragment implements TransactionListAdapter.OnTransactionNoteListener {
@@ -45,11 +48,18 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
         final TransactionListAdapter adapter = new TransactionListAdapter(getActivity(), this, transactionViewModel);
         RecyclerView recyclerView = view.findViewById(R.id.transactionListView);
 
+        transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(List<Transaction> transactions) {
+                adapter.setTransactions(transactions);
+            }
+        });
+
         //Set the adapter to list view
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter.setTransactions(transactionViewModel.filterTransactionsByCategoryId(String.valueOf(id)));
+        transactionViewModel.filterTransactionsByCategoryId(String.valueOf(id));
 
         return view;
     }

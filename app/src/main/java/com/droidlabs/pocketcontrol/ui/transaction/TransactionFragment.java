@@ -19,6 +19,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +37,6 @@ import java.util.List;
 
 public class TransactionFragment extends Fragment implements TransactionListAdapter.OnTransactionNoteListener {
 
-    private List<Transaction> transactionsList = new ArrayList<>();
     private TransactionViewModel transactionViewModel;
     private CategoryViewModel categoryViewModel;
     private TransactionListAdapter transactionListAdapter;
@@ -61,8 +61,12 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         recyclerView.setAdapter(transactionListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        transactionsList = transactionViewModel.getAllTransactions();
-        transactionListAdapter.setTransactions(transactionsList);
+        transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(List<Transaction> transactions) {
+                transactionListAdapter.setTransactions(transactions);
+            }
+        });
 
         AppCompatButton addTransactionLayout = view.findViewById(R.id.addTransactionButton);
 
@@ -163,9 +167,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
                         && editTextToDate.getText().toString().equals("")
                 );
 
-                List<Transaction> filteredTransactions = getFilteredTransactions();
-
-                transactionListAdapter.setTransactions(filteredTransactions);
+                filterTransactions();
             }
         });
 
@@ -210,9 +212,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
             selectedCategory = (Category) parent.getItemAtPosition(position);
             filterByCategory = selectedCategory.getId() != -1;
 
-            List<Transaction> filteredTransactions = getFilteredTransactions();
-
-            transactionListAdapter.setTransactions(filteredTransactions);
+            filterTransactions();
         }
 
         @Override
@@ -244,10 +244,16 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         fragmentTransaction.commit();
     }
 
+    private void filterTransactions() {
+        if (filterByCategory) {
+            transactionViewModel.filterTransactionsByCategoryId(selectedCategory.getId().toString());
+        }
+    }
+    /*
     /**
      * Helper method to check filters and filter transactions.
      * @return list of filtered transactions.
-     */
+
     private List<Transaction> getFilteredTransactions() {
         Log.v("FILTER", "Filter by date: " + filterByDate);
         Log.v("FILTER", "Filter by category: " + filterByCategory);
@@ -298,4 +304,5 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
             return transactionViewModel.getAllTransactions();
         }
     }
+    */
 }

@@ -1,6 +1,7 @@
 package com.droidlabs.pocketcontrol.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +12,17 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
+import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -24,11 +30,6 @@ public class HomeFragment extends Fragment {
     private PocketControlDB db = PocketControlDB.getDatabase(getContext());
     private Animation topAnimation;
     private TextView textViewAmount, textViewExpense, textViewIncome, textViewNetBalance;
-    private TransactionDao transactionDao;
-    private Float totalAmount = 0f;
-    private Float totalExpense = 0f;
-    private Float totalIncome = 0f;
-    private List<Transaction> allTransactions;
 
     @Nullable
     @Override
@@ -45,23 +46,33 @@ public class HomeFragment extends Fragment {
         textViewAmount.setAnimation(topAnimation);
         textViewNetBalance.setAnimation(topAnimation);
 
-        transactionDao = db.transactionDao();
-        allTransactions = transactionDao.getAllTransactions();
+        TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+        transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(List<Transaction> transactions) {
+                float totalAmount = 0f;
+                float totalExpense = 0f;
+                float totalIncome = 0f;
 
-        if (!allTransactions.isEmpty()) {
-            for (Transaction transaction: allTransactions) {
-                if (transaction.getType().equals(1)) {
-                    totalExpense += transaction.getAmount();
-                } else {
-                    totalIncome += transaction.getAmount();
+                if (!transactions.isEmpty()) {
+                    for (Transaction transaction: transactions) {
+                        if (transaction.getType().equals(1)) {
+                            totalExpense += transaction.getAmount();
+                        } else {
+                            totalIncome += transaction.getAmount();
+                        }
+                    }
                 }
-            }
-        }
-        totalAmount =  totalIncome - totalExpense;
 
-        textViewExpense.setText("Total Expense:  " + CurrencyUtils.formatAmount(totalExpense));
-        textViewIncome.setText("Total Income:    " + CurrencyUtils.formatAmount(totalIncome));
-        textViewAmount.setText(CurrencyUtils.formatAmount(totalAmount));
+                totalAmount =  totalIncome - totalExpense;
+
+                textViewExpense.setText("Total Expense:  " + CurrencyUtils.formatAmount(totalExpense));
+                textViewIncome.setText("Total Income:    " + CurrencyUtils.formatAmount(totalIncome));
+                textViewAmount.setText(CurrencyUtils.formatAmount(totalAmount));
+            }
+        });
+
+        transactionViewModel.getAllTransactions();
 
         return view;
     }
