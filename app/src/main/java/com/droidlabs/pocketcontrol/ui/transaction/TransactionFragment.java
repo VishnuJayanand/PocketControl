@@ -2,12 +2,15 @@ package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -41,8 +44,11 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
     private CategoryViewModel categoryViewModel;
     private TransactionListAdapter transactionListAdapter;
     private EditText editTextToDate, editTextFromDate;
+    private EditText editTextToAmount, editTextFromAmount;
     private Category selectedCategory;
-    private boolean filterByCategory = false, filterByDate = false;
+    private boolean filterByCategory = false, filterByDate = false, filterByAmount = false;
+    private float fromAmount = 0f, toAmount = 0f;
+    private Button imageAmountButton;
     private final Calendar fromDate = Calendar.getInstance(), toDate = Calendar.getInstance();
 
     @Override
@@ -108,6 +114,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
                 fromDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 updateTransactionDateLabel(editTextFromDate, fromDate);
             }
+
         };
 
         editTextFromDate.setOnClickListener(new View.OnClickListener() {
@@ -169,8 +176,58 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
             }
         });
 
+        // Amount filter
+
+        editTextFromAmount = view.findViewById(R.id.fromAmount);
+        editTextToAmount = view.findViewById(R.id.toAmount);
+
+        imageAmountButton = view.findViewById(R.id.imageAmountButton);
+
+        editTextFromAmount.addTextChangedListener(amountTextWatcher);
+        editTextToAmount.addTextChangedListener(amountTextWatcher);
+
+        imageAmountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+
+                filterByAmount = true;
+                fromAmount = Float.parseFloat(editTextFromAmount.getText().toString());
+                toAmount = Float.parseFloat(editTextToAmount.getText().toString());
+
+
+                List<Transaction> filteredTransactions = getFilteredTransactions();
+
+                transactionListAdapter.setTransactions(filteredTransactions);
+
+            }
+        });
+
         return view;
     }
+
+    private TextWatcher amountTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
+
+            if (editTextFromAmount.getText().toString().isEmpty()
+                    ||
+                    editTextToAmount.getText().toString().isEmpty()) {
+                imageAmountButton.setEnabled(false);
+            } else {
+                imageAmountButton.setEnabled(true);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(final Editable s) {
+
+        }
+    };
 
     /**
      * Method to update the transaction date with the selected date.
@@ -251,6 +308,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
     private List<Transaction> getFilteredTransactions() {
         Log.v("FILTER", "Filter by date: " + filterByDate);
         Log.v("FILTER", "Filter by category: " + filterByCategory);
+        Log.v("FILTER", "Filter by amount: " + filterByAmount);
         if (filterByDate) {
             long fromDateInMS, toDateInMS;
 
@@ -282,8 +340,18 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
             }
 
             if (filterByCategory) {
-                return transactionViewModel.filterTransactionsByCategoryAndDate(
-                        selectedCategory.getId().toString(), fromDateInMS, toDateInMS
+                if (filterByAmount) {
+                    return transactionViewModel.filterTransactionsByCategoryAndDateAndAmount(
+                            selectedCategory.getId().toString(), fromDateInMS, toDateInMS, fromAmount, toAmount
+                    );
+                } else {
+                    return transactionViewModel.filterTransactionsByCategoryAndDate(
+                            selectedCategory.getId().toString(), fromDateInMS, toDateInMS
+                    );
+                }
+            } else if (filterByAmount) {
+                return  transactionViewModel.filterTransactionsByAmountAndDate(
+                        fromDateInMS, toDateInMS, fromAmount, toAmount
                 );
             } else {
                 return transactionViewModel.filterTransactionsByDate(fromDateInMS, toDateInMS);
@@ -291,9 +359,15 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         } else if (filterByCategory) {
             if (selectedCategory.getId() == -1) {
                 return transactionViewModel.getAllTransactions();
+            } else if (filterByAmount) {
+                return transactionViewModel.filterTransactionsByAmountAndCategory(
+                        selectedCategory.getId().toString(), fromAmount, toAmount
+                );
             } else {
                 return transactionViewModel.filterTransactionsByCategoryId(selectedCategory.getId().toString());
             }
+        } else if (filterByAmount) {
+            return transactionViewModel.filterTransactionsByAmount(fromAmount, toAmount);
         } else {
             return transactionViewModel.getAllTransactions();
         }

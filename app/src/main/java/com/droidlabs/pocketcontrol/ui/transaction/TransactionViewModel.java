@@ -52,6 +52,16 @@ public class TransactionViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get transactions by amount range.
+     * @param lowerBoundAmount lower amount bound.
+     * @param upperBoundAmount upper amount bound.
+     * @return return all transactions within the specified date range.
+     */
+    public List<Transaction> filterTransactionsByAmount(final float lowerBoundAmount, final float upperBoundAmount) {
+        return repository.filterTransactionsByAmount(lowerBoundAmount, upperBoundAmount);
+    }
+
+    /**
      * Get transactions by category ID.
      * @param catId category ID
      * @param lb lower date bound.
@@ -60,6 +70,45 @@ public class TransactionViewModel extends AndroidViewModel {
      */
     public List<Transaction> filterTransactionsByCategoryAndDate(final String catId, final long lb, final long ub) {
         return repository.filterTransactionsByCategoryAndDate(catId, lb, ub);
+    }
+
+    /**
+     * Get transactions by category ID.
+     * @param catId category ID
+     * @param lb lower date bound.
+     * @param ub upper date bound.
+     * @param uba upper amount bound.
+     * @param lba upper amount bound.
+     * @return return all transactions with the specified category ID and within the date range.
+     */
+    public List<Transaction> filterTransactionsByCategoryAndDateAndAmount(
+            final String catId, final long lb, final long ub, final float lba, final float uba) {
+        return repository.filterTransactionsByCategoryAndDateAndAmount(catId, lb, ub, lba, uba);
+    }
+
+    /**
+     * Get transactions by amount range and the selected time period.
+     * @param lb lower date bound.
+     * @param ub upper date bound.
+     * @param lba lower amount bound.
+     * @param uba upper amount bound.
+     * @return return all transactions with the specified category ID and within the date range.
+     */
+    public List<Transaction> filterTransactionsByAmountAndDate(
+            final long lb, final long ub, final float lba, final float uba) {
+        return repository.filterTransactionsByAmountAndDate(lb, ub, lba, uba);
+    }
+
+    /**
+     * Get transactions by amount range and the selected category.
+     * @param catId category id
+     * @param lba lower amount bound.
+     * @param uba upper amount bound.
+     * @return return all transactions with the specified category ID and within the date range.
+     */
+    public List<Transaction> filterTransactionsByAmountAndCategory(
+            final String catId, final float lba, final float uba) {
+        return repository.filterTransactionsByAmountAndCategory(catId, lba, uba);
     }
 
     /**
