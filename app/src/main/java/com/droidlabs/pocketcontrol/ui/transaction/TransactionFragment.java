@@ -71,8 +71,6 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
             }
         });
 
-        transactionViewModel.setCategoryFilter(false, "-1");
-
         AppCompatButton addTransactionLayout = view.findViewById(R.id.addTransactionButton);
 
         addTransactionLayout.setOnClickListener(new View.OnClickListener() {
@@ -193,8 +191,9 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
             @Override
             public void onClick(final View v) {
                 float fromAmount = Float.parseFloat(editTextFromAmount.getText().toString());
-                float toAmount = Float.parseFloat(editTextToAmount.getText().toString());;
-                boolean filterByAmount = true;
+                float toAmount = Float.parseFloat(editTextToAmount.getText().toString());
+
+                transactionViewModel.setAmountFilter(true, fromAmount, toAmount);
             }
         });
 

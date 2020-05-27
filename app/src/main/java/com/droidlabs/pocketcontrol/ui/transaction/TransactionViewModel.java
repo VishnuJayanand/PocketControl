@@ -33,25 +33,62 @@ public class TransactionViewModel extends AndroidViewModel {
         transactions = Transformations.switchMap(transactionFilters, filters -> {
             boolean categoryFilterEnabled = filters.getCategoryFilterEnabled();
             boolean dateFilterEnabled = filters.getDateFilterEnabled();
+            boolean amountFilterEnabled = filters.getAmountFilterEnabled();
 
-            if (categoryFilterEnabled) {
-                if (dateFilterEnabled) {
-                    return repository.filterTransactionsByCategoryAndDate(
-                            filters.categoryId,
-                            filters.dateLowerBound,
-                            filters.dateUpperBound
-                    );
-                }
-                return repository.filterTransactionsByCategoryId(filters.categoryId);
-            } else {
-                if (dateFilterEnabled) {
-                    return repository.filterTransactionsByDate(
-                            filters.dateLowerBound,
-                            filters.dateUpperBound
-                    );
-                }
-                return repository.getAllTransactions();
+            if (categoryFilterEnabled && dateFilterEnabled && amountFilterEnabled) {
+                return repository.filterTransactionsByCategoryAndDateAndAmount(
+                        filters.getCategoryId(),
+                        filters.getDateLowerBound(),
+                        filters.getDateUpperBound(),
+                        filters.getAmountLowerBound(),
+                        filters.getAmountUpperBound()
+                );
             }
+
+            if (categoryFilterEnabled && dateFilterEnabled && !amountFilterEnabled) {
+                return repository.filterTransactionsByCategoryAndDate(
+                        filters.getCategoryId(),
+                        filters.getDateLowerBound(),
+                        filters.getDateUpperBound()
+                );
+            }
+
+            if (categoryFilterEnabled && !dateFilterEnabled && amountFilterEnabled) {
+                return repository.filterTransactionsByAmountAndCategory(
+                        filters.getCategoryId(),
+                        filters.getAmountLowerBound(),
+                        filters.getAmountUpperBound()
+                );
+            }
+
+            if (categoryFilterEnabled && !dateFilterEnabled && !amountFilterEnabled) {
+                return repository.filterTransactionsByCategoryId(filters.getCategoryId());
+            }
+
+            if (!categoryFilterEnabled && dateFilterEnabled && amountFilterEnabled) {
+                return repository.filterTransactionsByAmountAndDate(
+                        filters.getDateLowerBound(),
+                        filters.getDateUpperBound(),
+                        filters.getAmountLowerBound(),
+                        filters.getAmountUpperBound()
+                );
+            }
+
+            if (!categoryFilterEnabled && dateFilterEnabled && !amountFilterEnabled) {
+                return repository.filterTransactionsByDate(
+                        filters.getDateLowerBound(),
+                        filters.getDateUpperBound()
+                );
+            }
+
+            if (!categoryFilterEnabled && !dateFilterEnabled && amountFilterEnabled) {
+                return repository.filterTransactionsByAmount(
+                        filters.getAmountLowerBound(),
+                        filters.getAmountUpperBound()
+                );
+            }
+
+            return repository.getAllTransactions();
         });
     }
 
@@ -84,6 +121,9 @@ public class TransactionViewModel extends AndroidViewModel {
             newFilters.setDateFilterEnabled(oldFilters.getDateFilterEnabled());
             newFilters.setDateLowerBound(oldFilters.getDateLowerBound());
             newFilters.setDateUpperBound(oldFilters.getDateUpperBound());
+            newFilters.setAmountFilterEnabled(oldFilters.getAmountFilterEnabled());
+            newFilters.setAmountLowerBound(oldFilters.getAmountLowerBound());
+            newFilters.setAmountUpperBound(oldFilters.getAmountUpperBound());
         }
 
         if (filterEnabled) {
@@ -114,6 +154,9 @@ public class TransactionViewModel extends AndroidViewModel {
         if (oldFilters != null) {
             newFilters.setCategoryFilterEnabled(oldFilters.getCategoryFilterEnabled());
             newFilters.setCategoryId(oldFilters.getCategoryId());
+            newFilters.setAmountFilterEnabled(oldFilters.getAmountFilterEnabled());
+            newFilters.setAmountLowerBound(oldFilters.getAmountLowerBound());
+            newFilters.setAmountUpperBound(oldFilters.getAmountUpperBound());
         }
 
         if (filterEnabled) {
@@ -133,13 +176,51 @@ public class TransactionViewModel extends AndroidViewModel {
         transactionFilters.setValue(newFilters);
     }
 
+    /**
+     * Setter for amount filter.
+     * @param filterEnabled whether filter is enabled.
+     * @param lowerBound amount lower bound.
+     * @param upperBound amount upper bound.
+     */
+    public void setAmountFilter(final boolean filterEnabled, final float lowerBound, final float upperBound) {
+        TransactionFilters newFilters = new TransactionFilters();
+        TransactionFilters oldFilters = transactionFilters.getValue();
+
+        if (oldFilters != null) {
+            newFilters.setCategoryFilterEnabled(oldFilters.getCategoryFilterEnabled());
+            newFilters.setCategoryId(oldFilters.getCategoryId());
+            newFilters.setDateFilterEnabled(oldFilters.getDateFilterEnabled());
+            newFilters.setDateLowerBound(oldFilters.getDateLowerBound());
+            newFilters.setDateUpperBound(oldFilters.getDateUpperBound());
+        }
+
+        if (filterEnabled) {
+            newFilters.setAmountFilterEnabled(true);
+            newFilters.setAmountLowerBound(lowerBound);
+            newFilters.setAmountUpperBound(upperBound);
+        } else {
+            newFilters.setAmountFilterEnabled(false);
+            newFilters.setAmountLowerBound(Float.MIN_VALUE);
+            newFilters.setAmountUpperBound(Float.MAX_VALUE);
+        }
+
+        if (Objects.equals(oldFilters, newFilters)) {
+            return;
+        }
+
+        transactionFilters.setValue(newFilters);
+    }
+
     class TransactionFilters {
         private Boolean categoryFilterEnabled;
         private Boolean dateFilterEnabled;
+        private Boolean amountFilterEnabled;
 
         private String categoryId;
         private Long dateLowerBound;
         private Long dateUpperBound;
+        private Float amountLowerBound;
+        private Float amountUpperBound;
 
         /**
          * Class constructor.
@@ -147,9 +228,13 @@ public class TransactionViewModel extends AndroidViewModel {
         TransactionFilters() {
             categoryFilterEnabled = false;
             dateFilterEnabled = false;
+            amountFilterEnabled = false;
+
             categoryId = "";
             dateLowerBound = Long.MIN_VALUE;
             dateUpperBound = Long.MAX_VALUE;
+            amountLowerBound = Float.MIN_VALUE;
+            amountUpperBound = Float.MAX_VALUE;
         }
 
         /**
@@ -193,6 +278,30 @@ public class TransactionViewModel extends AndroidViewModel {
         }
 
         /**
+         * Setter for amount filter enabled.
+         * @param filterEnabled whether filter is enabled.
+         */
+        private void setAmountFilterEnabled(final Boolean filterEnabled) {
+            this.amountFilterEnabled = filterEnabled;
+        }
+
+        /**
+         * Setter for lower bound amount filter.
+         * @param lowerBound filter amount lower bound.
+         */
+        private void setAmountLowerBound(final Float lowerBound) {
+            this.amountLowerBound = lowerBound;
+        }
+
+        /**
+         * Setter for upper bound amount filter.
+         * @param upperBound filter amount upper bound.
+         */
+        private void setAmountUpperBound(final Float upperBound) {
+            this.amountUpperBound = upperBound;
+        }
+
+        /**
          * Getter for category filter enabled.
          * @return whether category filter is enabled.
          */
@@ -230,6 +339,30 @@ public class TransactionViewModel extends AndroidViewModel {
          */
         private Long getDateUpperBound() {
             return dateUpperBound;
+        }
+
+        /**
+         * Getter for amount filter enabled.
+         * @return whether amount filter is enabled.
+         */
+        private Boolean getAmountFilterEnabled() {
+            return amountFilterEnabled;
+        }
+
+        /**
+         * Getter for lower bound amount filter.
+         * @return amount lower bound.
+         */
+        private Float getAmountLowerBound() {
+            return amountLowerBound;
+        }
+
+        /**
+         * Getter for upper bound amount filter.
+         * @return amount upper bound.
+         */
+        private Float getAmountUpperBound() {
+            return amountUpperBound;
         }
     }
 }

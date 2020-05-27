@@ -56,7 +56,7 @@ public class TransactionRepository {
      * @param uba amount upper bound.
      * @return all transactions within date range.
      */
-    public List<Transaction> filterTransactionsByAmount(final float lba, final float uba) {
+    public LiveData<List<Transaction>> filterTransactionsByAmount(final float lba, final float uba) {
         return transactionDao.filterTransactionsByAmount(lba, uba);
     }
 
@@ -84,7 +84,7 @@ public class TransactionRepository {
      * @param uba amount upper bound.
      * @return all transactions of a certain category and within date range.
      */
-    public List<Transaction> filterTransactionsByCategoryAndDateAndAmount(
+    public LiveData<List<Transaction>> filterTransactionsByCategoryAndDateAndAmount(
             final String catId, final long lb, final long ub, final float lba, final float uba) {
         return transactionDao.filterTransactionsByCategoryAndDateAndAmount(catId, lb, ub, lba, uba);
     }
@@ -97,7 +97,7 @@ public class TransactionRepository {
      * @param uba upper amount bound.
      * @return return all transactions with the specified category ID and within the date range.
      */
-    public List<Transaction> filterTransactionsByAmountAndDate(
+    public LiveData<List<Transaction>> filterTransactionsByAmountAndDate(
             final long lb, final long ub, final float lba, final float uba) {
         return transactionDao.filterTransactionsByAmountAndDate(lb, ub, lba, uba);
     }
@@ -109,7 +109,7 @@ public class TransactionRepository {
      * @param uba upper amount bound.
      * @return return all transactions with the specified category ID and within the date range.
      */
-    public List<Transaction> filterTransactionsByAmountAndCategory(
+    public LiveData<List<Transaction>> filterTransactionsByAmountAndCategory(
             final String catId, final float lba, final float uba) {
         return transactionDao.filterTransactionsByAmountAndCategory(catId, lba, uba);
     }
