@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -47,7 +48,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
     private Category selectedCategory;
     private boolean filterByCategory = false, filterByDate = false, filterByAmount = false;
     private float fromAmount = 0f, toAmount = 0f;
-    private ImageButton imageAmountButton;
+    private Button imageAmountButton;
     private final Calendar fromDate = Calendar.getInstance(), toDate = Calendar.getInstance();
 
     @Override
@@ -182,8 +183,8 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
 
         imageAmountButton = view.findViewById(R.id.imageAmountButton);
 
-        editTextFromAmount.addTextChangedListener(budgetTextWatcher);
-        editTextToAmount.addTextChangedListener(budgetTextWatcher);
+        editTextFromAmount.addTextChangedListener(amountTextWatcher);
+        editTextToAmount.addTextChangedListener(amountTextWatcher);
 
         imageAmountButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,7 +205,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         return view;
     }
 
-    private TextWatcher budgetTextWatcher = new TextWatcher() {
+    private TextWatcher amountTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
 

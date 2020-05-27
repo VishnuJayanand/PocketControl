@@ -39,7 +39,7 @@
             <TextView
                 android:layout_width="60dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="5dp"
+
                 android:gravity="center_vertical"
                 android:text="Amount" />
 
@@ -53,19 +53,21 @@
                 />
             <EditText
                 android:id="@+id/toAmount"
-                android:layout_width="60dp"
+                android:layout_width="55dp"
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
                 android:textSize="13dp"
                 android:inputType="number"
                 />
 
-            <ImageButton
+            <Button
                 android:id="@+id/imageAmountButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:enabled="false"
+                android:text="Search"
+                android:textSize="10dp"
                 app:srcCompat="@android:drawable/ic_menu_search" />
         </LinearLayout>
 
