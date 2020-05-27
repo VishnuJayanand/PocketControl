@@ -41,8 +41,6 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
     private CategoryViewModel categoryViewModel;
     private TransactionListAdapter transactionListAdapter;
     private EditText editTextToDate, editTextFromDate;
-    private Category selectedCategory;
-    private boolean filterByCategory = false, filterByDate = false;
     private final Calendar fromDate = Calendar.getInstance(), toDate = Calendar.getInstance();
 
     @Override
@@ -63,10 +61,12 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
 
         transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {
             @Override
-            public void onChanged(List<Transaction> transactions) {
+            public void onChanged(final List<Transaction> transactions) {
                 transactionListAdapter.setTransactions(transactions);
             }
         });
+
+        transactionViewModel.setCategoryFilter(false, "-1");
 
         AppCompatButton addTransactionLayout = view.findViewById(R.id.addTransactionButton);
 
@@ -162,12 +162,14 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                filterByDate = !(
+                long fromDateInMS = parseFromDate();
+                long toDateInMS = parseToDate();
+                boolean filterByDateEnabled = !(
                         editTextFromDate.getText().toString().equals("")
                         && editTextToDate.getText().toString().equals("")
                 );
 
-                filterTransactions();
+                transactionViewModel.setDateFilter(filterByDateEnabled, fromDateInMS, toDateInMS);
             }
         });
 
@@ -209,10 +211,10 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
 
         @Override
         public void onItemSelected(final AdapterView<?> parent, final View view, final int position, final long id) {
-            selectedCategory = (Category) parent.getItemAtPosition(position);
-            filterByCategory = selectedCategory.getId() != -1;
+            Category selectedCategory = (Category) parent.getItemAtPosition(position);
+            boolean filterEnabled = selectedCategory.getId() != -1;
 
-            filterTransactions();
+            transactionViewModel.setCategoryFilter(filterEnabled, selectedCategory.getId().toString());
         }
 
         @Override
@@ -244,65 +246,42 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         fragmentTransaction.commit();
     }
 
-    private void filterTransactions() {
-        if (filterByCategory) {
-            transactionViewModel.filterTransactionsByCategoryId(selectedCategory.getId().toString());
-        }
-    }
-    /*
     /**
-     * Helper method to check filters and filter transactions.
-     * @return list of filtered transactions.
-
-    private List<Transaction> getFilteredTransactions() {
-        Log.v("FILTER", "Filter by date: " + filterByDate);
-        Log.v("FILTER", "Filter by category: " + filterByCategory);
-        if (filterByDate) {
-            long fromDateInMS, toDateInMS;
-
-            if (!editTextFromDate.getText().toString().equals("")) {
-                fromDateInMS = DateUtils.getStartOfDayInMS(fromDate.getTimeInMillis());
-            } else {
-                if (!editTextToDate.getText().toString().equals("")) {
-                    fromDateInMS = DateUtils.getStartOfDayInMS(0);
-                } else {
-                    fromDateInMS = DateUtils.getStartOfCurrentDay().getTimeInMillis();
-                }
-            }
-
-            if (!editTextToDate.getText().toString().equals("")) {
-                toDateInMS = DateUtils.getEndOfDayInMS(toDate.getTimeInMillis());
-            } else {
-                if (!editTextFromDate.getText().toString().equals("")) {
-                    if (
-                        DateUtils.getStartOfDayInMS(fromDate.getTimeInMillis())
-                        > DateUtils.getStartOfCurrentDay().getTimeInMillis()
-                    ) {
-                        toDateInMS = DateUtils.getEndOfDayInMS(fromDate.getTimeInMillis());
-                    } else {
-                        toDateInMS = DateUtils.getEndOfCurrentDay().getTimeInMillis();
-                    }
-                } else {
-                    toDateInMS = DateUtils.getEndOfCurrentDay().getTimeInMillis();
-                }
-            }
-
-            if (filterByCategory) {
-                return transactionViewModel.filterTransactionsByCategoryAndDate(
-                        selectedCategory.getId().toString(), fromDateInMS, toDateInMS
-                );
-            } else {
-                return transactionViewModel.filterTransactionsByDate(fromDateInMS, toDateInMS);
-            }
-        } else if (filterByCategory) {
-            if (selectedCategory.getId() == -1) {
-                return transactionViewModel.getAllTransactions();
-            } else {
-                return transactionViewModel.filterTransactionsByCategoryId(selectedCategory.getId().toString());
-            }
+     * Parse fromDate for date filter.
+     * @return parsed from date.
+     */
+    private long parseFromDate() {
+        if (!editTextFromDate.getText().toString().equals("")) {
+            return DateUtils.getStartOfDayInMS(fromDate.getTimeInMillis());
         } else {
-            return transactionViewModel.getAllTransactions();
+            if (!editTextToDate.getText().toString().equals("")) {
+                return DateUtils.getStartOfDayInMS(0);
+            } else {
+                return DateUtils.getStartOfCurrentDay().getTimeInMillis();
+            }
         }
     }
-    */
+
+    /**
+     * Parse toDate for date filter.
+     * @return parsed to date.
+     */
+    private long parseToDate() {
+        if (!editTextToDate.getText().toString().equals("")) {
+            return DateUtils.getEndOfDayInMS(toDate.getTimeInMillis());
+        } else {
+            if (!editTextFromDate.getText().toString().equals("")) {
+                if (
+                        DateUtils.getStartOfDayInMS(fromDate.getTimeInMillis())
+                                > DateUtils.getStartOfCurrentDay().getTimeInMillis()
+                ) {
+                    return DateUtils.getEndOfDayInMS(fromDate.getTimeInMillis());
+                } else {
+                    return DateUtils.getEndOfCurrentDay().getTimeInMillis();
+                }
+            } else {
+                return DateUtils.getEndOfCurrentDay().getTimeInMillis();
+            }
+        }
+    }
 }

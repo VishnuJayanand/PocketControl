@@ -50,7 +50,7 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
 
         transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {
             @Override
-            public void onChanged(List<Transaction> transactions) {
+            public void onChanged(final List<Transaction> transactions) {
                 adapter.setTransactions(transactions);
             }
         });
@@ -59,7 +59,7 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        transactionViewModel.filterTransactionsByCategoryId(String.valueOf(id));
+        transactionViewModel.setCategoryFilter(true, String.valueOf(id));
 
         return view;
     }

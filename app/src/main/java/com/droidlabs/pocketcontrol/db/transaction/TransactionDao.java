@@ -58,5 +58,9 @@ public interface TransactionDao {
     @Query("SELECT * FROM transactions "
             + "WHERE category=:categoryId AND date BETWEEN :lowerBound AND :upperBound "
             + "ORDER BY date DESC")
-    LiveData<List<Transaction>> filterTransactionsByCategoryAndDate(String categoryId, long lowerBound, long upperBound);
+    LiveData<List<Transaction>> filterTransactionsByCategoryAndDate(
+            String categoryId,
+            long lowerBound,
+            long upperBound
+    );
 }

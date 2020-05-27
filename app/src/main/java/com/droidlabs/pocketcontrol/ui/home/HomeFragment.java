@@ -1,7 +1,6 @@
 package com.droidlabs.pocketcontrol.ui.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +17,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
-import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -49,8 +46,7 @@ public class HomeFragment extends Fragment {
         TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {
             @Override
-            public void onChanged(List<Transaction> transactions) {
-                float totalAmount = 0f;
+            public void onChanged(final List<Transaction> transactions) {
                 float totalExpense = 0f;
                 float totalIncome = 0f;
 
@@ -64,7 +60,7 @@ public class HomeFragment extends Fragment {
                     }
                 }
 
-                totalAmount =  totalIncome - totalExpense;
+                float totalAmount =  totalIncome - totalExpense;
 
                 textViewExpense.setText("Total Expense:  " + CurrencyUtils.formatAmount(totalExpense));
                 textViewIncome.setText("Total Income:    " + CurrencyUtils.formatAmount(totalIncome));
@@ -72,7 +68,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        transactionViewModel.getAllTransactions();
+        transactionViewModel.setCategoryFilter(false, "-1");
 
         return view;
     }

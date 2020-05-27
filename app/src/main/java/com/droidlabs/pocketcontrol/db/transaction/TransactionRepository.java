@@ -57,7 +57,11 @@ public class TransactionRepository {
      * @param ub date upper bound.
      * @return all transactions of a certain category and within date range.
      */
-    public LiveData<List<Transaction>> filterTransactionsByCategoryAndDate(final String catId, final long lb, final long ub) {
+    public LiveData<List<Transaction>> filterTransactionsByCategoryAndDate(
+            final String catId,
+            final long lb,
+            final long ub
+    ) {
         return transactionDao.filterTransactionsByCategoryAndDate(catId, lb, ub);
     }
 
