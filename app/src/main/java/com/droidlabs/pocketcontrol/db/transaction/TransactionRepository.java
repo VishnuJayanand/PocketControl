@@ -49,6 +49,16 @@ public class TransactionRepository {
     }
 
     /**
+     * Get transactions by amount range.
+     * @param lba amount lower bound.
+     * @param uba amount upper bound.
+     * @return all transactions within date range.
+     */
+    public List<Transaction> filterTransactionsByAmount(final float lba, final float uba) {
+        return transactionDao.filterTransactionsByAmount(lba, uba);
+    }
+
+    /**
      * Get transactions by category and date range.
      * @param catId category id.
      * @param lb date lower bound.
@@ -57,6 +67,45 @@ public class TransactionRepository {
      */
     public List<Transaction> filterTransactionsByCategoryAndDate(final String catId, final long lb, final long ub) {
         return transactionDao.filterTransactionsByCategoryAndDate(catId, lb, ub);
+    }
+
+    /**
+     * Get transactions by category and date range along with amunt range.
+     * @param catId category id.
+     * @param lb date lower bound.
+     * @param ub date upper bound.
+     * @param lba amount lower bound.
+     * @param uba amount upper bound.
+     * @return all transactions of a certain category and within date range.
+     */
+    public List<Transaction> filterTransactionsByCategoryAndDateAndAmount(
+            final String catId, final long lb, final long ub, final float lba, final float uba) {
+        return transactionDao.filterTransactionsByCategoryAndDateAndAmount(catId, lb, ub, lba, uba);
+    }
+
+    /**
+     * Get transactions by amount range and the selected time period.
+     * @param lb lower date bound.
+     * @param ub upper date bound.
+     * @param lba lower amount bound.
+     * @param uba upper amount bound.
+     * @return return all transactions with the specified category ID and within the date range.
+     */
+    public List<Transaction> filterTransactionsByAmountAndDate(
+            final long lb, final long ub, final float lba, final float uba) {
+        return transactionDao.filterTransactionsByAmountAndDate(lb, ub, lba, uba);
+    }
+
+    /**
+     * Get transactions by amount range and the selected category id.
+     * @param catId category id
+     * @param lba lower amount bound.
+     * @param uba upper amount bound.
+     * @return return all transactions with the specified category ID and within the date range.
+     */
+    public List<Transaction> filterTransactionsByAmountAndCategory(
+            final String catId, final float lba, final float uba) {
+        return transactionDao.filterTransactionsByAmountAndCategory(catId, lba, uba);
     }
 
     /**

@@ -22,7 +22,56 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_weight="0"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:textSize="30dp"
+                android:text="FILTER :"/>
+
+            <TextView
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:gravity="center_vertical"
+                android:text="Amount" />
+
+            <EditText
+                android:id="@+id/fromAmount"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:textSize="13dp"
+                android:inputType="number"
+                />
+            <EditText
+                android:id="@+id/toAmount"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:textSize="13dp"
+                android:inputType="number"
+                />
+
+            <ImageButton
+                android:id="@+id/imageAmountButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:enabled="false"
+                app:srcCompat="@android:drawable/ic_menu_search" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
