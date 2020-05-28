@@ -68,6 +68,7 @@
                 android:layout_height="40dp"
                 android:layout_weight="0.5"
                 android:gravity="center_vertical"
+                android:hint="From"
                 android:inputType="number"
                 android:textSize="13dp" />
 
@@ -77,6 +78,7 @@
                 android:layout_height="40dp"
                 android:layout_weight="0.5"
                 android:gravity="center_vertical"
+                android:hint="To"
                 android:inputType="number"
                 android:textSize="13dp" />
 
@@ -110,6 +112,7 @@
                 android:layout_weight="0.5"
                 android:clickable="true"
                 android:focusable="false"
+                android:hint="From"
                 android:textSize="13dp" />
 
             <EditText
@@ -119,6 +122,7 @@
                 android:layout_weight="0.5"
                 android:clickable="true"
                 android:focusable="false"
+                android:hint="To"
                 android:textSize="13dp" />
 
         </LinearLayout>
