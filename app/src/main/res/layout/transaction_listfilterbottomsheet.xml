@@ -8,7 +8,7 @@
     android:paddingStart="20dp"
     android:paddingTop="10dp"
     android:paddingEnd="20dp"
-    android:paddingBottom="50dp">
+    android:paddingBottom="30dp">
 
     <TextView
         android:layout_width="150dp"
@@ -132,11 +132,10 @@
 
     <Button
         android:id="@+id/applyFiltersTransaction"
-        style="@style/featured_add_button"
-        android:layout_width="wrap_content"
+        style="@style/expand_filters_button"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:layout_weight="0"
-        android:drawableStart="@drawable/ic_search_white_24dp"
-        android:drawablePadding="15sp"
         android:text="@string/transaction_list_filter_apply_filters" />
 </LinearLayout>
