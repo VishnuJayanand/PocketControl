@@ -354,7 +354,7 @@ public class AddTransactionFragment extends Fragment {
         int transactionAmount = Integer.parseInt(tiedtTransactionAmount.getText().toString());
         String transactionNote  = tiedtTransactionNote.getText().toString().trim() + "";
         Transaction newTransaction = new Transaction((float) transactionAmount,
-                transactionType, Integer.toString(categoryId), transactionDate, transactionNote, transactionMethod);
+                transactionType, Integer.toString(categoryId), DateUtils.getStartOfDayInMS(transactionDate), transactionNote, transactionMethod);
 
         if (transactionRecurringIntervalType != 0) {
             newTransaction.setRecurring(true);
@@ -396,6 +396,8 @@ public class AddTransactionFragment extends Fragment {
     }
 
     private void processAddRecurringTransaction(final Transaction transaction) {
+        Transaction initialTransaction = new Transaction();
+
         Integer recurringIntervalType = transaction.getRecurringIntervalType();
         Integer recurringIntervalCustomDays = transaction.getRecurringIntervalDays();
 
@@ -403,19 +405,42 @@ public class AddTransactionFragment extends Fragment {
         Calendar today = DateUtils.getStartOfCurrentDay();
         int counter = 0;
 
+        initialTransaction.setAmount(transaction.getAmount());
+        initialTransaction.setCategory(transaction.getCategory());
+        initialTransaction.setMethod(transaction.getMethod());
+        initialTransaction.setType(transaction.getType());
+        initialTransaction.setTextNote(transaction.getTextNote());
+        initialTransaction.setFlagIconRecurring(transaction.getFlagIconRecurring());
+        initialTransaction.setRecurring(transaction.isRecurring());
+        initialTransaction.setRecurringIntervalType(transaction.getRecurringIntervalType());
+        initialTransaction.setRecurringIntervalDays(transaction.getRecurringIntervalDays());
+        initialTransaction.setId(transaction.getId());
+        initialTransaction.setDate(transaction.getDate());
+
+        transaction.setRecurringIntervalType(0);
+        transaction.setRecurringIntervalDays(0);
+        transaction.setRecurring(false);
+
+        transactionViewModel.updateTransactionRecurringFields(
+                transaction.getId(),
+                transaction.isRecurring(),
+                transaction.getRecurringIntervalType(),
+                transaction.getRecurringIntervalDays()
+        );
+
         if (recurringIntervalType != null) {
             while (originalDate.getTimeInMillis() <= today.getTimeInMillis()) {
                 Transaction newTransaction = new Transaction();
 
-                newTransaction.setAmount(transaction.getAmount());
-                newTransaction.setCategory(transaction.getCategory());
-                newTransaction.setMethod(transaction.getMethod());
-                newTransaction.setType(transaction.getType());
-                newTransaction.setTextNote(transaction.getTextNote());
+                newTransaction.setAmount(initialTransaction.getAmount());
+                newTransaction.setCategory(initialTransaction.getCategory());
+                newTransaction.setMethod(initialTransaction.getMethod());
+                newTransaction.setType(initialTransaction.getType());
+                newTransaction.setTextNote(initialTransaction.getTextNote());
                 newTransaction.setFlagIconRecurring(true);
-                newTransaction.setRecurring(false);
-                newTransaction.setRecurringIntervalType(0);
-                newTransaction.setRecurringIntervalDays(0);
+                newTransaction.setRecurring(initialTransaction.isRecurring());
+                newTransaction.setRecurringIntervalType(initialTransaction.getRecurringIntervalType());
+                newTransaction.setRecurringIntervalDays(initialTransaction.getRecurringIntervalDays());
 
                 switch (recurringIntervalType) {
                     case 1:
@@ -440,7 +465,22 @@ public class AddTransactionFragment extends Fragment {
 
                 if (originalDate.getTimeInMillis() <= today.getTimeInMillis()) {
                     newTransaction.setDate(DateUtils.getStartOfDay(originalDate.getTimeInMillis()).getTimeInMillis());
+
                     transactionViewModel.insert(newTransaction);
+
+                    initialTransaction.setRecurringIntervalType(0);
+                    initialTransaction.setRecurringIntervalDays(0);
+                    initialTransaction.setRecurring(false);
+
+                    transactionViewModel.updateTransactionRecurringFields(
+                            initialTransaction.getId(),
+                            initialTransaction.isRecurring(),
+                            initialTransaction.getRecurringIntervalType(),
+                            initialTransaction.getRecurringIntervalDays()
+                    );
+
+                    initialTransaction = newTransaction;
+
                     counter++;
                 }
             }

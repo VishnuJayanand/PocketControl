@@ -115,4 +115,20 @@ public interface TransactionDao {
             + "ORDER BY date DESC")
     LiveData<List<Transaction>> filterTransactionsByAmountAndCategory(
             String categoryId, float lowerBoundAmount, float upperBoundAmount);
+
+    @Query("UPDATE transactions SET "
+            + "is_recurring=:isRecurring, "
+            + "recurring_interval_type=:recurringIntervalType, "
+            + "recurring_interval_days=:recurringIntervalDays "
+            + "WHERE id=:transactionId;")
+    void updateTransactionRecurringFields(
+            int transactionId,
+            Boolean isRecurring,
+            Integer recurringIntervalType,
+            Integer recurringIntervalDays
+    );
+
+    @Query("SELECT COUNT(id) FROM transactions")
+    int getTransactionsCount();
+
 }

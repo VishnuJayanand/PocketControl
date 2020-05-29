@@ -124,4 +124,15 @@ public class TransactionRepository {
         });
     }
 
+    public void updateTransactionRecurringFields(
+            int transactionId,
+            Boolean isRecurring,
+            Integer recurringIntervalType,
+            Integer recurringIntervalDays
+    ) {
+        PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
+            transactionDao.updateTransactionRecurringFields(transactionId, isRecurring, recurringIntervalType, recurringIntervalDays);
+        });
+    }
+
 }

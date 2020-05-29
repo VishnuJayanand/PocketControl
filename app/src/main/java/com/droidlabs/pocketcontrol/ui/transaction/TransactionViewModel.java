@@ -110,6 +110,20 @@ public class TransactionViewModel extends AndroidViewModel {
         repository.insert(transaction);
     }
 
+    public void updateTransactionRecurringFields(
+            int transactionId,
+            Boolean isRecurring,
+            Integer recurringIntervalType,
+            Integer recurringIntervalDays
+    ) {
+        repository.updateTransactionRecurringFields(
+                transactionId,
+                isRecurring,
+                recurringIntervalType,
+                recurringIntervalDays
+        );
+    }
+
     /**
      * Setter for category filter.
      * @param filterEnabled whether filter is enabled.
