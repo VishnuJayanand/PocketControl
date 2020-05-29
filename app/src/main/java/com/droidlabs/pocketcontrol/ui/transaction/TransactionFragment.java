@@ -92,7 +92,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
     @Override
     public void onTransactionClick(final Transaction transaction, final int position) {
         Bundle bundle = new Bundle();
-        bundle.putFloat("transactionDate", transaction.getDate());
+        bundle.putLong("transactionDate", transaction.getDate());
         bundle.putFloat("transactionAmount", transaction.getAmount());
         bundle.putString("transactionNote", transaction.getTextNote());
         bundle.putInt("transactionType", transaction.getType());
