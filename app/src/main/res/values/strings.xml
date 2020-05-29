@@ -8,9 +8,9 @@
     <string name="hint_transaction">Transaction description...</string>
     <string name="button_save">Save</string>
     <string name="empty_not_saved">Transaction not saved because it is empty.</string>
-    <string name="choosse_transactiontype">Choose TransactionType :</string>
+    <string name="choosse_transactiontype">Transaction Type:</string>
     <string name="fraction">%1$d/%2$d</string>
-    <string name="choose_transaction_method">Choose Transaction Method :</string>
+    <string name="choose_transaction_method">Payment Method:</string>
     <string name="home_screen_net_balance">NET BALANCE</string>
     <string name="bottom_menu_home_text">Home</string>
     <string name="bottom_menu_category_text">Categories</string>
