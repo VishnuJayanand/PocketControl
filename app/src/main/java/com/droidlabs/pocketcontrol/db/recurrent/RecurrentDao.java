@@ -8,18 +8,23 @@ import androidx.room.Query;
 @Dao
 public interface RecurrentDao {
 
+    /**
+     * Add new recurrent.
+     * @param recurrent recurrent.
+     */
     @Insert(onConflict = OnConflictStrategy.ABORT)
     void insert(Recurrent recurrent);
 
     /**
-     * Delete all transactions from the database.
+     * Delete all recurrents.
      */
     @Query("DELETE FROM recurrents")
     void deleteAll();
 
     /**
-     * Retrieve all transactions from the database.
-     * @return all transactions.
+     * Retrieve recurrent by date.
+     * @param date current date.
+     * @return recurrent.
      */
     @Query("SELECT * FROM recurrents WHERE date=:date")
     Recurrent getRecurrentByDate(Long date);

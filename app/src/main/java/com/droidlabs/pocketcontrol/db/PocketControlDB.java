@@ -28,7 +28,6 @@ import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

@@ -117,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Executed every time the app opens.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -124,6 +127,9 @@ public class MainActivity extends AppCompatActivity {
         createRecurringTransactions();
     }
 
+    /**
+     * Creates recurring transactions at startup.
+     */
     private void createRecurringTransactions() {
         long startOfDay = DateUtils.getStartOfCurrentDay().getTimeInMillis();
 
@@ -134,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         if (today == null) {
             transactionViewModel.getTransactions().observe(this, new Observer<List<Transaction>>() {
                 @Override
-                public void onChanged(List<Transaction> transactions) {
+                public void onChanged(final List<Transaction> transactions) {
                     List<Transaction> filteredTransactions = new ArrayList<>();
 
                     for (Transaction transaction : transactions) {
@@ -167,6 +173,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creates recurring transactions at startup.
+     * @param transaction initial transaction.
+     * @return last added transaction.
+     */
     private Transaction processAddRecurringTransaction(final Transaction transaction) {
         Transaction copyTransaction = new Transaction();
 

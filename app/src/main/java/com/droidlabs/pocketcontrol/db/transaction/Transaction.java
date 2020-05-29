@@ -187,11 +187,23 @@ public class Transaction {
         return isRecurring;
     }
 
+    /**
+     * Getter for icon recurring flag.
+     * @return flag.
+     */
     @Nullable
     public Boolean getFlagIconRecurring() {
         return flagIconRecurring;
     }
 
+    /**
+     * Getter for recurring type.
+     * 1 - Daily
+     * 2 - Weekly
+     * 3 - Monthly
+     * 4 - Custom
+     * @return recurring type.
+     */
     @Nullable
     public Integer getRecurringIntervalType() {
         return recurringIntervalType;
@@ -253,12 +265,24 @@ public class Transaction {
         isRecurring = recurring;
     }
 
-    public void setFlagIconRecurring(@Nullable Boolean flagIconRecurring) {
-        this.flagIconRecurring = flagIconRecurring;
+    /**
+     * Setter for recurring icon flag.
+     * @param flag flag.
+     */
+    public void setFlagIconRecurring(final @Nullable Boolean flag) {
+        this.flagIconRecurring = flag;
     }
 
-    public void setRecurringIntervalType(@Nullable Integer recurringIntervalType) {
-        this.recurringIntervalType = recurringIntervalType;
+    /**
+     * Setter for recurring type.
+     * 1 - Daily
+     * 2 - Weekly
+     * 3 - Monthly
+     * 4 - Custom
+     * @param recType type.
+     */
+    public void setRecurringIntervalType(final @Nullable Integer recType) {
+        this.recurringIntervalType = recType;
     }
 
     /**

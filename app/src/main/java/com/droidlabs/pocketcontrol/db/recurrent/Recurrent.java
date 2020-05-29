@@ -13,20 +13,39 @@ public class Recurrent {
     @ColumnInfo(name = "date")
     private Long date;
 
+    /**
+     * Empty constructor.
+     */
     public Recurrent() { }
 
-    public void setId(int id) {
-        this.id = id;
+    /**
+     * Set id.
+     * @param recId id.
+     */
+    public void setId(final int recId) {
+        this.id = recId;
     }
 
-    public void setDate(Long date) {
-        this.date = date;
+    /**
+     * Set date.
+     * @param recDate date.
+     */
+    public void setDate(final Long recDate) {
+        this.date = recDate;
     }
 
+    /**
+     * Get id.
+     * @return id.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Get date.
+     * @return date.
+     */
     public Long getDate() {
         return date;
     }

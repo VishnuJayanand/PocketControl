@@ -14,6 +14,7 @@ public interface TransactionDao {
     /**
      * Insert new transaction into the database.
      * @param transaction transaction to be saved.
+     * @return new transaction id.
      */
     @Insert(onConflict = OnConflictStrategy.ABORT)
     long insert(Transaction transaction);
@@ -33,6 +34,7 @@ public interface TransactionDao {
 
     /**
      * Get transaction by id.
+     * @param transactionId id.
      * @return transaction.
      */
     @Query("SELECT * FROM transactions WHERE id=:transactionId")
@@ -123,6 +125,13 @@ public interface TransactionDao {
     LiveData<List<Transaction>> filterTransactionsByAmountAndCategory(
             String categoryId, float lowerBoundAmount, float upperBoundAmount);
 
+    /**
+     * Update transaction recurring params.
+     * @param transactionId id.
+     * @param isRecurring flag.
+     * @param recurringIntervalType type.
+     * @param recurringIntervalDays recurring interval in days.
+     */
     @Query("UPDATE transactions SET "
             + "is_recurring=:isRecurring, "
             + "recurring_interval_type=:recurringIntervalType, "
@@ -134,8 +143,4 @@ public interface TransactionDao {
             Integer recurringIntervalType,
             Integer recurringIntervalDays
     );
-
-    @Query("SELECT COUNT(id) FROM transactions")
-    int getTransactionsCount();
-
 }

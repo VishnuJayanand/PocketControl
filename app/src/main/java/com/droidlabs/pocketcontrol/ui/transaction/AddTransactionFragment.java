@@ -88,7 +88,7 @@ public class AddTransactionFragment extends Fragment {
 
         recurringSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
                 if (isChecked) {
                     recurringTransactionWrapper.setVisibility(View.VISIBLE);
                 } else {
@@ -198,14 +198,18 @@ public class AddTransactionFragment extends Fragment {
         //get the spinner from the xml.
         dropdownRecurringTransaction = view.findViewById(R.id.spinnerRecurringInterval);
         //create a list of items for the spinner.
-        String[] dropdownItems = { "Daily", "Weekly", "Monthly", "Custom" };
+        String[] dropdownItems = {"Daily", "Weekly", "Monthly", "Custom"};
         ArrayAdapter<String> adapterRecurring = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
         dropdownRecurringTransaction.setAdapter(adapterRecurring);
         dropdownRecurringTransaction.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(
+                    final AdapterView<?> parent,
+                    final View view,
+                    final int position,
+                    final long id) {
                 String selected = (String) parent.getItemAtPosition(position);
 
                 if (selected.equals("Custom")) {
@@ -216,7 +220,7 @@ public class AddTransactionFragment extends Fragment {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onNothingSelected(final AdapterView<?> parent) {
 
             }
         });
@@ -265,6 +269,10 @@ public class AddTransactionFragment extends Fragment {
         return true;
     }
 
+    /**
+     * Check if recurring conditions are met.
+     * @return validation result.
+     */
     private boolean checkRecurringConditions() {
         if (dropdownRecurringTransaction.getSelectedItem().equals("Custom")) {
             if (customRecurringDaysInterval.getText().toString().trim().isEmpty()) {
@@ -307,6 +315,9 @@ public class AddTransactionFragment extends Fragment {
         }
     }
 
+    /**
+     * Parser for recurring transaction type.
+     */
     private void convertRecurringTransaction() {
         if (recurringSwitch.isChecked()) {
             String text = dropdownRecurringTransaction.getSelectedItem().toString();
@@ -355,7 +366,12 @@ public class AddTransactionFragment extends Fragment {
         int transactionAmount = Integer.parseInt(tiedtTransactionAmount.getText().toString());
         String transactionNote  = tiedtTransactionNote.getText().toString().trim() + "";
         Transaction newTransaction = new Transaction((float) transactionAmount,
-                transactionType, Integer.toString(categoryId), DateUtils.getStartOfDayInMS(transactionDate), transactionNote, transactionMethod);
+                transactionType,
+                Integer.toString(categoryId),
+                DateUtils.getStartOfDayInMS(transactionDate),
+                transactionNote,
+                transactionMethod
+        );
 
         if (transactionRecurringIntervalType != 0) {
             newTransaction.setRecurring(true);
@@ -398,6 +414,11 @@ public class AddTransactionFragment extends Fragment {
         Toast.makeText(getContext(), total, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Process and create recurring transactions.
+     * @param transaction initial transaction.
+     * @return last transaction.
+     */
     private Transaction processAddRecurringTransaction(final Transaction transaction) {
         Transaction copyTransaction = new Transaction();
 
