@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -34,15 +35,15 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Objects;
 
 public class AddTransactionFragment extends Fragment {
     private TextInputEditText tiedtTransactionAmount, tiedtTransactionNote;
-    private TextInputLayout tilTransactionAmount, tilTransactionNote;
+    private TextInputEditText customRecurringDaysInterval;
+    private TextInputLayout tilTransactionAmount, tilTransactionNote, tilCustomRecurringDaysInterval;
     private boolean isTransactionRecurring;
     private int transactionType;
     private int transactionMethod;
-    private int transactionRecurringInterval;
+    private int transactionRecurringIntervalType;
     private Spinner dropdownTransactionType;
     private Spinner dropdownTransactionMethod;
     private Spinner dropdownTransactionCategory;
@@ -53,6 +54,7 @@ public class AddTransactionFragment extends Fragment {
     private TransactionViewModel transactionViewModel;
     private Switch recurringSwitch;
     private LinearLayout recurringTransactionWrapper;
+    private LinearLayout customDaysIntervalWrapper;
 
     @Nullable
     @Override
@@ -64,8 +66,11 @@ public class AddTransactionFragment extends Fragment {
         tiedtTransactionNote = view.findViewById(R.id.tiedt_transactionNote);
         tilTransactionAmount = view.findViewById(R.id.til_transactionAmount);
         tilTransactionNote = view.findViewById(R.id.til_transactionNote);
+        tilCustomRecurringDaysInterval = view.findViewById(R.id.til_customRecurringDaysInterval);
         recurringSwitch = view.findViewById(R.id.recurringSwitch);
         recurringTransactionWrapper = view.findViewById(R.id.recurringTransactionWrapper);
+        customDaysIntervalWrapper = view.findViewById(R.id.customDaysIntervalWrapper);
+        customRecurringDaysInterval = view.findViewById(R.id.customRecurringDaysInterval);
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
@@ -86,7 +91,7 @@ public class AddTransactionFragment extends Fragment {
                 if (isChecked) {
                     recurringTransactionWrapper.setVisibility(View.VISIBLE);
                 } else {
-                    recurringTransactionWrapper.setVisibility(View.INVISIBLE);
+                    recurringTransactionWrapper.setVisibility(View.GONE);
                 }
             }
         });
@@ -192,11 +197,28 @@ public class AddTransactionFragment extends Fragment {
         //get the spinner from the xml.
         dropdownRecurringTransaction = view.findViewById(R.id.spinnerRecurringInterval);
         //create a list of items for the spinner.
-        String[] dropdownItems = { "Daily", "Weekly", "Monthly" };
+        String[] dropdownItems = { "Daily", "Weekly", "Monthly", "Custom" };
         ArrayAdapter<String> adapterRecurring = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
         dropdownRecurringTransaction.setAdapter(adapterRecurring);
+        dropdownRecurringTransaction.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selected = (String) parent.getItemAtPosition(position);
+
+                if (selected.equals("Custom")) {
+                    customDaysIntervalWrapper.setVisibility(View.VISIBLE);
+                } else {
+                    customDaysIntervalWrapper.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     /**
@@ -219,6 +241,12 @@ public class AddTransactionFragment extends Fragment {
             requestFocus(tiedtTransactionAmount);
             return false;
         }
+
+        if (Integer.parseInt(tiedtTransactionAmount.getText().toString().trim()) <= 0) {
+            tilTransactionAmount.setError("Amount should be larger than 0");
+            requestFocus(tiedtTransactionAmount);
+            return false;
+        }
         return true;
     }
 
@@ -233,6 +261,24 @@ public class AddTransactionFragment extends Fragment {
             requestFocus(editText);
             return false;
         }
+        return true;
+    }
+
+    private boolean checkRecurringConditions() {
+        if (dropdownRecurringTransaction.getSelectedItem().equals("Custom")) {
+            if (customRecurringDaysInterval.getText().toString().trim().isEmpty()) {
+                tilCustomRecurringDaysInterval.setError("Required");
+                requestFocus(customRecurringDaysInterval);
+                return false;
+            }
+
+            if (Integer.parseInt(customRecurringDaysInterval.getText().toString().trim()) <= 0) {
+                tilCustomRecurringDaysInterval.setError("Should be larger than 0");
+                requestFocus(customRecurringDaysInterval);
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -265,19 +311,22 @@ public class AddTransactionFragment extends Fragment {
             String text = dropdownRecurringTransaction.getSelectedItem().toString();
             switch (text) {
                 case "Daily":
-                    transactionRecurringInterval = 1;
+                    transactionRecurringIntervalType = 1;
                     break;
                 case "Weekly":
-                    transactionRecurringInterval = 2;
+                    transactionRecurringIntervalType = 2;
                     break;
                 case "Monthly":
-                    transactionRecurringInterval = 3;
+                    transactionRecurringIntervalType = 3;
+                    break;
+                case "Custom":
+                    transactionRecurringIntervalType = 4;
                     break;
                 default:
-                    transactionRecurringInterval = 0;
+                    transactionRecurringIntervalType = 0;
             }
         } else {
-            transactionRecurringInterval = 0;
+            transactionRecurringIntervalType = 0;
         }
     }
 
@@ -289,6 +338,9 @@ public class AddTransactionFragment extends Fragment {
             return;
         }
         if (!checkTransactionDate()) {
+            return;
+        }
+        if (!checkRecurringConditions()) {
             return;
         }
         convertTransactionType();
@@ -304,17 +356,26 @@ public class AddTransactionFragment extends Fragment {
         Transaction newTransaction = new Transaction((float) transactionAmount,
                 transactionType, Integer.toString(categoryId), transactionDate, transactionNote, transactionMethod);
 
-        if (transactionRecurringInterval != 0) {
+        if (transactionRecurringIntervalType != 0) {
             newTransaction.setRecurring(true);
-            newTransaction.setRecurringIntervalDays(transactionRecurringInterval);
+            newTransaction.setRecurringIntervalType(transactionRecurringIntervalType);
+
+            if (transactionRecurringIntervalType == 4) {
+                int customRecurringInterval = Integer.parseInt(customRecurringDaysInterval.getText().toString().trim());
+
+                if (customRecurringInterval != 0) {
+                    newTransaction.setRecurringIntervalDays(customRecurringInterval);
+                } else {
+                    newTransaction.setRecurringIntervalDays(1);
+                }
+            }
+
             newTransaction.setFlagIconRecurring(true);
         } else {
             newTransaction.setRecurring(false);
-            newTransaction.setRecurringIntervalDays(0);
+            newTransaction.setRecurringIntervalType(0);
             newTransaction.setFlagIconRecurring(false);
         }
-
-        //Get TransactionViewModel
 
         //Insert new Category in to the database
         transactionViewModel.insert(newTransaction);
@@ -335,12 +396,14 @@ public class AddTransactionFragment extends Fragment {
     }
 
     private void processAddRecurringTransaction(final Transaction transaction) {
-        Integer recurringInterval = transaction.getRecurringIntervalDays();
+        Integer recurringIntervalType = transaction.getRecurringIntervalType();
+        Integer recurringIntervalCustomDays = transaction.getRecurringIntervalDays();
+
         Calendar originalDate = DateUtils.getStartOfDay(transaction.getDate());
         Calendar today = DateUtils.getStartOfCurrentDay();
         int counter = 0;
 
-        if (recurringInterval != null) {
+        if (recurringIntervalType != null) {
             while (originalDate.getTimeInMillis() <= today.getTimeInMillis()) {
                 Transaction newTransaction = new Transaction();
 
@@ -351,9 +414,10 @@ public class AddTransactionFragment extends Fragment {
                 newTransaction.setTextNote(transaction.getTextNote());
                 newTransaction.setFlagIconRecurring(true);
                 newTransaction.setRecurring(false);
+                newTransaction.setRecurringIntervalType(0);
                 newTransaction.setRecurringIntervalDays(0);
 
-                switch (recurringInterval) {
+                switch (recurringIntervalType) {
                     case 1:
                         originalDate.add(Calendar.DAY_OF_YEAR, 1);
                         break;
@@ -362,6 +426,13 @@ public class AddTransactionFragment extends Fragment {
                         break;
                     case 3:
                         originalDate.add(Calendar.MONTH, 1);
+                        break;
+                    case 4:
+                        if (recurringIntervalCustomDays != null) {
+                            originalDate.add(Calendar.DAY_OF_YEAR, recurringIntervalCustomDays);
+                        } else {
+                            originalDate.add(Calendar.DAY_OF_YEAR, 1);
+                        }
                         break;
                     default:
                         originalDate.add(Calendar.DAY_OF_YEAR, 1);
