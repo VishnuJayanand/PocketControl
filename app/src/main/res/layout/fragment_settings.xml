@@ -33,7 +33,7 @@
             android:background="@android:drawable/btn_dropdown"
             android:gravity="right"
             android:layout_weight="1"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dialog" />
 
     </LinearLayout>
 
@@ -65,7 +65,7 @@
             android:background="@android:drawable/btn_dropdown"
             android:gravity="right"
             android:layout_weight="1"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dialog" />
 
     </LinearLayout>
 
@@ -97,7 +97,7 @@
             android:layout_weight="1"
             android:background="@android:drawable/btn_dropdown"
             android:gravity="right"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dialog" />
 
     </LinearLayout>
 
