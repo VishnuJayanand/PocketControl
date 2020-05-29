@@ -167,6 +167,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
         private final OnTransactionNoteListener onNoteListener;
         private final ImageButton duplicateTransactionButton;
         private final LinearLayout recurringTransactionWrapper;
+        private final LinearLayout fillerEmptySpace;
         // private final TextView transactionCurrency;
 
         /**
@@ -176,15 +177,30 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
          */
         private TransactionViewHolder(final View itemView, final OnTransactionNoteListener onTransactionNoteListener) {
             super(itemView);
+
+            View.OnClickListener clickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    onNoteListener.onTransactionClick(transactions.get(getAdapterPosition()), getAdapterPosition());
+                }
+            };
+
             transactionCategoryImage = itemView.findViewById(R.id.transactionCategoryImage);
             transactionCategoryTitle = itemView.findViewById(R.id.transactionCategoryTitle);
             transactionDate = itemView.findViewById(R.id.transactionDate);
             transactionAmount = itemView.findViewById(R.id.transactionAmount);
             duplicateTransactionButton = itemView.findViewById(R.id.duplicate_transaction);
             recurringTransactionWrapper = itemView.findViewById(R.id.recurringTransactionWrapper);
-            this.onNoteListener = onTransactionNoteListener;
+            fillerEmptySpace = itemView.findViewById(R.id.blankSpace);
 
-            itemView.setOnClickListener(this);
+            transactionCategoryTitle.setOnClickListener(clickListener);
+            transactionCategoryImage.setOnClickListener(clickListener);
+            transactionAmount.setOnClickListener(clickListener);
+            transactionDate.setOnClickListener(clickListener);
+            recurringTransactionWrapper.setOnClickListener(clickListener);
+            fillerEmptySpace.setOnClickListener(clickListener);
+
+            this.onNoteListener = onTransactionNoteListener;
         }
 
         /**
@@ -220,14 +236,6 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
 
         if (oldTransaction.getTextNote() != null) {
             newTransaction.setTextNote(oldTransaction.getTextNote());
-        }
-
-        if (oldTransaction.isRecurring() != null) {
-            newTransaction.setRecurring(oldTransaction.isRecurring());
-        }
-
-        if (oldTransaction.getRecurringIntervalDays() != null) {
-            newTransaction.setRecurringIntervalDays(oldTransaction.getRecurringIntervalDays());
         }
 
         if (oldTransaction.getType() != null) {
