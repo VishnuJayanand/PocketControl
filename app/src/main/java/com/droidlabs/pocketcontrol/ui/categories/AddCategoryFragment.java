@@ -82,6 +82,11 @@ public class AddCategoryFragment extends Fragment {
             requestFocus(tiedtCategoryName);
             return false;
         }
+        if (!tiedtCategoryName.getText().toString().trim().matches(".*[a-zA-Z]+.*")) {
+            tilCategoryName.setError("Categories should have at least one character");
+            requestFocus(tiedtCategoryName);
+            return false;
+        }
         return true;
     }
 
@@ -108,6 +113,6 @@ public class AddCategoryFragment extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
-        Toast.makeText(getContext(), categoryName, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "Added new category", Toast.LENGTH_LONG).show();
     }
 }
