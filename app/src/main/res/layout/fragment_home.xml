@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,7 +66,8 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginTop="450dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <Button
             android:id="@+id/addCategoryButton"
@@ -82,7 +85,14 @@
         android:layout_marginTop="350dp"
         android:orientation="vertical">
 
-        <include layout="@layout/transaction_listview"/>
+        <Button
+            android:id="@+id/addTransactionButton"
+            style="@style/featured_add_button"
+            android:background="@drawable/pill_button"
+            android:text="@string/add_transaction"
+            android:drawableStart="@drawable/ic_add_black_24dp"
+            android:drawablePadding="10sp"
+            />
     </LinearLayout>
 
 </RelativeLayout>
