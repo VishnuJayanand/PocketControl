@@ -204,7 +204,7 @@ public abstract class PocketControlDB extends RoomDatabase {
         );
 
         recurringTransaction.setRecurring(true);
-        recurringTransaction.setRecurringIntervalType(1);
+        recurringTransaction.setRecurringIntervalType(4);
         recurringTransaction.setRecurringIntervalDays(3);
         recurringTransaction.setFlagIconRecurring(true);
 

@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView appImage, teamImage;
     private static final int TIMER = 4000;
     private TransactionViewModel transactionViewModel;
-    private List<Transaction> transactionsList;
 
     /**
      * Method to create an app instance.
@@ -136,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
             transactionViewModel.getTransactions().observe(this, new Observer<List<Transaction>>() {
                 @Override
                 public void onChanged(List<Transaction> transactions) {
-                    transactionsList = transactions;
                     List<Transaction> filteredTransactions = new ArrayList<>();
 
                     for (Transaction transaction : transactions) {
@@ -146,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
                             if (isRecurring != null && recurringType != null) {
                                 if (recurringType != 0) {
+                                    Log.v("RECURRING", "ADDING TRANSACTION: " + transaction.getId());
                                     filteredTransactions.add(transaction);
                                 }
                             }
@@ -168,99 +167,103 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void processAddRecurringTransaction(final Transaction transaction) {
-        Transaction initialTransaction = new Transaction();
+    private Transaction processAddRecurringTransaction(final Transaction transaction) {
+        Transaction copyTransaction = new Transaction();
 
         Integer recurringIntervalType = transaction.getRecurringIntervalType();
         Integer recurringIntervalCustomDays = transaction.getRecurringIntervalDays();
 
-        Log.v("RECURRING", String.valueOf(recurringIntervalCustomDays));
-
-        Calendar originalDate = DateUtils.getStartOfDay(transaction.getDate());
+        Calendar recurringDate = DateUtils.getStartOfDay(transaction.getDate());
         Calendar today = DateUtils.getStartOfCurrentDay();
         int counter = 0;
 
-        initialTransaction.setAmount(transaction.getAmount());
-        initialTransaction.setCategory(transaction.getCategory());
-        initialTransaction.setMethod(transaction.getMethod());
-        initialTransaction.setType(transaction.getType());
-        initialTransaction.setTextNote(transaction.getTextNote());
-        initialTransaction.setFlagIconRecurring(transaction.getFlagIconRecurring());
-        initialTransaction.setRecurring(transaction.isRecurring());
-        initialTransaction.setRecurringIntervalType(transaction.getRecurringIntervalType());
-        initialTransaction.setRecurringIntervalDays(transaction.getRecurringIntervalDays());
-        initialTransaction.setId(transaction.getId());
-        initialTransaction.setDate(transaction.getDate());
+        copyTransaction.setAmount(transaction.getAmount());
+        copyTransaction.setCategory(transaction.getCategory());
+        copyTransaction.setMethod(transaction.getMethod());
+        copyTransaction.setType(transaction.getType());
+        copyTransaction.setTextNote(transaction.getTextNote());
+        copyTransaction.setFlagIconRecurring(transaction.getFlagIconRecurring());
+        copyTransaction.setRecurring(transaction.isRecurring());
+        copyTransaction.setRecurringIntervalType(transaction.getRecurringIntervalType());
+        copyTransaction.setRecurringIntervalDays(transaction.getRecurringIntervalDays());
+        copyTransaction.setId(transaction.getId());
+        copyTransaction.setDate(transaction.getDate());
 
-        transaction.setRecurringIntervalType(0);
-        transaction.setRecurringIntervalDays(0);
-        transaction.setRecurring(false);
-
-        transactionViewModel.updateTransactionRecurringFields(
-                transaction.getId(),
-                transaction.isRecurring(),
-                transaction.getRecurringIntervalType(),
-                transaction.getRecurringIntervalDays()
-        );
+        int whatToAdd;
+        int howMuchToAdd;
 
         if (recurringIntervalType != null) {
-            while (originalDate.getTimeInMillis() <= today.getTimeInMillis()) {
-                Transaction newTransaction = new Transaction();
 
-                newTransaction.setAmount(initialTransaction.getAmount());
-                newTransaction.setCategory(initialTransaction.getCategory());
-                newTransaction.setMethod(initialTransaction.getMethod());
-                newTransaction.setType(initialTransaction.getType());
-                newTransaction.setTextNote(initialTransaction.getTextNote());
-                newTransaction.setFlagIconRecurring(true);
-                newTransaction.setRecurring(initialTransaction.isRecurring());
-                newTransaction.setRecurringIntervalType(initialTransaction.getRecurringIntervalType());
-                newTransaction.setRecurringIntervalDays(initialTransaction.getRecurringIntervalDays());
+            switch (recurringIntervalType) {
+                case 1:
+                    whatToAdd = Calendar.DAY_OF_YEAR;
+                    howMuchToAdd = 1;
+                    break;
+                case 2:
+                    whatToAdd = Calendar.WEEK_OF_YEAR;
+                    howMuchToAdd = 1;
+                    break;
+                case 3:
+                    whatToAdd = Calendar.MONTH;
+                    howMuchToAdd = 1;
+                    break;
+                case 4:
+                    whatToAdd = Calendar.DAY_OF_YEAR;
+                    if (recurringIntervalCustomDays != null) {
+                        howMuchToAdd = recurringIntervalCustomDays;
+                    } else {
+                        howMuchToAdd = 1;
+                    }
+                    break;
+                default:
+                    whatToAdd = Calendar.DAY_OF_YEAR;
+                    howMuchToAdd = 1;
+            }
 
-                switch (recurringIntervalType) {
-                    case 1:
-                        originalDate.add(Calendar.DAY_OF_YEAR, 1);
-                        break;
-                    case 2:
-                        originalDate.add(Calendar.WEEK_OF_YEAR, 1);
-                        break;
-                    case 3:
-                        originalDate.add(Calendar.MONTH, 1);
-                        break;
-                    case 4:
-                        if (recurringIntervalCustomDays != null) {
-                            originalDate.add(Calendar.DAY_OF_YEAR, recurringIntervalCustomDays);
-                        } else {
-                            originalDate.add(Calendar.DAY_OF_YEAR, 1);
-                        }
-                        break;
-                    default:
-                        originalDate.add(Calendar.DAY_OF_YEAR, 1);
-                }
+            do {
+                recurringDate.add(whatToAdd, howMuchToAdd);
 
-                if (originalDate.getTimeInMillis() <= today.getTimeInMillis()) {
-                    newTransaction.setDate(DateUtils.getStartOfDay(originalDate.getTimeInMillis()).getTimeInMillis());
+                if (recurringDate.getTimeInMillis() <= today.getTimeInMillis()) {
+                    // add a new transaction
+                    // save currentTransaction as non-recurring.
 
-                    transactionViewModel.insert(newTransaction);
-
-                    initialTransaction.setRecurringIntervalType(0);
-                    initialTransaction.setRecurringIntervalDays(0);
-                    initialTransaction.setRecurring(false);
+                    copyTransaction.setRecurring(false);
+                    copyTransaction.setRecurringIntervalType(0);
+                    copyTransaction.setRecurringIntervalDays(0);
 
                     transactionViewModel.updateTransactionRecurringFields(
-                            initialTransaction.getId(),
-                            initialTransaction.isRecurring(),
-                            initialTransaction.getRecurringIntervalType(),
-                            initialTransaction.getRecurringIntervalDays()
+                            copyTransaction.getId(),
+                            copyTransaction.isRecurring(),
+                            copyTransaction.getRecurringIntervalType(),
+                            copyTransaction.getRecurringIntervalDays()
                     );
 
-                    initialTransaction = newTransaction;
+                    Transaction newTransaction = new Transaction();
+
+                    newTransaction.setAmount(copyTransaction.getAmount());
+                    newTransaction.setCategory(copyTransaction.getCategory());
+                    newTransaction.setMethod(copyTransaction.getMethod());
+                    newTransaction.setType(copyTransaction.getType());
+                    newTransaction.setTextNote(copyTransaction.getTextNote());
+                    newTransaction.setFlagIconRecurring(true);
+                    newTransaction.setRecurring(true);
+                    newTransaction.setRecurringIntervalType(recurringIntervalType);
+                    newTransaction.setRecurringIntervalDays(recurringIntervalCustomDays);
+
+                    newTransaction.setDate(DateUtils.getStartOfDay(recurringDate.getTimeInMillis()).getTimeInMillis());
+
+                    long newTransactionId = transactionViewModel.insert(newTransaction);
+
+                    copyTransaction = transactionViewModel.getTransactionById(newTransactionId);
 
                     counter++;
                 }
-            }
+
+            } while (recurringDate.getTimeInMillis() <= today.getTimeInMillis());
         }
 
         Log.v("RECURRING", "TRANSACTIONS ADDED: " + (counter + 1));
+
+        return copyTransaction;
     }
 }

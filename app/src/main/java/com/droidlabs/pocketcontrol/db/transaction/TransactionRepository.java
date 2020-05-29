@@ -31,6 +31,10 @@ public class TransactionRepository {
         return allTransactions;
     }
 
+    public Transaction getTransactionById(long transactionId) {
+        return transactionDao.getTransactionById(transactionId);
+    };
+
     /**
      * Get transactions by categoryID.
      * @param categoryId category id.
@@ -118,10 +122,8 @@ public class TransactionRepository {
      * Insert a new transaction in the database.
      * @param transaction transaction to be saved.
      */
-    public void insert(final Transaction transaction) {
-        PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
-            transactionDao.insert(transaction);
-        });
+    public long insert(final Transaction transaction) {
+        return transactionDao.insert(transaction);
     }
 
     public void updateTransactionRecurringFields(
@@ -130,9 +132,7 @@ public class TransactionRepository {
             Integer recurringIntervalType,
             Integer recurringIntervalDays
     ) {
-        PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
-            transactionDao.updateTransactionRecurringFields(transactionId, isRecurring, recurringIntervalType, recurringIntervalDays);
-        });
+        transactionDao.updateTransactionRecurringFields(transactionId, isRecurring, recurringIntervalType, recurringIntervalDays);
     }
 
 }

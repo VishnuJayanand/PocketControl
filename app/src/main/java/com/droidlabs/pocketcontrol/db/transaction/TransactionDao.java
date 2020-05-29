@@ -16,7 +16,7 @@ public interface TransactionDao {
      * @param transaction transaction to be saved.
      */
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    void insert(Transaction transaction);
+    long insert(Transaction transaction);
 
     /**
      * Delete all transactions from the database.
@@ -30,6 +30,13 @@ public interface TransactionDao {
      */
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     LiveData<List<Transaction>> getAllTransactions();
+
+    /**
+     * Get transaction by id.
+     * @return transaction.
+     */
+    @Query("SELECT * FROM transactions WHERE id=:transactionId")
+    Transaction getTransactionById(long transactionId);
 
     /**
      * Retrieve all transactions from a specified category.
