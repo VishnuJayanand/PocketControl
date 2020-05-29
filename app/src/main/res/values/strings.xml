@@ -17,4 +17,6 @@
     <string name="bottom_menu_transaction_text">Transactions</string>
     <string name="bottom_menu_budget_text">Budgets</string>
     <string name="bottom_menu_settings_text">Settings</string>
+    <string name="transaction_list_filter_bottom_sheet_header">Filters</string>
+    <string name="transaction_list_filter_apply_filters">Apply filters</string>
 </resources>

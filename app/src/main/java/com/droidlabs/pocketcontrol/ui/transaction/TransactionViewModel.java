@@ -1,6 +1,7 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -82,6 +83,7 @@ public class TransactionViewModel extends AndroidViewModel {
             }
 
             if (!categoryFilterEnabled && !dateFilterEnabled && amountFilterEnabled) {
+                Log.v("HERE", "HERE");
                 return repository.filterTransactionsByAmount(
                         filters.getAmountLowerBound(),
                         filters.getAmountUpperBound()

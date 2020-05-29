@@ -2,6 +2,8 @@
 <resources>
     <color name="colorPrimary">#00AEE0</color>
     <color name="colorPrimaryDark">#005B74</color>
+    <color name="colorSecondary">#FFB400</color>
+    <color name="colorSecondaryDark">#A27400</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorIncome">#18B120</color>
     <color name="colorExpense">#D81B1B</color>

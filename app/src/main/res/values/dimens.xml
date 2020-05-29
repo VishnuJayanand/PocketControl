@@ -11,4 +11,5 @@
     <dimen name="home_text_net_balance">45sp</dimen>
     <dimen name="home_text_income_expense">20sp</dimen>
     <dimen name="button_add_top">15sp</dimen>
+    <dimen name="button_expand_filter">15sp</dimen>
 </resources>
