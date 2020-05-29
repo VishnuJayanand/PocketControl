@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
@@ -238,6 +240,14 @@ public class AddTransactionFragment extends Fragment {
         final TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         //Insert new Category in to the database
         transactionViewModel.insert(newTransaction);
+
+        Fragment fragment = new TransactionFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
         String total = "Added new transaction";
         Toast.makeText(getContext(), total, Toast.LENGTH_LONG).show();
     }

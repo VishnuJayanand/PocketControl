@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
@@ -98,6 +100,13 @@ public class AddCategoryFragment extends Fragment {
         final CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         //Insert new Category in to the database
         categoryViewModel.insert(newCategory);
+
+        Fragment fragment = new CategoriesFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
         Toast.makeText(getContext(), categoryName, Toast.LENGTH_LONG).show();
     }
