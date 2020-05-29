@@ -30,11 +30,33 @@
         android:layout_marginTop="20dp"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/transaction_date"
-            android:textSize="18sp" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/transaction_date"
+                android:textSize="18sp" />
+
+            <Switch
+                android:id="@+id/recurringSwitch"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                android:paddingStart="15dp"
+                android:showText="false"
+                android:switchPadding="7dp"
+                android:text="Recurring"
+                android:textAlignment="inherit"
+                android:textAllCaps="false"
+                android:textIsSelectable="false"
+                android:textSize="12sp"
+                android:theme="@style/recurring_switch" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/transactionDate"
@@ -72,13 +94,13 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:paddingRight="24dp"
-            android:text="@string/choosse_transactiontype"
+            android:text="@string/choose_transaction_type"
             android:textSize="17sp" />
 
         <Spinner
             android:id="@+id/spinnerTransactionType"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45sp"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dialog" />
     </LinearLayout>
@@ -99,7 +121,7 @@
         <Spinner
             android:id="@+id/spinnerTransactionMethod"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45sp"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dialog" />
     </LinearLayout>
@@ -119,9 +141,71 @@
         <Spinner
             android:id="@+id/spinnerTransactionCategory"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45sp"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dialog" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/recurringTransactionWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/choose_recurring_interval"
+            android:textSize="17sp" />
+
+        <Spinner
+            android:id="@+id/spinnerRecurringInterval"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dialog" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/customDaysIntervalWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5sp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingTop="7sp"
+            android:text="Custom interval:"
+            android:textSize="17sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_customRecurringDaysInterval"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/customRecurringDaysInterval"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3sp"
+                android:layout_marginEnd="3sp"
+                android:layout_weight="0"
+                android:hint="days"
+                android:inputType="number"
+                android:textSize="17sp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
     <Button

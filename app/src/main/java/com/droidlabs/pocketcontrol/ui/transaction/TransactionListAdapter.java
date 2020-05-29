@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -77,10 +78,16 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             Integer type = current.getType();
             Float amount = current.getAmount();
             String category = current.getCategory();
+            Boolean recurring = current.getFlagIconRecurring();
 
             // turn float to string
             String amountToString = CurrencyUtils.formatAmount(amount, "€");
 
+            if (recurring != null && recurring) {
+                holder.recurringTransactionWrapper.setVisibility(View.VISIBLE);
+            } else {
+                holder.recurringTransactionWrapper.setVisibility(View.GONE);
+            }
 
             if (type == 1) {
                 holder.transactionAmount.setTextColor(ContextCompat.getColor(context, R.color.colorExpense));
@@ -159,6 +166,8 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
         private final TextView transactionAmount;
         private final OnTransactionNoteListener onNoteListener;
         private final ImageButton duplicateTransactionButton;
+        private final LinearLayout recurringTransactionWrapper;
+        private final LinearLayout fillerEmptySpace;
         // private final TextView transactionCurrency;
 
         /**
@@ -168,14 +177,30 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
          */
         private TransactionViewHolder(final View itemView, final OnTransactionNoteListener onTransactionNoteListener) {
             super(itemView);
+
+            View.OnClickListener clickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    onNoteListener.onTransactionClick(transactions.get(getAdapterPosition()), getAdapterPosition());
+                }
+            };
+
             transactionCategoryImage = itemView.findViewById(R.id.transactionCategoryImage);
             transactionCategoryTitle = itemView.findViewById(R.id.transactionCategoryTitle);
             transactionDate = itemView.findViewById(R.id.transactionDate);
             transactionAmount = itemView.findViewById(R.id.transactionAmount);
             duplicateTransactionButton = itemView.findViewById(R.id.duplicate_transaction);
-            this.onNoteListener = onTransactionNoteListener;
+            recurringTransactionWrapper = itemView.findViewById(R.id.recurringTransactionWrapper);
+            fillerEmptySpace = itemView.findViewById(R.id.blankSpace);
 
-            itemView.setOnClickListener(this);
+            transactionCategoryTitle.setOnClickListener(clickListener);
+            transactionCategoryImage.setOnClickListener(clickListener);
+            transactionAmount.setOnClickListener(clickListener);
+            transactionDate.setOnClickListener(clickListener);
+            recurringTransactionWrapper.setOnClickListener(clickListener);
+            fillerEmptySpace.setOnClickListener(clickListener);
+
+            this.onNoteListener = onTransactionNoteListener;
         }
 
         /**
@@ -211,14 +236,6 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
 
         if (oldTransaction.getTextNote() != null) {
             newTransaction.setTextNote(oldTransaction.getTextNote());
-        }
-
-        if (oldTransaction.isRecurring() != null) {
-            newTransaction.setRecurring(oldTransaction.isRecurring());
-        }
-
-        if (oldTransaction.getRecurringIntervalDays() != null) {
-            newTransaction.setRecurringIntervalDays(oldTransaction.getRecurringIntervalDays());
         }
 
         if (oldTransaction.getType() != null) {

@@ -21,10 +21,13 @@ import com.droidlabs.pocketcontrol.db.icon.Icon;
 import com.droidlabs.pocketcontrol.db.icon.IconDao;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentMode;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
+import com.droidlabs.pocketcontrol.db.recurrent.Recurrent;
+import com.droidlabs.pocketcontrol.db.recurrent.RecurrentDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 
+import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -38,7 +41,8 @@ import java.util.concurrent.Executors;
         Icon.class,
         PaymentMode.class,
         Transaction.class,
-        Defaults.class
+        Defaults.class,
+        Recurrent.class
 }, version = 1, exportSchema = false)
 public abstract class PocketControlDB extends RoomDatabase {
 
@@ -83,6 +87,12 @@ public abstract class PocketControlDB extends RoomDatabase {
      * @return Defaults Dao
      */
     public abstract DefaultsDao defaultsDao();
+
+    /**
+     * Recurrent Dao.
+     * @return Recurrent Dao
+     */
+    public abstract RecurrentDao recurrentDao();
 
     private static final String DB_NAME = "PocketControl.db";
     private static final int DB_VERSION = 1;
@@ -141,6 +151,9 @@ public abstract class PocketControlDB extends RoomDatabase {
         transactionDao.deleteAll();
         defaultsDao.deleteAll();
 
+        Calendar someDay = DateUtils.getStartOfCurrentDay();
+        someDay.add(Calendar.DAY_OF_YEAR, -8);
+
         Long today = DateUtils.getStartOfCurrentDay().getTimeInMillis();
 
         Budget budget = new Budget(700f, "Monthly budget", true);
@@ -173,7 +186,6 @@ public abstract class PocketControlDB extends RoomDatabase {
         Defaults defaultValue = new Defaults("Currency", "EUR");
         defaultsDao.insert(defaultValue);
 
-
         Transaction transactionA = new Transaction(300f, 2, String.valueOf(rentCatId), today, "", 1);
         Transaction transactionB = new Transaction(200f, 1, String.valueOf(shoppingCatId), today, "", 1);
         Transaction transactionC = new Transaction(100f, 2, String.valueOf(studyCatId), today, "", 1);
@@ -181,12 +193,28 @@ public abstract class PocketControlDB extends RoomDatabase {
         Transaction transactionE = new Transaction(250f, 1, String.valueOf(healthCatId), today, "", 1);
         Transaction transactionF = new Transaction(250f, 1, String.valueOf(foodId), today, "", 1);
 
+        Transaction recurringTransaction = new Transaction(
+                500f,
+                1,
+                String.valueOf(rentCatId),
+                someDay.getTimeInMillis(),
+                "",
+                1
+        );
+
+        recurringTransaction.setRecurring(true);
+        recurringTransaction.setRecurringIntervalType(4);
+        recurringTransaction.setRecurringIntervalDays(3);
+        recurringTransaction.setFlagIconRecurring(true);
+
         transactionDao.insert(transactionA);
         transactionDao.insert(transactionB);
         transactionDao.insert(transactionC);
         transactionDao.insert(transactionD);
         transactionDao.insert(transactionE);
         transactionDao.insert(transactionF);
+
+        transactionDao.insert(recurringTransaction);
     }
 
 }

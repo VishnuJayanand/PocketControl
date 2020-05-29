@@ -103,11 +103,42 @@ public class TransactionViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get single transaction by is.
+     * @param id id.
+     * @return transaction
+     */
+    public Transaction getTransactionById(final long id) {
+        return repository.getTransactionById(id);
+    }
+
+    /**
      * Insert a new transaction in the database.
      * @param transaction transaction to be added.
+     * @return id of inserted transaction.
      */
-    public void insert(final Transaction transaction) {
-        repository.insert(transaction);
+    public long insert(final Transaction transaction) {
+        return repository.insert(transaction);
+    }
+
+    /**
+     * Update transaction recurring fields.
+     * @param transactionId id.
+     * @param isRecurring flag.
+     * @param recurringIntervalType type.
+     * @param recurringIntervalDays interval in days.
+     */
+    public void updateTransactionRecurringFields(
+            final int transactionId,
+            final Boolean isRecurring,
+            final Integer recurringIntervalType,
+            final Integer recurringIntervalDays
+    ) {
+        repository.updateTransactionRecurringFields(
+                transactionId,
+                isRecurring,
+                recurringIntervalType,
+                recurringIntervalDays
+        );
     }
 
     /**

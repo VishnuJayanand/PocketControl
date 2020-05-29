@@ -14,9 +14,10 @@ public interface TransactionDao {
     /**
      * Insert new transaction into the database.
      * @param transaction transaction to be saved.
+     * @return new transaction id.
      */
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    void insert(Transaction transaction);
+    long insert(Transaction transaction);
 
     /**
      * Delete all transactions from the database.
@@ -30,6 +31,14 @@ public interface TransactionDao {
      */
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     LiveData<List<Transaction>> getAllTransactions();
+
+    /**
+     * Get transaction by id.
+     * @param transactionId id.
+     * @return transaction.
+     */
+    @Query("SELECT * FROM transactions WHERE id=:transactionId")
+    Transaction getTransactionById(long transactionId);
 
     /**
      * Retrieve all transactions from a specified category.
@@ -115,4 +124,23 @@ public interface TransactionDao {
             + "ORDER BY date DESC")
     LiveData<List<Transaction>> filterTransactionsByAmountAndCategory(
             String categoryId, float lowerBoundAmount, float upperBoundAmount);
+
+    /**
+     * Update transaction recurring params.
+     * @param transactionId id.
+     * @param isRecurring flag.
+     * @param recurringIntervalType type.
+     * @param recurringIntervalDays recurring interval in days.
+     */
+    @Query("UPDATE transactions SET "
+            + "is_recurring=:isRecurring, "
+            + "recurring_interval_type=:recurringIntervalType, "
+            + "recurring_interval_days=:recurringIntervalDays "
+            + "WHERE id=:transactionId;")
+    void updateTransactionRecurringFields(
+            int transactionId,
+            Boolean isRecurring,
+            Integer recurringIntervalType,
+            Integer recurringIntervalDays
+    );
 }

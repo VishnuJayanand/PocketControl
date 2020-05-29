@@ -1,15 +1,20 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -23,6 +28,7 @@ import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -32,15 +38,24 @@ import java.util.Locale;
 
 public class AddTransactionFragment extends Fragment {
     private TextInputEditText tiedtTransactionAmount, tiedtTransactionNote;
-    private TextInputLayout tilTransactionAmount, tilTransactionNote;
+    private TextInputEditText customRecurringDaysInterval;
+    private TextInputLayout tilTransactionAmount, tilTransactionNote, tilCustomRecurringDaysInterval;
+    private boolean isTransactionRecurring;
     private int transactionType;
     private int transactionMethod;
+    private int transactionRecurringIntervalType;
     private Spinner dropdownTransactionType;
     private Spinner dropdownTransactionMethod;
     private Spinner dropdownTransactionCategory;
+    private Spinner dropdownRecurringTransaction;
     private EditText editText;
     private Long transactionDate;
     private CategoryDao categoryDao;
+    private TransactionViewModel transactionViewModel;
+    private Switch recurringSwitch;
+    private LinearLayout recurringTransactionWrapper;
+    private LinearLayout customDaysIntervalWrapper;
+    private Transaction lastAddedTransaction;
 
     @Nullable
     @Override
@@ -52,6 +67,13 @@ public class AddTransactionFragment extends Fragment {
         tiedtTransactionNote = view.findViewById(R.id.tiedt_transactionNote);
         tilTransactionAmount = view.findViewById(R.id.til_transactionAmount);
         tilTransactionNote = view.findViewById(R.id.til_transactionNote);
+        tilCustomRecurringDaysInterval = view.findViewById(R.id.til_customRecurringDaysInterval);
+        recurringSwitch = view.findViewById(R.id.recurringSwitch);
+        recurringTransactionWrapper = view.findViewById(R.id.recurringTransactionWrapper);
+        customDaysIntervalWrapper = view.findViewById(R.id.customDaysIntervalWrapper);
+        customRecurringDaysInterval = view.findViewById(R.id.customRecurringDaysInterval);
+
+        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
         Button btnAdd = view.findViewById(R.id.addNewTransaction);
 
@@ -61,6 +83,19 @@ public class AddTransactionFragment extends Fragment {
         setTransactionMethodSpinner(view);
         //set thee spinner for transactionIcon from the xml.
         setTransactionCategorySpinner(view);
+
+        setRecurringTransactionsSpinner(view);
+
+        recurringSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+                if (isChecked) {
+                    recurringTransactionWrapper.setVisibility(View.VISIBLE);
+                } else {
+                    recurringTransactionWrapper.setVisibility(View.GONE);
+                }
+            }
+        });
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +191,42 @@ public class AddTransactionFragment extends Fragment {
     }
 
     /**
+     * This method to set the spinner of Transaction Category.
+     * @param view the transaction add layout
+     */
+    private void setRecurringTransactionsSpinner(final View view) {
+        //get the spinner from the xml.
+        dropdownRecurringTransaction = view.findViewById(R.id.spinnerRecurringInterval);
+        //create a list of items for the spinner.
+        String[] dropdownItems = {"Daily", "Weekly", "Monthly", "Custom"};
+        ArrayAdapter<String> adapterRecurring = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
+        //set the spinners adapter to the previously created one.
+        dropdownRecurringTransaction.setAdapter(adapterRecurring);
+        dropdownRecurringTransaction.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(
+                    final AdapterView<?> parent,
+                    final View view,
+                    final int position,
+                    final long id) {
+                String selected = (String) parent.getItemAtPosition(position);
+
+                if (selected.equals("Custom")) {
+                    customDaysIntervalWrapper.setVisibility(View.VISIBLE);
+                } else {
+                    customDaysIntervalWrapper.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(final AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    /**
      * Method to focus on the view that have the wrong input.
      * @param view the view
      */
@@ -175,6 +246,12 @@ public class AddTransactionFragment extends Fragment {
             requestFocus(tiedtTransactionAmount);
             return false;
         }
+
+        if (Integer.parseInt(tiedtTransactionAmount.getText().toString().trim()) <= 0) {
+            tilTransactionAmount.setError("Amount should be larger than 0");
+            requestFocus(tiedtTransactionAmount);
+            return false;
+        }
         return true;
     }
 
@@ -189,6 +266,28 @@ public class AddTransactionFragment extends Fragment {
             requestFocus(editText);
             return false;
         }
+        return true;
+    }
+
+    /**
+     * Check if recurring conditions are met.
+     * @return validation result.
+     */
+    private boolean checkRecurringConditions() {
+        if (dropdownRecurringTransaction.getSelectedItem().equals("Custom")) {
+            if (customRecurringDaysInterval.getText().toString().trim().isEmpty()) {
+                tilCustomRecurringDaysInterval.setError("Required");
+                requestFocus(customRecurringDaysInterval);
+                return false;
+            }
+
+            if (Integer.parseInt(customRecurringDaysInterval.getText().toString().trim()) <= 0) {
+                tilCustomRecurringDaysInterval.setError("Should be larger than 0");
+                requestFocus(customRecurringDaysInterval);
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -217,6 +316,33 @@ public class AddTransactionFragment extends Fragment {
     }
 
     /**
+     * Parser for recurring transaction type.
+     */
+    private void convertRecurringTransaction() {
+        if (recurringSwitch.isChecked()) {
+            String text = dropdownRecurringTransaction.getSelectedItem().toString();
+            switch (text) {
+                case "Daily":
+                    transactionRecurringIntervalType = 1;
+                    break;
+                case "Weekly":
+                    transactionRecurringIntervalType = 2;
+                    break;
+                case "Monthly":
+                    transactionRecurringIntervalType = 3;
+                    break;
+                case "Custom":
+                    transactionRecurringIntervalType = 4;
+                    break;
+                default:
+                    transactionRecurringIntervalType = 0;
+            }
+        } else {
+            transactionRecurringIntervalType = 0;
+        }
+    }
+
+    /**
      * Submit method to submit the input from user.
      */
     private void submitForm() {
@@ -226,8 +352,13 @@ public class AddTransactionFragment extends Fragment {
         if (!checkTransactionDate()) {
             return;
         }
+        if (!checkRecurringConditions()) {
+            return;
+        }
         convertTransactionType();
         convertTransactionMethod();
+        convertRecurringTransaction();
+
         String transactionCategory = dropdownTransactionCategory.getSelectedItem().toString();
         Category selectedCategory = categoryDao.getSingleCategory(transactionCategory);
         int categoryId = selectedCategory.getId();
@@ -235,11 +366,42 @@ public class AddTransactionFragment extends Fragment {
         int transactionAmount = Integer.parseInt(tiedtTransactionAmount.getText().toString());
         String transactionNote  = tiedtTransactionNote.getText().toString().trim() + "";
         Transaction newTransaction = new Transaction((float) transactionAmount,
-                transactionType, Integer.toString(categoryId), transactionDate, transactionNote, transactionMethod);
-        //Get CategoryViewModel
-        final TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+                transactionType,
+                Integer.toString(categoryId),
+                DateUtils.getStartOfDayInMS(transactionDate),
+                transactionNote,
+                transactionMethod
+        );
+
+        if (transactionRecurringIntervalType != 0) {
+            newTransaction.setRecurring(true);
+            newTransaction.setRecurringIntervalType(transactionRecurringIntervalType);
+
+            if (transactionRecurringIntervalType == 4) {
+                int customRecurringInterval = Integer.parseInt(customRecurringDaysInterval.getText().toString().trim());
+
+                if (customRecurringInterval != 0) {
+                    newTransaction.setRecurringIntervalDays(customRecurringInterval);
+                } else {
+                    newTransaction.setRecurringIntervalDays(1);
+                }
+            }
+
+            newTransaction.setFlagIconRecurring(true);
+        } else {
+            newTransaction.setRecurring(false);
+            newTransaction.setRecurringIntervalType(0);
+            newTransaction.setFlagIconRecurring(false);
+        }
+
         //Insert new Category in to the database
-        transactionViewModel.insert(newTransaction);
+        long newTransactionId = transactionViewModel.insert(newTransaction);
+
+        Transaction insertedTransaction = transactionViewModel.getTransactionById(newTransactionId);
+
+        if (insertedTransaction.isRecurring()) {
+            lastAddedTransaction = processAddRecurringTransaction(insertedTransaction);
+        }
 
         Fragment fragment = new TransactionFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -250,6 +412,111 @@ public class AddTransactionFragment extends Fragment {
 
         String total = "Added new transaction";
         Toast.makeText(getContext(), total, Toast.LENGTH_LONG).show();
+    }
+
+    /**
+     * Process and create recurring transactions.
+     * @param transaction initial transaction.
+     * @return last transaction.
+     */
+    private Transaction processAddRecurringTransaction(final Transaction transaction) {
+        Transaction copyTransaction = new Transaction();
+
+        Integer recurringIntervalType = transaction.getRecurringIntervalType();
+        Integer recurringIntervalCustomDays = transaction.getRecurringIntervalDays();
+
+        Calendar recurringDate = DateUtils.getStartOfDay(transaction.getDate());
+        Calendar today = DateUtils.getStartOfCurrentDay();
+        int counter = 0;
+
+        copyTransaction.setAmount(transaction.getAmount());
+        copyTransaction.setCategory(transaction.getCategory());
+        copyTransaction.setMethod(transaction.getMethod());
+        copyTransaction.setType(transaction.getType());
+        copyTransaction.setTextNote(transaction.getTextNote());
+        copyTransaction.setFlagIconRecurring(transaction.getFlagIconRecurring());
+        copyTransaction.setRecurring(transaction.isRecurring());
+        copyTransaction.setRecurringIntervalType(transaction.getRecurringIntervalType());
+        copyTransaction.setRecurringIntervalDays(transaction.getRecurringIntervalDays());
+        copyTransaction.setId(transaction.getId());
+        copyTransaction.setDate(transaction.getDate());
+
+        int whatToAdd;
+        int howMuchToAdd;
+
+        if (recurringIntervalType != null) {
+
+            switch (recurringIntervalType) {
+                case 1:
+                    whatToAdd = Calendar.DAY_OF_YEAR;
+                    howMuchToAdd = 1;
+                    break;
+                case 2:
+                    whatToAdd = Calendar.WEEK_OF_YEAR;
+                    howMuchToAdd = 1;
+                    break;
+                case 3:
+                    whatToAdd = Calendar.MONTH;
+                    howMuchToAdd = 1;
+                    break;
+                case 4:
+                    whatToAdd = Calendar.DAY_OF_YEAR;
+                    if (recurringIntervalCustomDays != null) {
+                        howMuchToAdd = recurringIntervalCustomDays;
+                    } else {
+                        howMuchToAdd = 1;
+                    }
+                    break;
+                default:
+                    whatToAdd = Calendar.DAY_OF_YEAR;
+                    howMuchToAdd = 1;
+            }
+
+            do {
+                recurringDate.add(whatToAdd, howMuchToAdd);
+
+                if (recurringDate.getTimeInMillis() <= today.getTimeInMillis()) {
+                    // add a new transaction
+                    // save currentTransaction as non-recurring.
+
+                    copyTransaction.setRecurring(false);
+                    copyTransaction.setRecurringIntervalType(0);
+                    copyTransaction.setRecurringIntervalDays(0);
+
+                    transactionViewModel.updateTransactionRecurringFields(
+                            copyTransaction.getId(),
+                            copyTransaction.isRecurring(),
+                            copyTransaction.getRecurringIntervalType(),
+                            copyTransaction.getRecurringIntervalDays()
+                    );
+
+                    Transaction newTransaction = new Transaction();
+
+                    newTransaction.setAmount(copyTransaction.getAmount());
+                    newTransaction.setCategory(copyTransaction.getCategory());
+                    newTransaction.setMethod(copyTransaction.getMethod());
+                    newTransaction.setType(copyTransaction.getType());
+                    newTransaction.setTextNote(copyTransaction.getTextNote());
+                    newTransaction.setFlagIconRecurring(true);
+                    newTransaction.setRecurring(true);
+                    newTransaction.setRecurringIntervalType(recurringIntervalType);
+                    newTransaction.setRecurringIntervalDays(recurringIntervalCustomDays);
+
+                    newTransaction.setDate(DateUtils.getStartOfDay(recurringDate.getTimeInMillis()).getTimeInMillis());
+
+                    long newTransactionId = transactionViewModel.insert(newTransaction);
+
+                    copyTransaction = transactionViewModel.getTransactionById(newTransactionId);
+
+                    counter++;
+                }
+
+            } while (recurringDate.getTimeInMillis() <= today.getTimeInMillis());
+        }
+
+        Log.v("RECURRING", "TRANSACTIONS ADDED: " + (counter + 1));
+
+        return copyTransaction;
     }
 }
 

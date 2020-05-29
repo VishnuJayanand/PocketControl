@@ -41,6 +41,14 @@ public class Transaction {
     @Nullable
     private Boolean isRecurring;
 
+    @ColumnInfo(name = "flag_icon_recurring", defaultValue = "0")
+    @Nullable
+    private Boolean flagIconRecurring;
+
+    @ColumnInfo(name = "recurring_interval_type", defaultValue = "0")
+    @Nullable
+    private Integer recurringIntervalType;
+
     @ColumnInfo(name = "recurring_interval_days", defaultValue = "0")
     @Nullable
     private Integer recurringIntervalDays;
@@ -180,6 +188,28 @@ public class Transaction {
     }
 
     /**
+     * Getter for icon recurring flag.
+     * @return flag.
+     */
+    @Nullable
+    public Boolean getFlagIconRecurring() {
+        return flagIconRecurring;
+    }
+
+    /**
+     * Getter for recurring type.
+     * 1 - Daily
+     * 2 - Weekly
+     * 3 - Monthly
+     * 4 - Custom
+     * @return recurring type.
+     */
+    @Nullable
+    public Integer getRecurringIntervalType() {
+        return recurringIntervalType;
+    }
+
+    /**
      * Recurring days getter.
      * @return interval for recurring transaction.
      */
@@ -233,6 +263,26 @@ public class Transaction {
      */
     public void setRecurring(final Boolean recurring) {
         isRecurring = recurring;
+    }
+
+    /**
+     * Setter for recurring icon flag.
+     * @param flag flag.
+     */
+    public void setFlagIconRecurring(final @Nullable Boolean flag) {
+        this.flagIconRecurring = flag;
+    }
+
+    /**
+     * Setter for recurring type.
+     * 1 - Daily
+     * 2 - Weekly
+     * 3 - Monthly
+     * 4 - Custom
+     * @param recType type.
+     */
+    public void setRecurringIntervalType(final @Nullable Integer recType) {
+        this.recurringIntervalType = recType;
     }
 
     /**

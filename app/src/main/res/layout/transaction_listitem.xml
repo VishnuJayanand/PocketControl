@@ -1,86 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/singleTransactionWrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:background="@drawable/row_separator"
+    android:orientation="horizontal"
+    android:paddingStart="10dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="10dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:clickable="true"
-        android:focusable="true">
-        <TextView
-            android:id="@+id/transactionDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginTop="5dp"
-            android:text="Transaction Date"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#0A0A0B"
-            android:textSize="20sp"
-            android:paddingBottom="5dp"
-            android:textStyle="bold"/>
+        android:focusable="true"
+        android:orientation="vertical">
+
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="25sp"
             android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/transactionCategoryImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="top"
-                android:src="@mipmap/ic_launcher" />
 
             <TextView
-                android:id="@+id/transactionCategoryTitle"
+                android:id="@+id/transactionDate"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingBottom="20dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="8dp"
-                android:text="@string/category_title"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Transaction Date"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#0A0A0B"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/transactionAmount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right|center_vertical"
+                android:paddingRight="5dp"
+                android:text="Transaction Amount"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#4D4D50"
-                android:textSize="12sp"/>
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/transactionCategoryImage"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="top"
+                    android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:id="@+id/transactionCategoryTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="8dp"
+                    android:text="@string/category_title"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#4D4D50"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/blankSpace"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/recurringTransactionWrapper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/recurringTransaction"
+                        style="@android:style/Widget.DeviceDefault.Light.ImageButton"
+                        android:layout_width="16dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="0"
+                        android:backgroundTint="?android:attr/windowBackground"
+                        app:srcCompat="@drawable/ic_loop_gray_16dp" />
+
+                    <TextView
+                        android:id="@+id/recurringText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="12dp"
+                        android:layout_weight="0"
+                        android:gravity="start|center_vertical"
+                        android:text="Recurring"
+                        android:textSize="12dp" />
+
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/duplicate_transaction"
+                    style="@android:style/Widget.DeviceDefault.Light.ImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_weight="0"
+                    android:backgroundTint="?android:attr/windowBackground"
+                    app:srcCompat="@drawable/ic_content_copy_black_24dp" />
+
+            </LinearLayout>
 
 
         </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/transactionAmount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:gravity="right"
-            android:paddingTop="15dp"
-            android:paddingBottom="10dp"
-            android:paddingRight="5dp"
-            android:text="Transaction Amount"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#4D4D50"
-            android:textSize="15sp"/>
-
-        <ImageButton
-            android:id="@+id/duplicate_transaction"
-            style="@android:style/Widget.DeviceDefault.Light.ImageButton"
-            android:layout_width="24dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_weight="0"
-            android:backgroundTint="@android:color/white"
-            app:srcCompat="@drawable/ic_content_copy_black_24dp" />
-
     </LinearLayout>
 
 </LinearLayout>
