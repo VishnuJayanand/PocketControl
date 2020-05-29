@@ -7,14 +7,18 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.recurrent.Recurrent;
+import com.droidlabs.pocketcontrol.db.recurrent.RecurrentDao;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetFragment;
 import com.droidlabs.pocketcontrol.ui.categories.CategoriesFragment;
 import com.droidlabs.pocketcontrol.ui.home.HomeFragment;
 import com.droidlabs.pocketcontrol.ui.settings.SettingsFragment;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionFragment;
+import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.view.WindowManager;
@@ -101,4 +105,28 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        createRecurringTransactions();
+    }
+
+    private void createRecurringTransactions() {
+        long startOfDay = DateUtils.getStartOfCurrentDay().getTimeInMillis();
+
+        RecurrentDao recurrentDao = PocketControlDB.getDatabase(this).recurrentDao();
+
+        Recurrent today = recurrentDao.getRecurrentByDate(startOfDay);
+
+        if (today == null) {
+            Log.v("RESUME", "ADD RECURRENT");
+            Recurrent newRecurrent = new Recurrent();
+            newRecurrent.setDate(startOfDay);
+            recurrentDao.insert(newRecurrent);
+        } else {
+            Log.v("RESUME", String.valueOf(today));
+        }
+    }
 }

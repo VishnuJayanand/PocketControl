@@ -55,9 +55,11 @@
     <style name="layout_list_view">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginStart">10dp</item>
         <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginEnd">10dp</item>
         <item name="android:background">#FFFBFB</item>
+    </style>
+
+    <style name="recurring_switch" parent="Theme.AppCompat.Light">
+        <item name="android:colorControlActivated">@color/colorIncome</item>
     </style>
 </resources>

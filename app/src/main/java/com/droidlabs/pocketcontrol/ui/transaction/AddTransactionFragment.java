@@ -1,15 +1,19 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -23,24 +27,32 @@ import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 public class AddTransactionFragment extends Fragment {
     private TextInputEditText tiedtTransactionAmount, tiedtTransactionNote;
     private TextInputLayout tilTransactionAmount, tilTransactionNote;
+    private boolean isTransactionRecurring;
     private int transactionType;
     private int transactionMethod;
+    private int transactionRecurringInterval;
     private Spinner dropdownTransactionType;
     private Spinner dropdownTransactionMethod;
     private Spinner dropdownTransactionCategory;
+    private Spinner dropdownRecurringTransaction;
     private EditText editText;
     private Long transactionDate;
     private CategoryDao categoryDao;
+    private TransactionViewModel transactionViewModel;
+    private Switch recurringSwitch;
+    private LinearLayout recurringTransactionWrapper;
 
     @Nullable
     @Override
@@ -52,6 +64,10 @@ public class AddTransactionFragment extends Fragment {
         tiedtTransactionNote = view.findViewById(R.id.tiedt_transactionNote);
         tilTransactionAmount = view.findViewById(R.id.til_transactionAmount);
         tilTransactionNote = view.findViewById(R.id.til_transactionNote);
+        recurringSwitch = view.findViewById(R.id.recurringSwitch);
+        recurringTransactionWrapper = view.findViewById(R.id.recurringTransactionWrapper);
+
+        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
         Button btnAdd = view.findViewById(R.id.addNewTransaction);
 
@@ -61,6 +77,19 @@ public class AddTransactionFragment extends Fragment {
         setTransactionMethodSpinner(view);
         //set thee spinner for transactionIcon from the xml.
         setTransactionCategorySpinner(view);
+
+        setRecurringTransactionsSpinner(view);
+
+        recurringSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    recurringTransactionWrapper.setVisibility(View.VISIBLE);
+                } else {
+                    recurringTransactionWrapper.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +185,21 @@ public class AddTransactionFragment extends Fragment {
     }
 
     /**
+     * This method to set the spinner of Transaction Category.
+     * @param view the transaction add layout
+     */
+    private void setRecurringTransactionsSpinner(final View view) {
+        //get the spinner from the xml.
+        dropdownRecurringTransaction = view.findViewById(R.id.spinnerRecurringInterval);
+        //create a list of items for the spinner.
+        String[] dropdownItems = { "Daily", "Weekly", "Monthly" };
+        ArrayAdapter<String> adapterRecurring = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
+        //set the spinners adapter to the previously created one.
+        dropdownRecurringTransaction.setAdapter(adapterRecurring);
+    }
+
+    /**
      * Method to focus on the view that have the wrong input.
      * @param view the view
      */
@@ -216,6 +260,27 @@ public class AddTransactionFragment extends Fragment {
         }
     }
 
+    private void convertRecurringTransaction() {
+        if (recurringSwitch.isChecked()) {
+            String text = dropdownRecurringTransaction.getSelectedItem().toString();
+            switch (text) {
+                case "Daily":
+                    transactionRecurringInterval = 1;
+                    break;
+                case "Weekly":
+                    transactionRecurringInterval = 2;
+                    break;
+                case "Monthly":
+                    transactionRecurringInterval = 3;
+                    break;
+                default:
+                    transactionRecurringInterval = 0;
+            }
+        } else {
+            transactionRecurringInterval = 0;
+        }
+    }
+
     /**
      * Submit method to submit the input from user.
      */
@@ -228,6 +293,8 @@ public class AddTransactionFragment extends Fragment {
         }
         convertTransactionType();
         convertTransactionMethod();
+        convertRecurringTransaction();
+
         String transactionCategory = dropdownTransactionCategory.getSelectedItem().toString();
         Category selectedCategory = categoryDao.getSingleCategory(transactionCategory);
         int categoryId = selectedCategory.getId();
@@ -236,10 +303,25 @@ public class AddTransactionFragment extends Fragment {
         String transactionNote  = tiedtTransactionNote.getText().toString().trim() + "";
         Transaction newTransaction = new Transaction((float) transactionAmount,
                 transactionType, Integer.toString(categoryId), transactionDate, transactionNote, transactionMethod);
-        //Get CategoryViewModel
-        final TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+
+        if (transactionRecurringInterval != 0) {
+            newTransaction.setRecurring(true);
+            newTransaction.setRecurringIntervalDays(transactionRecurringInterval);
+            newTransaction.setFlagIconRecurring(true);
+        } else {
+            newTransaction.setRecurring(false);
+            newTransaction.setRecurringIntervalDays(0);
+            newTransaction.setFlagIconRecurring(false);
+        }
+
+        //Get TransactionViewModel
+
         //Insert new Category in to the database
         transactionViewModel.insert(newTransaction);
+
+        if (newTransaction.isRecurring()) {
+            processAddRecurringTransaction(newTransaction);
+        }
 
         Fragment fragment = new TransactionFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -250,6 +332,50 @@ public class AddTransactionFragment extends Fragment {
 
         String total = "Added new transaction";
         Toast.makeText(getContext(), total, Toast.LENGTH_LONG).show();
+    }
+
+    private void processAddRecurringTransaction(final Transaction transaction) {
+        Integer recurringInterval = transaction.getRecurringIntervalDays();
+        Calendar originalDate = DateUtils.getStartOfDay(transaction.getDate());
+        Calendar today = DateUtils.getStartOfCurrentDay();
+        int counter = 0;
+
+        if (recurringInterval != null) {
+            while (originalDate.getTimeInMillis() <= today.getTimeInMillis()) {
+                Transaction newTransaction = new Transaction();
+
+                newTransaction.setAmount(transaction.getAmount());
+                newTransaction.setCategory(transaction.getCategory());
+                newTransaction.setMethod(transaction.getMethod());
+                newTransaction.setType(transaction.getType());
+                newTransaction.setTextNote(transaction.getTextNote());
+                newTransaction.setFlagIconRecurring(true);
+                newTransaction.setRecurring(false);
+                newTransaction.setRecurringIntervalDays(0);
+
+                switch (recurringInterval) {
+                    case 1:
+                        originalDate.add(Calendar.DAY_OF_YEAR, 1);
+                        break;
+                    case 2:
+                        originalDate.add(Calendar.WEEK_OF_YEAR, 1);
+                        break;
+                    case 3:
+                        originalDate.add(Calendar.MONTH, 1);
+                        break;
+                    default:
+                        originalDate.add(Calendar.DAY_OF_YEAR, 1);
+                }
+
+                if (originalDate.getTimeInMillis() <= today.getTimeInMillis()) {
+                    newTransaction.setDate(DateUtils.getStartOfDay(originalDate.getTimeInMillis()).getTimeInMillis());
+                    transactionViewModel.insert(newTransaction);
+                    counter++;
+                }
+            }
+        }
+
+        Log.v("RECURRING", "TRANSACTIONS ADDED: " + (counter + 1));
     }
 }
 

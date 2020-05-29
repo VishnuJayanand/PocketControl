@@ -30,11 +30,33 @@
         android:layout_marginTop="20dp"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/transaction_date"
-            android:textSize="18sp" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/transaction_date"
+                android:textSize="18sp" />
+
+            <Switch
+                android:id="@+id/recurringSwitch"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                android:paddingStart="15dp"
+                android:showText="false"
+                android:switchPadding="7dp"
+                android:text="Recurring"
+                android:textAlignment="inherit"
+                android:textAllCaps="false"
+                android:textIsSelectable="false"
+                android:textSize="12sp"
+                android:theme="@style/recurring_switch" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/transactionDate"
@@ -72,7 +94,7 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:paddingRight="24dp"
-            android:text="@string/choosse_transactiontype"
+            android:text="@string/choose_transaction_type"
             android:textSize="17sp" />
 
         <Spinner
@@ -118,6 +140,28 @@
 
         <Spinner
             android:id="@+id/spinnerTransactionCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dialog" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/recurringTransactionWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/choose_recurring_interval"
+            android:textSize="17sp" />
+
+        <Spinner
+            android:id="@+id/spinnerRecurringInterval"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:drawable/btn_dropdown"

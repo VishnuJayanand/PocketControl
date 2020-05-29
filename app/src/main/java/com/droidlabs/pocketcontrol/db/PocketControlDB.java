@@ -21,6 +21,8 @@ import com.droidlabs.pocketcontrol.db.icon.Icon;
 import com.droidlabs.pocketcontrol.db.icon.IconDao;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentMode;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
+import com.droidlabs.pocketcontrol.db.recurrent.Recurrent;
+import com.droidlabs.pocketcontrol.db.recurrent.RecurrentDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
@@ -38,7 +40,8 @@ import java.util.concurrent.Executors;
         Icon.class,
         PaymentMode.class,
         Transaction.class,
-        Defaults.class
+        Defaults.class,
+        Recurrent.class
 }, version = 1, exportSchema = false)
 public abstract class PocketControlDB extends RoomDatabase {
 
@@ -83,6 +86,12 @@ public abstract class PocketControlDB extends RoomDatabase {
      * @return Defaults Dao
      */
     public abstract DefaultsDao defaultsDao();
+
+    /**
+     * Recurrent Dao.
+     * @return Recurrent Dao
+     */
+    public abstract RecurrentDao recurrentDao();
 
     private static final String DB_NAME = "PocketControl.db";
     private static final int DB_VERSION = 1;

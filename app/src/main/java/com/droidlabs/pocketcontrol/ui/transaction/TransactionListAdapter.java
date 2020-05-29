@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -77,10 +78,16 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             Integer type = current.getType();
             Float amount = current.getAmount();
             String category = current.getCategory();
+            Boolean recurring = current.getFlagIconRecurring();
 
             // turn float to string
             String amountToString = CurrencyUtils.formatAmount(amount, "€");
 
+            if (recurring != null && recurring) {
+                holder.recurringTransactionWrapper.setVisibility(View.VISIBLE);
+            } else {
+                holder.recurringTransactionWrapper.setVisibility(View.GONE);
+            }
 
             if (type == 1) {
                 holder.transactionAmount.setTextColor(ContextCompat.getColor(context, R.color.colorExpense));
@@ -159,6 +166,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
         private final TextView transactionAmount;
         private final OnTransactionNoteListener onNoteListener;
         private final ImageButton duplicateTransactionButton;
+        private final LinearLayout recurringTransactionWrapper;
         // private final TextView transactionCurrency;
 
         /**
@@ -173,6 +181,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             transactionDate = itemView.findViewById(R.id.transactionDate);
             transactionAmount = itemView.findViewById(R.id.transactionAmount);
             duplicateTransactionButton = itemView.findViewById(R.id.duplicate_transaction);
+            recurringTransactionWrapper = itemView.findViewById(R.id.recurringTransactionWrapper);
             this.onNoteListener = onTransactionNoteListener;
 
             itemView.setOnClickListener(this);
