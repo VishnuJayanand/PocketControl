@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -47,11 +48,20 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
         //Create the adapter for Transaction
         final TransactionListAdapter adapter = new TransactionListAdapter(getActivity(), this, transactionViewModel);
         RecyclerView recyclerView = view.findViewById(R.id.transactionListView);
+        LinearLayout emptyListImage = view.findViewById(R.id.emptyPageViewWrapper);
 
         transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {
             @Override
             public void onChanged(final List<Transaction> transactions) {
                 adapter.setTransactions(transactions);
+
+                if (transactions.size() > 0) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    emptyListImage.setVisibility(View.GONE);
+                } else {
+                    recyclerView.setVisibility(View.GONE);
+                    emptyListImage.setVisibility(View.VISIBLE);
+                }
             }
         });
 

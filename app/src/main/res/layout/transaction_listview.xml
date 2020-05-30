@@ -7,23 +7,23 @@
     >
 
     <LinearLayout
+        android:id="@+id/allTransactionsWrapper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:orientation="vertical">
 
         <Button
             android:id="@+id/addTransactionButton"
-            android:text="@string/add_transaction"
             style="@style/featured_add_button"
             android:drawableStart="@drawable/ic_add_black_24dp"
             android:drawablePadding="10sp"
-            />
+            android:text="@string/add_transaction" />
 
         <SearchView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#d1d1d1"
-            android:visibility="gone" >
+            android:visibility="gone">
 
         </SearchView>
 
@@ -36,10 +36,11 @@
 
         <TextView
             android:id="@+id/allTransactionsText"
+            style="@style/font_family_normal_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10sp"
             android:layout_marginTop="20dp"
-            android:paddingStart="10dp"
             android:text="All Transactions"
             android:textColor="#000000"
             android:textSize="20sp" />
@@ -47,10 +48,43 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/transactionListView"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_marginTop="15dp"
             android:cacheColorHint="#00000000"
             android:divider="#d1d1d1"
-            android:dividerHeight="3dp" />
+            android:dividerHeight="3dp"
+            android:visibility="gone">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <LinearLayout
+            android:id="@+id/emptyPageViewWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="80sp"
+            android:gravity="clip_horizontal|top"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/emptyPageView"
+                android:layout_width="wrap_content"
+                android:layout_height="240dp"
+                android:layout_weight="0"
+                app:srcCompat="@drawable/empty_page" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center_horizontal"
+                android:paddingStart="30sp"
+                android:paddingEnd="30sp"
+                android:text="You have no transactions yet! Add transactions above :)"
+                android:textSize="24sp" />
+        </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>

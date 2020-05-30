@@ -62,4 +62,8 @@
     <style name="recurring_switch" parent="Theme.AppCompat.Light">
         <item name="android:colorControlActivated">@color/colorIncome</item>
     </style>
+
+    <style name="font_family_normal_text">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
 </resources>

@@ -1,6 +1,7 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
+import com.droidlabs.pocketcontrol.utils.FormatterUtils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -93,6 +95,22 @@ public class AddTransactionFragment extends Fragment {
                     recurringTransactionWrapper.setVisibility(View.VISIBLE);
                 } else {
                     recurringTransactionWrapper.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        tiedtTransactionAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (!hasFocus) {
+                    Editable editableContent = tiedtTransactionAmount.getText();
+
+                    if (editableContent != null) {
+                        try {
+                            float value = Float.parseFloat(editableContent.toString());
+                            tiedtTransactionAmount.setText(FormatterUtils.roundToTwoDecimals(value));
+                        } catch (Exception e) { }
+                    }
                 }
             }
         });
@@ -247,7 +265,7 @@ public class AddTransactionFragment extends Fragment {
             return false;
         }
 
-        if (Integer.parseInt(tiedtTransactionAmount.getText().toString().trim()) <= 0) {
+        if (Float.parseFloat(tiedtTransactionAmount.getText().toString().trim()) <= 0) {
             tilTransactionAmount.setError("Amount should be larger than 0");
             requestFocus(tiedtTransactionAmount);
             return false;
@@ -363,7 +381,7 @@ public class AddTransactionFragment extends Fragment {
         Category selectedCategory = categoryDao.getSingleCategory(transactionCategory);
         int categoryId = selectedCategory.getId();
 
-        int transactionAmount = Integer.parseInt(tiedtTransactionAmount.getText().toString());
+        float transactionAmount = Float.parseFloat(tiedtTransactionAmount.getText().toString());
         String transactionNote  = tiedtTransactionNote.getText().toString().trim() + "";
         Transaction newTransaction = new Transaction((float) transactionAmount,
                 transactionType,

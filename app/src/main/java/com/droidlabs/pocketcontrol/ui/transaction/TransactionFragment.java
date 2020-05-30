@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -37,6 +39,9 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
     ) {
         View view = inf.inflate(R.layout.transaction_listview, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.transactionListView);
+        LinearLayout emptyTransactions = view.findViewById(R.id.emptyPageViewWrapper);
+        TextView allTransactionsText = view.findViewById(R.id.allTransactionsText);
+        Button expandFilterButton = view.findViewById(R.id.expandFilterButton);
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
@@ -50,6 +55,13 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
             @Override
             public void onChanged(final List<Transaction> transactions) {
                 transactionListAdapter.setTransactions(transactions);
+                if (transactions.size() > 0) {
+                    emptyTransactions.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                } else {
+                    emptyTransactions.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -61,7 +73,6 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
 
         AppCompatButton addTransactionLayout = view.findViewById(R.id.addTransactionButton);
 
-        Button expandFilterButton = view.findViewById(R.id.expandFilterButton);
         expandFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
