@@ -26,6 +26,7 @@
 
             <TextView
                 android:id="@+id/transactionDate"
+                style="@style/font_family_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -37,6 +38,7 @@
 
             <TextView
                 android:id="@+id/transactionAmount"
+                style="@style/font_family_normal_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="right|center_vertical"
@@ -67,6 +69,7 @@
 
                 <TextView
                     android:id="@+id/transactionCategoryTitle"
+                    style="@style/font_family_normal_text"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -110,6 +113,7 @@
 
                     <TextView
                         android:id="@+id/recurringText"
+                        style="@style/font_family_normal_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginRight="12dp"

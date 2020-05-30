@@ -19,10 +19,11 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                style="@style/font_family_normal_text"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="100dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30sp"
+                android:gravity="center"
                 android:text="ADD BUDGET"
                 android:textSize="30dp" />
 
@@ -55,7 +56,8 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            style="@style/font_family_normal_text"
+                            android:layout_width="150sp"
                             android:layout_height="wrap_content"
                             android:labelFor="@+id/budgetNameEdit"
                             android:padding="@dimen/inputPadding"
@@ -107,7 +109,8 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            style="@style/font_family_normal_text"
+                            android:layout_width="150sp"
                             android:layout_height="wrap_content"
                             android:labelFor="@+id/budgetNameEdit"
                             android:padding="@dimen/inputPadding"
@@ -159,7 +162,8 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            style="@style/font_family_normal_text"
+                            android:layout_width="150sp"
                             android:layout_height="wrap_content"
                             android:labelFor="@+id/budgetNameEdit"
                             android:padding="@dimen/inputPadding"

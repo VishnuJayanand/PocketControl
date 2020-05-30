@@ -156,9 +156,6 @@ public abstract class PocketControlDB extends RoomDatabase {
 
         Long today = DateUtils.getStartOfCurrentDay().getTimeInMillis();
 
-        Budget budget = new Budget(700f, "Monthly budget", true);
-        budgetDao.insert(budget);
-
         Category health = new Category(1, "Health", R.drawable.health);
         Category transport = new Category(2, "Transport", R.drawable.transport);
         Category shopping = new Category(3, "Shopping", R.drawable.shopping);
@@ -176,15 +173,18 @@ public abstract class PocketControlDB extends RoomDatabase {
         Currency currency = new Currency("EUR");
         currencyDao.insert(currency);
 
-        Icon icon = new Icon("icon_1");
-        iconDao.insert(icon);
-
         PaymentMode paymentMode = new PaymentMode("Credit card");
         paymentModeDao.insert(paymentMode);
 
-
         Defaults defaultValue = new Defaults("Currency", "EUR");
         defaultsDao.insert(defaultValue);
+
+        Icon icon = new Icon("icon_1");
+        iconDao.insert(icon);
+/*
+
+        Budget budget = new Budget(700f, "Monthly budget", true);
+        budgetDao.insert(budget);
 
         Transaction transactionA = new Transaction(300f, 2, String.valueOf(rentCatId), today, "", 1);
         Transaction transactionB = new Transaction(200f, 1, String.valueOf(shoppingCatId), today, "", 1);
@@ -215,6 +215,8 @@ public abstract class PocketControlDB extends RoomDatabase {
         transactionDao.insert(transactionF);
 
         transactionDao.insert(recurringTransaction);
+
+ */
     }
 
 }
