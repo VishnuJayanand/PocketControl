@@ -63,6 +63,7 @@
 
         <EditText
             android:id="@+id/transactionDate"
+            style="@style/font_family_normal_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -161,6 +162,7 @@
         android:visibility="gone">
 
         <TextView
+            style="@style/font_family_normal_text"
             android:layout_width="200dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -185,6 +187,7 @@
 
         <TextView
             android:id="@+id/textView5"
+            style="@style/font_family_normal_text"
             android:layout_width="200dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -200,6 +203,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/customRecurringDaysInterval"
+                style="@style/font_family_normal_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3sp"
