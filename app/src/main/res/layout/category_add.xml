@@ -52,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
+        android:background="@drawable/pill_button"
         android:paddingStart="50sp"
         android:paddingTop="10sp"
         android:paddingEnd="50sp"
@@ -59,7 +60,6 @@
         android:text="Save"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        tools:background="@drawable/pill_button" />
+        android:textSize="20sp" />
 
 </LinearLayout>
