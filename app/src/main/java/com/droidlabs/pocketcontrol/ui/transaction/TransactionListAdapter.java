@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -107,6 +108,21 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
 
             holder.transactionDate.setText(DateUtils.formatDate(date));
             holder.transactionAmount.setText(amountToString);
+
+            holder.deleteTransactionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            holder.updateTransactionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
             holder.duplicateTransactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
@@ -169,6 +185,8 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
         private final TextView transactionAmount;
         private final OnTransactionNoteListener onNoteListener;
         private final LinearLayout duplicateTransactionButton;
+        private final LinearLayout updateTransactionButton;
+        private final LinearLayout deleteTransactionButton;
         private final LinearLayout recurringTransactionWrapper;
         private final LinearLayout fillerEmptySpace;
         private final SwipeRevealLayout swipeRevealLayout;
@@ -197,6 +215,8 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             recurringTransactionWrapper = itemView.findViewById(R.id.recurringTransactionWrapper);
             fillerEmptySpace = itemView.findViewById(R.id.blankSpace);
             swipeRevealLayout = itemView.findViewById(R.id.swipeRevealLayout);
+            updateTransactionButton = itemView.findViewById(R.id.update_transaction);
+            deleteTransactionButton = itemView.findViewById(R.id.delete_transaction);
 
             transactionCategoryTitle.setOnClickListener(clickListener);
             transactionCategoryImage.setOnClickListener(clickListener);
