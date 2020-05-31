@@ -5,7 +5,8 @@
     android:id="@+id/budget_activty"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="#ffffff">
 
     <ScrollView
         android:layout_width="fill_parent"
