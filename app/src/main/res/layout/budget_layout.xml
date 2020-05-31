@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+              android:padding="5.0dp"
+              android:paddingStart="15dp"
+              android:paddingEnd="15dp"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/budgetName"
+        style="@style/font_family_normal_text"
+        android:layout_width="174dp"
+        android:layout_height="wrap_content"
+        android:textSize="20.0sp" />
+
+    <TextView
+        android:id="@+id/budgetCategory"
+        style="@style/font_family_normal_text"
+        android:layout_width="174dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="-27dp"
+        android:textSize="20.0sp" />
+
+    <LinearLayout android:orientation="horizontal"
+                  android:padding="5.0dp"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:baselineAligned="true">
+        <ProgressBar android:id="@+id/budgetBar"
+                     android:layout_width="fill_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="1.0" style="?android:attr/progressBarStyleHorizontal" />
+        <LinearLayout android:orientation="vertical"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:baselineAligned="true"
+                      android:layout_weight="1.0">
+
+            <TextView
+                android:id="@+id/budgetValue"
+                style="@style/font_family_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

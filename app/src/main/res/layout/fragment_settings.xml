@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_settings"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="80dp"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:paddingRight="0dp"
+            android:layout_weight="1"
+            android:text="Choose Default Category"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/defaultCategorySpinner"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:spinnerMode="dialog" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="160dp"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:paddingRight="0dp"
+            android:layout_weight="1"
+            android:text="Choose Default Currency"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/defaultCurrencySpinner"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="0dp"
+            android:background="@android:drawable/btn_dropdown"
+            android:gravity="right"
+            android:layout_weight="1"
+            android:spinnerMode="dialog" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="240dp"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="235dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:paddingRight="0dp"
+            android:text="Choose Default Payment Mode"
+            android:textSize="18sp" />
+
+        <Spinner
+            android:id="@+id/defaultPaymentModeSpinner"
+            android:layout_width="156dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:background="@android:drawable/btn_dropdown"
+            android:gravity="right"
+            android:spinnerMode="dialog" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="300dp"
+            android:layout_marginTop="20dp"
+            android:text="Export" />
+
+        <TextView
+            android:layout_width="143dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="-45dp"
+            android:text="Export Data to Google Drive"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="320dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/addDefaults"
+            android:layout_width="10dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="#03A9F4"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="32dp"
+            android:textSize="20sp"
+            android:text="Set Defaults" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/layout_list_view"
+    android:orientation="vertical"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20sp"
+        android:layout_marginBottom="20sp"
+        android:background="@drawable/layout_bg"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/addCategoryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="false"
+            android:orientation="vertical"
+            android:paddingTop="25sp"
+            android:paddingBottom="25sp">
+
+            <ImageView
+                android:id="@+id/categoryImage"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:src="@drawable/category" />
+
+            <TextView
+                android:id="@+id/categoryTitle"
+                style="@style/font_family_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="Category Title"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#03A9F4"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/transactionListView"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#00000000"
+        android:divider="#d1d1d1"
+        android:dividerHeight="3dp"
+        android:paddingTop="10dp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/emptyPageViewWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30sp"
+        android:gravity="clip_horizontal|top"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/emptyPageView"
+            android:layout_width="wrap_content"
+            android:layout_height="240dp"
+            android:layout_weight="0"
+            app:srcCompat="@drawable/empty_page" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_horizontal"
+            android:paddingStart="30sp"
+            android:paddingEnd="30sp"
+            android:text="No transactions for this category! Go to the transactions tab to add new transactions :)"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</LinearLayout>

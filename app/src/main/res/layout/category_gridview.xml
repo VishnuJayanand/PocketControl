@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_list_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <Button
+            android:id="@+id/addCategoryButton"
+            style="@style/featured_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_add_black_24dp"
+            android:drawablePadding="10sp"
+            android:text="@string/add_category" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categoryGridView"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:columnWidth="180dp"
+            android:gravity="center|bottom"
+            android:horizontalSpacing="10dp"
+            android:numColumns="2"
+            android:paddingTop="20dp"
+            android:stretchMode="spacingWidth"
+            android:verticalSpacing="60dp"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+</RelativeLayout>

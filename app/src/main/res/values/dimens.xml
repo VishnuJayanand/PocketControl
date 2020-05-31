@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">10sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">10sp</dimen>
+    <dimen name="small_padding">8dp</dimen>
+    <dimen name="big_padding">16dp</dimen>
+    <dimen name="min_height">100dp</dimen>
+    <dimen name="inputBorderThickness">2dip</dimen>
+    <dimen name="inputPadding">20dip</dimen>
+    <dimen name="inputSize">18sp</dimen>
+    <dimen name="home_text_net_balance">45sp</dimen>
+    <dimen name="home_text_income_expense">20sp</dimen>
+    <dimen name="button_add_top">15sp</dimen>
+    <dimen name="button_expand_filter">15sp</dimen>
+</resources>

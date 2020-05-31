@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/addTransactionFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:background="#ffffff">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_transactionAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tiedt_transactionAmount"
+            style="@style/font_family_normal_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Transaction Amount"
+            android:inputType="numberDecimal">
+
+        </com.google.android.material.textfield.TextInputEditText>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/til_transactionDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/font_family_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/transaction_date"
+                android:textSize="18sp" />
+
+            <Switch
+                android:id="@+id/recurringSwitch"
+                style="@style/font_family_normal_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                android:paddingStart="15dp"
+                android:showText="false"
+                android:switchPadding="7dp"
+                android:text="Recurring"
+                android:textAlignment="inherit"
+                android:textAllCaps="false"
+                android:textIsSelectable="false"
+                android:textSize="12sp"
+                android:theme="@style/recurring_switch" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/transactionDate"
+            style="@style/font_family_normal_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false" />
+
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_transactionNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tiedt_transactionNote"
+            style="@style/font_family_normal_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Transaction Note">
+
+        </com.google.android.material.textfield.TextInputEditText>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/font_family_normal_text"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingRight="24dp"
+            android:text="@string/choose_transaction_type"
+            android:textSize="17sp" />
+
+        <Spinner
+            android:id="@+id/spinnerTransactionType"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dialog" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/font_family_normal_text"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingRight="24dp"
+            android:text="@string/choose_transaction_method"
+            android:textSize="17sp" />
+
+        <Spinner
+            android:id="@+id/spinnerTransactionMethod"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dialog" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/font_family_normal_text"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Category: "
+            android:textSize="17sp" />
+
+        <Spinner
+            android:id="@+id/spinnerTransactionCategory"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dialog" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/recurringTransactionWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/font_family_normal_text"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/choose_recurring_interval"
+            android:textSize="17sp" />
+
+        <Spinner
+            android:id="@+id/spinnerRecurringInterval"
+            android:layout_width="match_parent"
+            android:layout_height="45sp"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dialog" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/customDaysIntervalWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="5sp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textView5"
+            style="@style/font_family_normal_text"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingTop="7sp"
+            android:text="Custom interval:"
+            android:textSize="17sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_customRecurringDaysInterval"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/customRecurringDaysInterval"
+                style="@style/font_family_normal_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3sp"
+                android:layout_marginEnd="3sp"
+                android:layout_weight="0"
+                android:hint="days"
+                android:inputType="number"
+                android:textSize="17sp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/addNewTransaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/pill_button"
+        android:gravity="center"
+        android:paddingStart="50sp"
+        android:paddingTop="10sp"
+        android:paddingEnd="50sp"
+        android:paddingBottom="10sp"
+        android:text="Save"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+
+</LinearLayout>
+
