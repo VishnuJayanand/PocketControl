@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
+import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
@@ -36,7 +37,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
     private final CategoryDao categoryDao;
     private final TransactionViewModel transactionViewModel;
     private final OnTransactionNoteListener mOnNoteListener;
-
+    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
 
     /**
      * Creating adapter for Transaction.
@@ -133,6 +134,8 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
                 }
             });
 
+            viewBinderHelper.bind(holder.swipeRevealLayout, current.getId().toString());
+
             // TODO: combine currency and amount
             //       transactionCurrency.setText(currency);
             //       holder.transactionCurrency.setText(currencyAsString);
@@ -165,9 +168,10 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
         private final TextView transactionDate;
         private final TextView transactionAmount;
         private final OnTransactionNoteListener onNoteListener;
-        private final ImageButton duplicateTransactionButton;
+        private final LinearLayout duplicateTransactionButton;
         private final LinearLayout recurringTransactionWrapper;
         private final LinearLayout fillerEmptySpace;
+        private final SwipeRevealLayout swipeRevealLayout;
         // private final TextView transactionCurrency;
 
         /**
@@ -192,6 +196,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             duplicateTransactionButton = itemView.findViewById(R.id.duplicate_transaction);
             recurringTransactionWrapper = itemView.findViewById(R.id.recurringTransactionWrapper);
             fillerEmptySpace = itemView.findViewById(R.id.blankSpace);
+            swipeRevealLayout = itemView.findViewById(R.id.swipeRevealLayout);
 
             transactionCategoryTitle.setOnClickListener(clickListener);
             transactionCategoryImage.setOnClickListener(clickListener);

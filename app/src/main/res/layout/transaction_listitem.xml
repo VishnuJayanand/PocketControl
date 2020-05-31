@@ -1,143 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/singleTransactionWrapper"
+    android:id="@+id/swipeRevealLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/row_separator"
-    android:orientation="horizontal"
-    android:paddingStart="10dp"
-    android:paddingTop="10dp"
-    android:paddingEnd="10dp"
-    android:paddingBottom="10dp">
+    app:dragEdge="right"
+    app:mode="normal">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/row_separator"
+        android:paddingTop="1sp">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="25sp"
-            android:orientation="horizontal">
+            android:id="@+id/update_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="#218BDF"
+            android:gravity="center"
+            android:minWidth="70sp"
+            android:orientation="vertical"
+            android:paddingStart="10sp"
+            android:paddingTop="10sp"
+            android:paddingEnd="10sp"
+            android:paddingBottom="10sp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5sp"
+                android:backgroundTint="#FF3A00"
+                app:srcCompat="@drawable/ic_edit_white_24dp" />
 
             <TextView
-                android:id="@+id/transactionDate"
                 style="@style/font_family_normal_text"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="Transaction Date"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#0A0A0B"
-                android:textSize="15sp"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:textColor="#ffffff"
+                android:textSize="12sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/transactionAmount"
-                style="@style/font_family_normal_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="right|center_vertical"
-                android:paddingRight="5dp"
-                android:text="Transaction Amount"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#4D4D50"
-                android:textSize="15sp" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/duplicate_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="#42AA46"
+            android:gravity="center"
+            android:minWidth="70sp"
+            android:orientation="vertical"
+            android:paddingStart="10sp"
+            android:paddingTop="10sp"
+            android:paddingEnd="10sp"
+            android:paddingBottom="10sp">
+
+            <ImageView
+                android:id="@+id/duplicate_transaction_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5sp"
+                android:backgroundTint="#FF3A00"
+                app:srcCompat="@drawable/ic_content_copy_white_24dp" />
+
+            <TextView
+                android:id="@+id/textView7"
+                style="@style/font_family_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Duplicate"
+                android:textColor="#ffffff"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/delete_transaction"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:background="#CF362A"
+            android:gravity="center"
+            android:minWidth="70sp"
+            android:orientation="vertical"
+            android:paddingStart="10sp"
+            android:paddingTop="10sp"
+            android:paddingEnd="10sp"
+            android:paddingBottom="10sp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5sp"
+                android:backgroundTint="#FF3A00"
+                app:srcCompat="@drawable/ic_delete_forever_white_24dp" />
+
+            <TextView
+                style="@style/font_family_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:textColor="#ffffff"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/singleTransactionWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/row_separator"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
+                android:layout_width="match_parent"
+                android:layout_height="25sp"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/transactionCategoryImage"
-                    android:layout_width="30dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="top"
-                    android:src="@mipmap/ic_launcher" />
-
                 <TextView
-                    android:id="@+id/transactionCategoryTitle"
+                    android:id="@+id/transactionDate"
                     style="@style/font_family_normal_text"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:paddingLeft="8dp"
-                    android:text="@string/category_title"
+                    android:text="Transaction Date"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#0A0A0B"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/transactionAmount"
+                    style="@style/font_family_normal_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right|center_vertical"
+                    android:paddingRight="5dp"
+                    android:text="Transaction Amount"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#4D4D50"
-                    android:textSize="12sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:gravity="right"
+                android:layout_height="40dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:id="@+id/blankSpace"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"></LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/recurringTransactionWrapper"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="0"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/recurringTransaction"
-                        style="@android:style/Widget.DeviceDefault.Light.ImageButton"
-                        android:layout_width="16dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="0"
-                        android:backgroundTint="?android:attr/windowBackground"
-                        app:srcCompat="@drawable/ic_loop_gray_16dp" />
+                        android:id="@+id/transactionCategoryImage"
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="top"
+                        android:src="@mipmap/ic_launcher" />
 
                     <TextView
-                        android:id="@+id/recurringText"
+                        android:id="@+id/transactionCategoryTitle"
                         style="@style/font_family_normal_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="12dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="8dp"
+                        android:text="@string/category_title"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="#4D4D50"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/blankSpace"
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"></LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/recurringTransactionWrapper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="0"
-                        android:gravity="start|center_vertical"
-                        android:text="Recurring"
-                        android:textSize="12dp" />
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/recurringTransaction"
+                            style="@android:style/Widget.DeviceDefault.Light.ImageButton"
+                            android:layout_width="16dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="0"
+                            android:backgroundTint="?android:attr/windowBackground"
+                            app:srcCompat="@drawable/ic_loop_gray_16dp" />
+
+                        <TextView
+                            android:id="@+id/recurringText"
+                            style="@style/font_family_normal_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="12dp"
+                            android:layout_weight="0"
+                            android:gravity="start|center_vertical"
+                            android:text="Recurring"
+                            android:textSize="12dp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/duplicate_transaction"
-                    style="@android:style/Widget.DeviceDefault.Light.ImageButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_weight="0"
-                    android:backgroundTint="?android:attr/windowBackground"
-                    app:srcCompat="@drawable/ic_content_copy_black_24dp" />
 
             </LinearLayout>
-
-
         </LinearLayout>
-    </LinearLayout>
 
-</LinearLayout>
+    </LinearLayout>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
