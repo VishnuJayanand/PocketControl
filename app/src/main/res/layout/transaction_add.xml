@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/addTransactionFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp"
     android:background="#ffffff">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_transactionAmount"
@@ -62,13 +67,20 @@
                 android:theme="@style/recurring_switch" />
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/transactionDate"
-            style="@style/font_family_normal_text"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/transactionDateLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="false" />
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/transactionDate"
+                style="@style/font_family_normal_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="false" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
@@ -95,95 +107,91 @@
         android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
-        <TextView
-            style="@style/font_family_normal_text"
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:paddingRight="24dp"
-            android:text="@string/choose_transaction_type"
-            android:textSize="17sp" />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/OutlinedExposedDropdownMenu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:hint="@string/newTransactionHintTransactionType">
 
-        <Spinner
-            android:id="@+id/spinnerTransactionType"
-            android:layout_width="match_parent"
-            android:layout_height="45sp"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dialog" />
+            <AutoCompleteTextView
+                android:id="@+id/spinnerTransactionType"
+                android:minHeight="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/OutlinedExposedDropdownMenu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:hint="@string/newTransactionHintPaymentMethod">
+
+            <AutoCompleteTextView
+                android:id="@+id/spinnerTransactionMethod"
+                android:minHeight="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
-        <TextView
-            style="@style/font_family_normal_text"
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:paddingRight="24dp"
-            android:text="@string/choose_transaction_method"
-            android:textSize="17sp" />
-
-        <Spinner
-            android:id="@+id/spinnerTransactionMethod"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilCategory"
+            style="@style/OutlinedExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="45sp"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dialog" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:hint="@string/newTransactionHintCategory">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <AutoCompleteTextView
+                android:id="@+id/spinnerTransactionCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp" />
 
-        <TextView
-            style="@style/font_family_normal_text"
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="Category: "
-            android:textSize="17sp" />
-
-        <Spinner
-            android:id="@+id/spinnerTransactionCategory"
-            android:layout_width="match_parent"
-            android:layout_height="45sp"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dialog" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/recurringTransactionWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
         android:visibility="gone">
 
-        <TextView
-            style="@style/font_family_normal_text"
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="@string/choose_recurring_interval"
-            android:textSize="17sp" />
-
-        <Spinner
-            android:id="@+id/spinnerRecurringInterval"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/OutlinedExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="45sp"
-            android:background="@android:drawable/btn_dropdown"
-            android:spinnerMode="dialog" />
+            android:layout_height="wrap_content"
+            android:hint="@string/newTransactionHintRecurringInterval">
+
+            <AutoCompleteTextView
+                android:id="@+id/spinnerRecurringInterval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/customDaysIntervalWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
-        android:paddingTop="5sp"
         android:visibility="gone">
 
         <TextView
@@ -222,11 +230,11 @@
 
     <Button
         android:id="@+id/addNewTransaction"
+        style="@style/basePrimaryRoundedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
-        android:background="@drawable/pill_button"
         android:gravity="center"
         android:paddingStart="50sp"
         android:paddingTop="10sp"
@@ -239,3 +247,4 @@
 
 </LinearLayout>
 
+</ScrollView>

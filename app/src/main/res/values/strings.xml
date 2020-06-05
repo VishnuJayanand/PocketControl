@@ -18,9 +18,10 @@
     <string name="transaction_list_filter_apply_filters">Apply filters</string>
 
     <!-- Button strings -->
-    <string name="add_transaction">Add transaction</string>
-    <string name="add_category">Add category</string>
-    <string name="button_save">Save</string>
+    <string name="addTransaction">Add transaction</string>
+    <string name="addCategory">Add category</string>
+    <string name="buttonSave">Save</string>
+    <string name="buttonFilters">Filters</string>
 
     <!-- Text input strings -->
 
@@ -33,6 +34,11 @@
     <string name="newCategoryHintIcon">Choose icon</string>
 
     <!-- Transactions strings -->
+    <string name="newTransactionHintTransactionType">Select Transaction Type</string>
+    <string name="newTransactionHintPaymentMethod">Select Payment Method</string>
+    <string name="newTransactionHintCategory">Select Category</string>
+    <string name="newTransactionHintRecurringInterval">Select Recurring Interval</string>
+    <string name="allTransactionsHeader">All Transactions</string>
 
     <!-- Budgets strings -->
 

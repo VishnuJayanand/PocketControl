@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_add_black_24dp"
             android:drawablePadding="10sp"
-            android:text="@string/add_category" />
+            android:text="@string/addCategory" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/categoryGridView"

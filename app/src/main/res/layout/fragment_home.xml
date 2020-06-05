@@ -75,7 +75,7 @@
             android:background="@drawable/pill_button_filter"
             android:drawableStart="@drawable/ic_add_black_24dp"
             android:drawablePadding="10sp"
-            android:text="@string/add_category" />
+            android:text="@string/addCategory" />
     </LinearLayout>
 
     <LinearLayout
@@ -90,7 +90,7 @@
             android:background="@drawable/pill_button"
             android:drawableStart="@drawable/ic_add_black_24dp"
             android:drawablePadding="10sp"
-            android:text="@string/add_transaction" />
+            android:text="@string/addTransaction" />
     </LinearLayout>
 
 </RelativeLayout>
