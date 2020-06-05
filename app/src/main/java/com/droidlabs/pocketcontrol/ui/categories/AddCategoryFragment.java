@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -25,7 +26,7 @@ import com.google.android.material.textfield.TextInputLayout;
 public class AddCategoryFragment extends Fragment {
     private TextInputEditText tiedtCategoryName;
     private TextInputLayout tilCategoryName;
-    private Spinner dropdown;
+    private AutoCompleteTextView dropdown;
     @Nullable
     @Override
     public final View onCreateView(
@@ -53,9 +54,9 @@ public class AddCategoryFragment extends Fragment {
      */
     private void setCategoryIconSpinner(final View view) {
         //get the spinner from the xml.
-        dropdown = view.findViewById(R.id.spinnerCategoryIcon);
+        dropdown = view.findViewById(R.id.newCategoryIcon);
         //create a list of items for the spinner.
-        String[] dropdownItems = new String[]{"food", "study", "health", "rent", "shopping", "transport"};
+        String[] dropdownItems = new String[]{"Food", "Study", "Health", "Rent", "Shopping", "Transport"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
@@ -97,7 +98,7 @@ public class AddCategoryFragment extends Fragment {
         if (!validateCategoryName()) {
             return;
         }
-        String categoryIcon = dropdown.getSelectedItem().toString();
+        String categoryIcon = dropdown.getText().toString().toLowerCase();
         int resID = this.getResources().getIdentifier(categoryIcon, "drawable", getContext().getPackageName());
         String categoryName = tiedtCategoryName.getText().toString().trim() + "";
         Category newCategory = new Category(categoryName, resID);
