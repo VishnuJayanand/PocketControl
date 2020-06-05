@@ -72,8 +72,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
             final @Nullable ViewGroup container,
             final @Nullable Bundle savedInstanceState
     ) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.transaction_listfilterbottomsheet, null, false);
+        View view = inflater.inflate(R.layout.transaction_listfilterbottomsheet, container, false);
 
         Spinner categoryFilterSpinner = view.findViewById(R.id.category_filter_spinner);
         ArrayAdapter<Category> categoryFilterAdapter = new ArrayAdapter<>(

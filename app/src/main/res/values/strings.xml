@@ -21,4 +21,8 @@
     <string name="bottom_menu_settings_text">Settings</string>
     <string name="transaction_list_filter_bottom_sheet_header">Filters</string>
     <string name="transaction_list_filter_apply_filters">Apply filters</string>
+
+    <string name="title_activity_sign_in_screen">SignInScreen</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

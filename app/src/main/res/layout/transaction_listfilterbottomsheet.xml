@@ -9,7 +9,7 @@
     android:paddingTop="10dp"
     android:paddingEnd="20dp"
     android:paddingBottom="30dp"
-    android:background="#ffffff">
+    >
 
     <TextView
         android:layout_width="150dp"
