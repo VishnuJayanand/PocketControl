@@ -7,31 +7,49 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
+import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import static java.lang.Integer.parseInt;
 
-public class DetailTransacionFragment extends Fragment {
+public class DetailTransactionBottomSheet extends BottomSheetDialogFragment {
+
+    private Transaction mTransaction;
+
+    /**
+     * Public constructor to initialize viewModels.
+     */
+    public DetailTransactionBottomSheet(
+            Transaction transaction
+    ) {
+        mTransaction = transaction;
+    }
+
+    /**
+     * Executed when creating the view.
+     * @param inflater inflater.
+     * @param container container.
+     * @param savedInstanceState saved instance state.
+     * @return created view.
+     */
     @Nullable
     @Override
-    public final View onCreateView(
-            final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
-        View view = inf.inflate(R.layout.transaction_detail, container, false);
-
-        Bundle bundle = this.getArguments();
-        Long date = bundle.getLong("transactionDate");
-        float amount = bundle.getFloat("transactionAmount");
-        String note = bundle.getString("transactionNote");
-        int type = bundle.getInt("transactionType");
-        String category = bundle.getString("transactionCategory");
+    public View onCreateView(
+            final @NonNull LayoutInflater inflater,
+            final @Nullable ViewGroup container,
+            final @Nullable Bundle savedInstanceState
+    ) {
+        View view = inflater.inflate(R.layout.transaction_detail, container, false);
 
         TextView transactionDate = view.findViewById(R.id.transactionDate);
         TextView transactionAmount = view.findViewById(R.id.transactionAmount);
@@ -42,10 +60,10 @@ public class DetailTransacionFragment extends Fragment {
         ImageView transactionCategoryImage = view.findViewById(R.id.transactionCategoryImage);
 
         // turn float to string
-        String amountToString = CurrencyUtils.formatAmount(amount, "€");
+        String amountToString = CurrencyUtils.formatAmount(mTransaction.getAmount(), "€");
         // transaction Type
         String typeAsString = "";
-        if (type == 1) {
+        if (mTransaction.getType() == 1) {
             transactionType.setTextColor(ContextCompat.getColor(getContext(), R.color.colorExpense));
             typeAsString = "Expense";
             amountToString = "- " + amountToString;
@@ -56,17 +74,18 @@ public class DetailTransacionFragment extends Fragment {
         }
 
         //get Category Title and Image
-        if (category != null) {
+        if (mTransaction.getCategory() != null) {
             CategoryDao categoryDao = PocketControlDB.getDatabase(getContext()).categoryDao();
-            Category category1 = categoryDao.getSingleCategory(parseInt(category));
+            Category category1 = categoryDao.getSingleCategory(parseInt(mTransaction.getCategory()));
             transactionCategoryTitle.setText(category1.getName());
             transactionCategoryImage.setImageResource(category1.getIcon());
         }
 
-        transactionDate.setText(DateUtils.formatDate(date));
+        transactionDate.setText(DateUtils.formatDate(mTransaction.getDate()));
         transactionAmount.setText(amountToString);
         transactionType.setText(typeAsString);
-        transactionNote.setText(note);
+        transactionNote.setText(mTransaction.getTextNote());
+
         return view;
     }
 }
