@@ -179,6 +179,7 @@ public class AddTransactionFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
         dropdownTransactionType.setAdapter(adapterType);
+        dropdownTransactionType.setInputType(0);
     }
 
     /**
@@ -194,6 +195,7 @@ public class AddTransactionFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
         dropdownTransactionMethod.setAdapter(adapterType);
+        dropdownTransactionMethod.setInputType(0);
     }
 
     /**
@@ -209,6 +211,7 @@ public class AddTransactionFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
         dropdownTransactionCategory.setAdapter(adapterCategory);
+        dropdownTransactionCategory.setInputType(0);
     }
 
     /**
@@ -224,6 +227,7 @@ public class AddTransactionFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
         dropdownRecurringTransaction.setAdapter(adapterRecurring);
+        dropdownRecurringTransaction.setInputType(0);
         dropdownRecurringTransaction.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
