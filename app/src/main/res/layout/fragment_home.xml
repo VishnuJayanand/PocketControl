@@ -71,12 +71,11 @@
 
         <Button
             android:id="@+id/addCategoryButton"
-            style="@style/featured_add_button"
+            style="@style/primaryRoundedButton200dp"
             android:background="@drawable/pill_button_filter"
-            android:text="@string/add_category"
             android:drawableStart="@drawable/ic_add_black_24dp"
             android:drawablePadding="10sp"
-            />
+            android:text="@string/add_category" />
     </LinearLayout>
 
     <LinearLayout
@@ -87,12 +86,11 @@
 
         <Button
             android:id="@+id/addTransactionButton"
-            style="@style/featured_add_button"
+            style="@style/primaryRoundedButton200dp"
             android:background="@drawable/pill_button"
-            android:text="@string/add_transaction"
             android:drawableStart="@drawable/ic_add_black_24dp"
             android:drawablePadding="10sp"
-            />
+            android:text="@string/add_transaction" />
     </LinearLayout>
 
 </RelativeLayout>
