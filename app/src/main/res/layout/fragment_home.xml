@@ -71,7 +71,7 @@
 
         <Button
             android:id="@+id/addCategoryButton"
-            style="@style/primaryRoundedButton200dp"
+            style="@style/secondaryRoundedButton200dp"
             android:background="@drawable/pill_button_filter"
             android:drawableStart="@drawable/ic_add_black_24dp"
             android:drawablePadding="10sp"

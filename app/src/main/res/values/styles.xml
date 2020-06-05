@@ -50,6 +50,10 @@
         <item name="android:layout_width">200dp</item>
     </style>
 
+    <style name="primaryRoundedButtonBlock" parent="basePrimaryRoundedButton">
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
     <style name="secondaryRoundedButton200dp" parent="baseSecondaryRoundedButton">
         <item name="android:layout_width">200dp</item>
     </style>

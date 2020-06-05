@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,7 +76,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
     ) {
         View view = inflater.inflate(R.layout.transaction_listfilterbottomsheet, container, false);
 
-        Spinner categoryFilterSpinner = view.findViewById(R.id.category_filter_spinner);
+        AutoCompleteTextView categoryFilterSpinner = view.findViewById(R.id.categoryFilterSpinner);
         ArrayAdapter<Category> categoryFilterAdapter = new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_spinner_item,
@@ -82,22 +84,12 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
         );
 
         // Category filter
-        categoryFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoryFilterSpinner.setAdapter(categoryFilterAdapter);
-        categoryFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        categoryFilterSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(
-                    final AdapterView<?> parent,
-                    final View view,
-                    final int position,
-                    final long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 categoryFilter = (Category) parent.getItemAtPosition(position);
                 categoryFilterEnabled = categoryFilter.getId() != -1;
-            }
-
-            @Override
-            public void onNothingSelected(final AdapterView<?> parent) {
-                Log.v("SPINNER", "NOTHING SELECTED");
             }
         });
 

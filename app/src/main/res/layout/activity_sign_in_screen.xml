@@ -62,7 +62,7 @@
 
         <Button
             android:id="@+id/signin_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/basePrimaryRoundedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign In" />
