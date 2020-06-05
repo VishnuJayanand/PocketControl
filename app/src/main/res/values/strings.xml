@@ -4,10 +4,7 @@
     <string name="category_title">Category Title</string>
     <string name="choose_category_icon">Category icon:</string>
     <string name="app_name">Pocket Control</string>
-    <string name="add_transaction">Add transaction</string>
-    <string name="add_category">Add category</string>
     <string name="hint_transaction">Transaction description...</string>
-    <string name="button_save">Save</string>
     <string name="empty_not_saved">Transaction not saved because it is empty.</string>
     <string name="choose_transaction_type">Transaction type:</string>
     <string name="fraction">%1$d/%2$d</string>
@@ -22,7 +19,20 @@
     <string name="transaction_list_filter_bottom_sheet_header">Filters</string>
     <string name="transaction_list_filter_apply_filters">Apply filters</string>
 
-    <string name="title_activity_sign_in_screen">SignInScreen</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <!-- Button strings -->
+    <string name="add_transaction">Add transaction</string>
+    <string name="add_category">Add category</string>
+    <string name="button_save">Save</string>
+
+    <!-- Text input strings -->
+
+    <!-- Home fragment strings -->
+
+    <!-- Categories fragment strings -->
+
+    <!-- Transactions fragment strings -->
+
+    <!-- Budgets fragment strings -->
+
+    <!-- Settings fragment strings -->
 </resources>
