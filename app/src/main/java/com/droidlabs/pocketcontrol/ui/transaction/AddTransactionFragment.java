@@ -179,7 +179,6 @@ public class AddTransactionFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
         dropdownTransactionType.setAdapter(adapterType);
-        dropdownTransactionType.setText(dropdownItems[0]);
     }
 
     /**
@@ -195,7 +194,6 @@ public class AddTransactionFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
         dropdownTransactionMethod.setAdapter(adapterType);
-        dropdownTransactionMethod.setText(dropdownItems[0]);
     }
 
     /**
@@ -211,7 +209,6 @@ public class AddTransactionFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
         dropdownTransactionCategory.setAdapter(adapterCategory);
-        dropdownTransactionCategory.setText(dropdownItems[0]);
     }
 
     /**
