@@ -76,7 +76,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         expandFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                filterBottomSheetDialog.show(getChildFragmentManager(), "Tag");
+                filterBottomSheetDialog.show(getParentFragmentManager(), "Tag");
             }
         });
 

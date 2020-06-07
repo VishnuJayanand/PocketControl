@@ -1,5 +1,6 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -32,6 +33,7 @@ import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.droidlabs.pocketcontrol.utils.FormatterUtils;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -48,10 +50,10 @@ public class AddTransactionFragment extends Fragment {
     private int transactionType;
     private int transactionMethod;
     private int transactionRecurringIntervalType;
-    private AutoCompleteTextView dropdownTransactionType;
-    private AutoCompleteTextView dropdownTransactionMethod;
-    private AutoCompleteTextView dropdownTransactionCategory;
-    private AutoCompleteTextView dropdownRecurringTransaction;
+    private TextInputEditText dropdownTransactionType;
+    private TextInputEditText dropdownTransactionMethod;
+    private TextInputEditText dropdownTransactionCategory;
+    private TextInputEditText dropdownRecurringTransaction;
     private TextInputEditText editText;
     private Long transactionDate;
     private CategoryDao categoryDao;
@@ -171,14 +173,34 @@ public class AddTransactionFragment extends Fragment {
      * @param view the transaction add layout
      */
     private void setTransactionTypeSpinner(final View view) {
-        //get the spinner from the xml.
+
         dropdownTransactionType = view.findViewById(R.id.spinnerTransactionType);
-        //create a list of items for the spinner.
         String[] dropdownItems = new String[]{"Expense", "Income"};
-        ArrayAdapter<String> adapterType = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        //set the spinners adapter to the previously created one.
-        dropdownTransactionType.setAdapter(adapterType);
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+            .setTitle("Select the transaction type")
+            .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dropdownTransactionType.setText(dropdownItems[which]);
+
+                }
+            });
+
+        dropdownTransactionType.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdownTransactionType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogBuilder.show();
+            }
+        });
         dropdownTransactionType.setInputType(0);
     }
 
@@ -187,14 +209,35 @@ public class AddTransactionFragment extends Fragment {
      * @param view the transaction add layout
      */
     private void setTransactionMethodSpinner(final View view) {
-        //get the spinner from the xml.
+
         dropdownTransactionMethod = view.findViewById(R.id.spinnerTransactionMethod);
-        //create a list of items for the spinner.
         String[] dropdownItems = new String[]{"Cash", "Card"};
-        ArrayAdapter<String> adapterType = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        //set the spinners adapter to the previously created one.
-        dropdownTransactionMethod.setAdapter(adapterType);
+
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the payment method")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dropdownTransactionMethod.setText(dropdownItems[which]);
+
+                    }
+                });
+
+        dropdownTransactionMethod.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdownTransactionMethod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogBuilder.show();
+            }
+        });
         dropdownTransactionMethod.setInputType(0);
     }
 
@@ -203,14 +246,34 @@ public class AddTransactionFragment extends Fragment {
      * @param view the transaction add layout
      */
     private void setTransactionCategorySpinner(final View view) {
-        //get the spinner from the xml.
+
         dropdownTransactionCategory = view.findViewById(R.id.spinnerTransactionCategory);
-        //create a list of items for the spinner.
         String[] dropdownItems = categoryDao.getCategoriesName();
-        ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        //set the spinners adapter to the previously created one.
-        dropdownTransactionCategory.setAdapter(adapterCategory);
+
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the transaction category")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dropdownTransactionCategory.setText(dropdownItems[which]);
+                    }
+                });
+
+        dropdownTransactionCategory.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdownTransactionCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogBuilder.show();
+            }
+        });
         dropdownTransactionCategory.setInputType(0);
     }
 
@@ -219,29 +282,42 @@ public class AddTransactionFragment extends Fragment {
      * @param view the transaction add layout
      */
     private void setRecurringTransactionsSpinner(final View view) {
-        //get the spinner from the xml.
+
         dropdownRecurringTransaction = view.findViewById(R.id.spinnerRecurringInterval);
-        //create a list of items for the spinner.
         String[] dropdownItems = {"Daily", "Weekly", "Monthly", "Custom"};
-        ArrayAdapter<String> adapterRecurring = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
+
         //set the spinners adapter to the previously created one.
-        dropdownRecurringTransaction.setAdapter(adapterRecurring);
-        dropdownRecurringTransaction.setInputType(0);
-        dropdownRecurringTransaction.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the transaction category")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(dropdownItems[which].equals("Custom")) {
+                            customDaysIntervalWrapper.setVisibility(View.VISIBLE);
+                        } else {
+                            customDaysIntervalWrapper.setVisibility(View.GONE);
+                        };
+
+                        dropdownRecurringTransaction.setText(dropdownItems[which]);
+                    }
+                });
+
+        dropdownRecurringTransaction.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String selected = (String) parent.getItemAtPosition(position);
-
-                Log.v("TAG", selected);
-
-                if (selected.equals("Custom")) {
-                    customDaysIntervalWrapper.setVisibility(View.VISIBLE);
-                } else {
-                    customDaysIntervalWrapper.setVisibility(View.GONE);
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
                 }
             }
         });
+
+        dropdownRecurringTransaction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogBuilder.show();
+            }
+        });
+        dropdownRecurringTransaction.setInputType(0);
     }
 
     /**
