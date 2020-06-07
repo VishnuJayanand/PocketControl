@@ -127,8 +127,6 @@ public class SettingsFragment extends Fragment {
         //set category spinner value
         String defaultCategoryValue = defaultsDao.getDefaultValue("Category");
         int selectionPosition = adapterCategory.getPosition(defaultCategoryValue);
-        System.out.println(defaultCategoryValue);
-
 
         //set the spinners adapter to the previously created one.
         defaultCategory.setAdapter(adapterCategory);
@@ -148,11 +146,11 @@ public class SettingsFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
 
-        //set category spinner value
+        //set currency spinner value
         String defaultCurrencyValue = defaultsDao.getDefaultValue("Currency");
         int selectionPosition = adapterCategory.getPosition(defaultCurrencyValue);
-        System.out.println(defaultCurrencyValue);
 
+        //set the spinners adapter to the previously created one.
         defaultCurrency.setAdapter(adapterCategory);
         defaultCurrency.setSelection(selectionPosition);
     }
@@ -169,6 +167,13 @@ public class SettingsFragment extends Fragment {
         ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
+
+        //set payment mode spinner value
+        String defaultCurrencyValue = defaultsDao.getDefaultValue("Payment Mode");
+        int selectionPosition = adapterCategory.getPosition(defaultCurrencyValue);
+
+        //set the spinners adapter to the previously created one.
         defaultPayment.setAdapter(adapterCategory);
+        defaultPayment.setSelection(selectionPosition);
     }
 }
