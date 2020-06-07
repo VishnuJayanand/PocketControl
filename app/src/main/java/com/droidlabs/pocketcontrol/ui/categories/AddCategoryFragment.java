@@ -1,5 +1,6 @@
 package com.droidlabs.pocketcontrol.ui.categories;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -26,7 +28,7 @@ import com.google.android.material.textfield.TextInputLayout;
 public class AddCategoryFragment extends Fragment {
     private TextInputEditText tiedtCategoryName;
     private TextInputLayout tilCategoryName;
-    private AutoCompleteTextView dropdown;
+    private TextInputEditText dropdown;
     @Nullable
     @Override
     public final View onCreateView(
@@ -57,10 +59,32 @@ public class AddCategoryFragment extends Fragment {
         dropdown = view.findViewById(R.id.newCategoryIcon);
         //create a list of items for the spinner.
         String[] dropdownItems = new String[]{"Food", "Study", "Health", "Rent", "Shopping", "Transport"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        //set the spinners adapter to the previously created one.
-        dropdown.setAdapter(adapter);
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the payment method")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dropdown.setText(dropdownItems[which]);
+
+                    }
+                });
+
+        dropdown.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogBuilder.show();
+            }
+        });
+        dropdown.setInputType(0);
     }
 
     /**
