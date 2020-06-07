@@ -148,11 +148,13 @@ public class SettingsFragment extends Fragment {
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
 
-        //set default spinner value
+        //set category spinner value
         String defaultCurrencyValue = defaultsDao.getDefaultValue("Currency");
         int selectionPosition = adapterCategory.getPosition(defaultCurrencyValue);
+        System.out.println(defaultCurrencyValue);
 
         defaultCurrency.setAdapter(adapterCategory);
+        defaultCurrency.setSelection(selectionPosition);
     }
 
     /**
