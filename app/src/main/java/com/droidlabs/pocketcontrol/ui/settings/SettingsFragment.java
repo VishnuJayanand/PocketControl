@@ -25,6 +25,7 @@ import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.currency.CurrencyDao;
 import com.droidlabs.pocketcontrol.db.defaults.Defaults;
+import com.droidlabs.pocketcontrol.db.defaults.DefaultsDao;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
 
 public class SettingsFragment extends Fragment {
@@ -34,6 +35,7 @@ public class SettingsFragment extends Fragment {
     private CategoryDao categoryDao;
     private CurrencyDao currencyDao;
     private PaymentModeDao paymentModeDao;
+    private DefaultsDao defaultsDao;
     private PocketControlDB db = PocketControlDB.getDatabase(getContext());
 
     @Nullable
@@ -46,6 +48,7 @@ public class SettingsFragment extends Fragment {
 
         categoryDao = PocketControlDB.getDatabase(getContext()).categoryDao();
         currencyDao = PocketControlDB.getDatabase(getContext()).currencyDao();
+        defaultsDao = PocketControlDB.getDatabase(getContext()).defaultsDao();
         paymentModeDao = PocketControlDB.getDatabase(getContext()).paymentModeDao();
 
         Button saveSettings = v.findViewById(R.id.addDefaults);
@@ -120,8 +123,16 @@ public class SettingsFragment extends Fragment {
         String[] dropdownItems = categoryDao.getCategoriesName();
         ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
+
+        //set category spinner value
+        String defaultCategoryValue = defaultsDao.getDefaultValue("Category");
+        int selectionPosition = adapterCategory.getPosition(defaultCategoryValue);
+        System.out.println(defaultCategoryValue);
+
+
         //set the spinners adapter to the previously created one.
         defaultCategory.setAdapter(adapterCategory);
+        defaultCategory.setSelection(selectionPosition);
     }
 
     /**
@@ -136,6 +147,11 @@ public class SettingsFragment extends Fragment {
         ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
         //set the spinners adapter to the previously created one.
+
+        //set default spinner value
+        String defaultCurrencyValue = defaultsDao.getDefaultValue("Currency");
+        int selectionPosition = adapterCategory.getPosition(defaultCurrencyValue);
+
         defaultCurrency.setAdapter(adapterCategory);
     }
 
