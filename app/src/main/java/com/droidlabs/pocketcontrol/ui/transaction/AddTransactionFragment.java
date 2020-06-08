@@ -273,6 +273,27 @@ public class AddTransactionFragment extends Fragment {
         return true;
     }
 
+    /**
+     * Method to check the input of transaction amount is Acceptable or not.
+     * @return Boolean if the input is Acceptable or not
+     */
+    private boolean checkTransactionAmountIsAcceptable() {
+        float amount = Float.valueOf(tiedtTransactionAmount.getText().toString());
+        boolean isInfinite = Float.isInfinite(amount);
+        double amountLimited = 999999999;
+        if (isInfinite) {
+            tilTransactionAmount.setError("The amount of transaction is infinity please enter different amount");
+            requestFocus(tiedtTransactionAmount);
+            return false;
+        }
+        if (amount > amountLimited) {
+            tilTransactionAmount.setError("The amount of transaction need to be between 0 - 999999999");
+            requestFocus(tiedtTransactionAmount);
+            return false;
+        }
+        return true;
+    }
+
 
     /**
      * Method to check the input of transaction Date.
@@ -365,6 +386,9 @@ public class AddTransactionFragment extends Fragment {
      */
     private void submitForm() {
         if (!checkTransactionAmount()) {
+            return;
+        }
+        if (!checkTransactionAmountIsAcceptable()) {
             return;
         }
         if (!checkTransactionDate()) {
