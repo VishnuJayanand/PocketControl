@@ -1,8 +1,12 @@
 package com.droidlabs.pocketcontrol.db.category;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
 
@@ -10,6 +14,7 @@ public class CategoryRepository {
 
     private CategoryDao categoryDao;
     private List<Category> allCategories;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     /**
      * Category repository constructor.
@@ -17,8 +22,8 @@ public class CategoryRepository {
      */
     public CategoryRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
+        sharedPreferencesUtils = new SharedPreferencesUtils(application);
         categoryDao = db.categoryDao();
-        allCategories = categoryDao.getAllCategories();
     }
 
     /**
@@ -26,7 +31,13 @@ public class CategoryRepository {
      * @return list of saved categories.
      */
     public List<Category> getAllCategories() {
-        return allCategories;
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return categoryDao.getAllCategories(currentUserId);
     }
 
     /**
@@ -34,6 +45,10 @@ public class CategoryRepository {
      * @param category category to be saved.
      */
     public void insert(final Category category) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        category.setOwnerId(currentUserId);
+
         PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
             categoryDao.insert(category);
         });

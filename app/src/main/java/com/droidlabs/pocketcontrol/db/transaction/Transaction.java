@@ -10,19 +10,36 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.project.Project;
+import com.droidlabs.pocketcontrol.db.user.User;
 
 
+import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_NULL;
 
 @Entity(
     tableName = "transactions",
-    foreignKeys = @ForeignKey(
-        entity = Category.class,
-        parentColumns = "id",
-        childColumns = "category",
-        onDelete = SET_NULL
-    ),
-    indices = {@Index("category")}
+    foreignKeys = {
+            @ForeignKey(
+                entity = Category.class,
+                parentColumns = "id",
+                childColumns = "category",
+                onDelete = SET_NULL
+            ),
+            @ForeignKey(
+                    entity = User.class,
+                    parentColumns = "id",
+                    childColumns = "owner_id",
+                    onDelete = CASCADE
+            ),
+            @ForeignKey(
+                    entity = Project.class,
+                    parentColumns = "id",
+                    childColumns = "project",
+                    onDelete = SET_NULL
+            ),
+    },
+    indices = {@Index("category"), @Index("owner_id"), @Index("project")}
 )
 public class Transaction {
 
@@ -68,6 +85,14 @@ public class Transaction {
     @ColumnInfo(name = "category")
     @Nullable
     private String category;
+
+    @ColumnInfo(name = "project")
+    @Nullable
+    private String project;
+
+    @ColumnInfo(name = "owner_id")
+    @Nullable
+    private String ownerId;
 
     /**
      * Transaction constructor with amount, type, category and date.
@@ -233,6 +258,16 @@ public class Transaction {
         return category;
     }
 
+    @Nullable
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    @Nullable
+    public String getProject() {
+        return project;
+    }
+
     /**
      * ID setter.
      * @param transId transaction id.
@@ -291,6 +326,14 @@ public class Transaction {
      */
     public void setRecurringIntervalDays(final @Nullable Integer recIntDays) {
         this.recurringIntervalDays = recIntDays;
+    }
+
+    public void setOwnerId(@Nullable String mOwnerId) {
+        this.ownerId = mOwnerId;
+    }
+
+    public void setProject(@Nullable String mProject) {
+        this.project = mProject;
     }
 
     /**

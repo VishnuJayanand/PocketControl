@@ -2,6 +2,7 @@ package com.droidlabs.pocketcontrol.db.user;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Ignore;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -34,15 +35,15 @@ public interface UserDao {
     /**
      * Retrieve a specific user from the database.
      * @param userId user id.
-     * @return all users.
+     * @return user.
      */
     @Query("SELECT * FROM users WHERE id=:userId")
     User getUserById(Long userId);
 
     /**
      * Retrieve a specific user from the database.
-     * @param userEmail user id.
-     * @return all users.
+     * @param userEmail user email.
+     * @return user.
      */
     @Query("SELECT * FROM users WHERE email=:userEmail")
     User getUserByEmail(String userEmail);

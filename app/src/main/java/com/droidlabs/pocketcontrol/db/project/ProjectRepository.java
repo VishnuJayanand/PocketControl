@@ -1,10 +1,14 @@
 package com.droidlabs.pocketcontrol.db.project;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 
+import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
 
@@ -12,9 +16,11 @@ public class ProjectRepository {
 
     private ProjectDao projectDao;
     private LiveData<List<Project>> allProjects;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     public ProjectRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
+        sharedPreferencesUtils = new SharedPreferencesUtils(application);
         projectDao = db.projectDao();
     }
 
@@ -22,8 +28,14 @@ public class ProjectRepository {
      * Get all projects from the database.
      * @return all projects in the database.
      */
-    public LiveData<List<Project>> getAllProjects(String userId) {
-        return projectDao.getAllProjects(userId);
+    public LiveData<List<Project>> getAllProjects() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return projectDao.getAllProjects(currentUserId);
     }
 
     /**
@@ -34,7 +46,7 @@ public class ProjectRepository {
     public Project getProjectById(final long projectId) {
         Project project = projectDao.getProjectById(projectId);
 
-        if (project.getPublic() != null) {
+        if (project.getIsPublic() != null && project.getIsPublic()) {
             return project;
         }
 

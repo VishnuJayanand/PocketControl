@@ -14,12 +14,14 @@ import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.budget.BudgetDao;
+import com.droidlabs.pocketcontrol.db.budget.BudgetRepository;
+
 import java.util.List;
 
 public class BudgetFragment extends Fragment {
 
     private PocketControlDB db = PocketControlDB.getDatabase(getContext());
-    private BudgetDao budgetDao;
+    private BudgetRepository budgetRepository;
     private List<Budget> allBudgets;
     private ArrayAdapter<String> nameAdapter;
 
@@ -32,8 +34,8 @@ public class BudgetFragment extends Fragment {
         ListView listView = (ListView) view.findViewById(R.id.budget_list);
         final TextView helpText = (TextView) view.findViewById(R.id.helpText);
 
-        budgetDao = db.budgetDao();
-        allBudgets = budgetDao.getAllBudgets();
+        budgetRepository = new BudgetRepository(getActivity().getApplication());
+        allBudgets = budgetRepository.getAllBudgets();
 
         if (allBudgets.isEmpty()) {
             helpText.setVisibility(View.VISIBLE);

@@ -27,8 +27,8 @@ public interface DefaultsDao {
      * Retrieve all defaults values.
      * @return list of defaults.
      */
-    @Query("SELECT * FROM defaults")
-    List<Defaults> getAllDefaults();
+    @Query("SELECT * FROM defaults WHERE owner_id=:ownerId")
+    List<Defaults> getAllDefaults(String ownerId);
 
     /**
      * Retrieve all defaults category.

@@ -63,7 +63,7 @@ public class Project {
     }
 
     @Nullable
-    public Boolean getPublic() {
+    public Boolean getIsPublic() {
         return isPublic;
     }
 

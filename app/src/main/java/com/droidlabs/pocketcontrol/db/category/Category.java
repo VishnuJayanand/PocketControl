@@ -4,11 +4,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.droidlabs.pocketcontrol.db.user.User;
+
+import static androidx.room.ForeignKey.CASCADE;
+
 @Entity(
-    tableName = "categories"
+    tableName = "categories",
+    foreignKeys = {
+        @ForeignKey(
+            entity = User.class,
+            parentColumns = "id",
+            childColumns = "owner_id",
+            onDelete = CASCADE
+        ),
+    },
+    indices = {@Index("owner_id")}
 )
 public class Category {
 
@@ -22,6 +37,11 @@ public class Category {
     @ColumnInfo(name = "icon")
     @Nullable
     private int icon;
+
+    // Foreign keys
+    @ColumnInfo(name = "owner_id")
+    @Nullable
+    private String ownerId;
 
     /**
      * Category constructor.
@@ -84,6 +104,11 @@ public class Category {
         return icon;
     }
 
+    @Nullable
+    public String getOwnerId() {
+        return ownerId;
+    }
+
     /**
      * Category id setter.
      * @param categoryId category id.
@@ -106,6 +131,10 @@ public class Category {
      */
     public void setIcon(final int categoryIcon) {
         this.icon = categoryIcon;
+    }
+
+    public void setOwnerId(@Nullable String mOwnerId) {
+        this.ownerId = mOwnerId;
     }
 
     /**

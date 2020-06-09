@@ -33,38 +33,142 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailInput"
+        <LinearLayout
+            android:id="@+id/selectedUser"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Your email">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            app:endIconMode="password_toggle"
-            android:hint="Your password">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <TextView
+                android:id="@+id/currentUserEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword" />
+                android:text="TextView" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/changeUserButton"
+                style="@style/basePrimaryRoundedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Change user" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/signin_button"
-            style="@style/basePrimaryRoundedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sign In" />
+        <LinearLayout
+            android:id="@+id/enterUserPin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordInputSignInGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:hint="Your password"
+                android:visibility="gone"
+                app:endIconMode="password_toggle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordSignInValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/accessPinInputGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Your 4-digit token">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fourDigitPinValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/validateCredentialsButton"
+                style="@style/basePrimaryRoundedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign In" />
+
+            <Button
+                android:id="@+id/signInWithPasswordButton"
+                style="@style/basePrimaryRoundedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign in with password" />
+
+            <Button
+                android:id="@+id/signInWithPinButton"
+                style="@style/basePrimaryRoundedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign in with pin"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/createNewAccountButton"
+                style="@style/basePrimaryRoundedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create a new user account" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/createNewUser"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/emailInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Your email">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:hint="Your password"
+                app:endIconMode="password_toggle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/signUpButton"
+                style="@style/basePrimaryRoundedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign Up" />
+
+            <Button
+                android:id="@+id/alreadyHaveAnAccountButton"
+                style="@style/basePrimaryRoundedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="I already have an account" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

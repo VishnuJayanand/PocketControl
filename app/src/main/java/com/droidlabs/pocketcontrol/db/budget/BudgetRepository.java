@@ -1,7 +1,15 @@
 package com.droidlabs.pocketcontrol.db.budget;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.user.User;
+import com.droidlabs.pocketcontrol.db.user.UserDao;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
+
 import java.util.List;
 
 /**
@@ -10,16 +18,16 @@ import java.util.List;
 public class BudgetRepository {
 
     private BudgetDao budgetDao;
-    private List<Budget> allBudgets;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     /**
      * Creates a new budget repository.
      * @param application application to the used.
      */
-    BudgetRepository(final Application application) {
+    public BudgetRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
+        sharedPreferencesUtils = new SharedPreferencesUtils(application);
         budgetDao = db.budgetDao();
-        allBudgets = budgetDao.getAllBudgets();
     }
 
     /**
@@ -27,7 +35,13 @@ public class BudgetRepository {
      * @return list of saved budgets.
      */
     public List<Budget> getAllBudgets() {
-        return allBudgets;
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return budgetDao.getAllBudgets(currentUserId);
     }
 
     /**
@@ -35,6 +49,10 @@ public class BudgetRepository {
      * @param budget budget to be saved.
      */
     public void insert(final Budget budget) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        budget.setOwnerId(currentUserId);
+
         PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
             budgetDao.insert(budget);
         });

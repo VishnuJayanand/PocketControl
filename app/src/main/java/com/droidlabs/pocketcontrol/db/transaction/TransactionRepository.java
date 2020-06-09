@@ -1,17 +1,21 @@
 package com.droidlabs.pocketcontrol.db.transaction;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 
+import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
 
 public class TransactionRepository {
 
     private TransactionDao transactionDao;
-    private LiveData<List<Transaction>> allTransactions;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     /**
      * Transaction repository constructor.
@@ -19,8 +23,8 @@ public class TransactionRepository {
      */
     public TransactionRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
+        sharedPreferencesUtils = new SharedPreferencesUtils(application);
         transactionDao = db.transactionDao();
-        allTransactions = transactionDao.getAllTransactions();
     }
 
     /**
@@ -28,7 +32,7 @@ public class TransactionRepository {
      * @return all transactions in the database.
      */
     public LiveData<List<Transaction>> getAllTransactions() {
-        return allTransactions;
+        return transactionDao.getAllTransactions();
     }
 
     /**
@@ -129,6 +133,10 @@ public class TransactionRepository {
      * @return transaction id.
      */
     public long insert(final Transaction transaction) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        transaction.setOwnerId(currentUserId);
+
         return transactionDao.insert(transaction);
     }
 

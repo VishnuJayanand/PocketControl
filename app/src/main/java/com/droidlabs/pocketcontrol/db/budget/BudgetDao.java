@@ -25,6 +25,6 @@ public interface BudgetDao {
      * Retrieve all budgets.
      * @return list of budgets saved on db.
      */
-    @Query("SELECT * FROM budgets")
-    List<Budget> getAllBudgets();
+    @Query("SELECT * FROM budgets WHERE owner_id=:ownerId")
+    List<Budget> getAllBudgets(String ownerId);
 }

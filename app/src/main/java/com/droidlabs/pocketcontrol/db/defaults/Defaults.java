@@ -3,10 +3,27 @@ package com.droidlabs.pocketcontrol.db.defaults;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "defaults")
+import com.droidlabs.pocketcontrol.db.user.User;
+
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(
+    tableName = "defaults",
+    foreignKeys = {
+        @ForeignKey(
+            entity = User.class,
+            parentColumns = "id",
+            childColumns = "owner_id",
+            onDelete = CASCADE
+        ),
+    },
+    indices = {@Index("owner_id")}
+)
 public class Defaults {
 
     @PrimaryKey(autoGenerate = true)
@@ -19,6 +36,10 @@ public class Defaults {
     @ColumnInfo(name = "default_value", defaultValue = "NULL")
     @Nullable
     private String defaultValue;
+
+    @ColumnInfo(name = "owner_id")
+    @Nullable
+    private String ownerId;
 
     /**
      * Empty defaults constructor.
@@ -78,5 +99,14 @@ public class Defaults {
      */
     public void setDefaultValue(@Nullable final String value) {
         this.defaultValue = value;
+    }
+
+    @Nullable
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(@Nullable String mOwnerId) {
+        this.ownerId = mOwnerId;
     }
 }

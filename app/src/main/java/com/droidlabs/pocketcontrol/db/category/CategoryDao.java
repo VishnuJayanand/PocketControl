@@ -29,8 +29,8 @@ public interface CategoryDao {
      * Get all categories from the database.
      * @return list of categories.
      */
-    @Query("SELECT * FROM categories")
-    List<Category> getAllCategories();
+    @Query("SELECT * FROM categories WHERE owner_id=:ownerId")
+    List<Category> getAllCategories(String ownerId);
 
     /**
      * Get single category.

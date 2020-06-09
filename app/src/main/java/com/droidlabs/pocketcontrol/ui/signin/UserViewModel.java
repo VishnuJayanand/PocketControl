@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.db.user.UserRepository;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
 
@@ -73,18 +74,15 @@ public class UserViewModel extends AndroidViewModel {
      * @return user.
      */
     public User getCurrentUser() {
-        SharedPreferences sharedPreferences = getApplication().getSharedPreferences(
-                getApplication().getString(R.string.shared_preferences_file_key),
-                Context.MODE_PRIVATE
-        );
+        SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(getApplication());
 
-        long currentUserId = sharedPreferences.getLong("currentUserId", -1);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
 
-        if (currentUserId == -1) {
+        if (currentUserId.equals("")) {
             return null;
         }
 
-        User user = repository.getUserById(currentUserId);
+        User user = repository.getUserById(Long.parseLong(currentUserId));
 
         // TODO: add validation, user should be authenticated
 

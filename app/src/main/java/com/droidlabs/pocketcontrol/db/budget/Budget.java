@@ -9,18 +9,28 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.user.User;
 
+import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_NULL;
 
 @Entity(
     tableName = "budgets",
-    foreignKeys = @ForeignKey(
-        entity = Category.class,
-        parentColumns = "id",
-        childColumns = "category",
-        onDelete = SET_NULL
-    ),
-    indices = {@Index("category")}
+    foreignKeys = {
+        @ForeignKey(
+            entity = Category.class,
+            parentColumns = "id",
+            childColumns = "category",
+            onDelete = SET_NULL
+        ),
+        @ForeignKey(
+            entity = User.class,
+            parentColumns = "id",
+            childColumns = "owner_id",
+            onDelete = CASCADE
+        )
+    },
+    indices = {@Index("category"), @Index("owner_id")}
 )
 public class Budget {
 
@@ -42,6 +52,10 @@ public class Budget {
     @ColumnInfo(name = "category")
     @Nullable
     private String category;
+
+    @ColumnInfo(name = "owner_id")
+    @Nullable
+    private String ownerId;
 
     /**
      * Empty budget constructor.
@@ -121,6 +135,11 @@ public class Budget {
         return this.category;
     }
 
+    @Nullable
+    public String getOwnerId() {
+        return ownerId;
+    }
+
     /**
      * ID setter.
      * @param budgetId budget id.
@@ -159,5 +178,9 @@ public class Budget {
      */
     public void setCategory(final @Nullable String cat) {
         this.category = cat;
+    }
+
+    public void setOwnerId(@Nullable String mOwnerId) {
+        this.ownerId = mOwnerId;
     }
 }

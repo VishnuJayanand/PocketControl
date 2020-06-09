@@ -173,6 +173,16 @@ public abstract class PocketControlDB extends RoomDatabase {
         userDao.deleteAll();
         projectDao.deleteAll();
 
+        User newUser = new User();
+
+        newUser.setAccessPin("1234");
+        newUser.setEmail("laurofmuller@gmail.com");
+        newUser.setFirstName("Lauro");
+        newUser.setLastName("Müller");
+        newUser.setPassword("123456");
+
+        long userId = userDao.insert(newUser);
+
         Calendar someDay = DateUtils.getStartOfCurrentDay();
         someDay.add(Calendar.DAY_OF_YEAR, -8);
 
@@ -184,6 +194,13 @@ public abstract class PocketControlDB extends RoomDatabase {
         Category food = new Category(4, "Food", R.drawable.food);
         Category study = new Category(5, "Study", R.drawable.study);
         Category rent = new Category(6, "Rent", R.drawable.rent);
+
+        health.setOwnerId(String.valueOf(userId));
+        transport.setOwnerId(String.valueOf(userId));
+        shopping.setOwnerId(String.valueOf(userId));
+        food.setOwnerId(String.valueOf(userId));
+        study.setOwnerId(String.valueOf(userId));
+        rent.setOwnerId(String.valueOf(userId));
 
         long healthCatId = categoryDao.insert(health);
         long transportCatId = categoryDao.insert(transport);
