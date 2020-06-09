@@ -4,8 +4,9 @@
     android:id="@+id/addCategoryFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    android:orientation="vertical">
+    android:padding="10dp"
+    android:orientation="vertical"
+    android:background="#ffffff">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_categoryName"
