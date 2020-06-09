@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 
-import com.droidlabs.pocketcontrol.ui.transaction.DetailTransactionBottomSheet;
+import com.droidlabs.pocketcontrol.ui.transaction.DetailTransactionFragment;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionListAdapter;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 
@@ -79,7 +81,20 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
      */
     @Override
     public void onTransactionClick(final Transaction transaction, final int position) {
-        DetailTransactionBottomSheet detailTransactionBottomSheet = new DetailTransactionBottomSheet(transaction);
-        detailTransactionBottomSheet.show(getChildFragmentManager(), "Tag");
+        Bundle bundle = new Bundle();
+        bundle.putLong("transactionDate", transaction.getDate());
+        bundle.putFloat("transactionAmount", transaction.getAmount());
+        bundle.putString("transactionNote", transaction.getTextNote());
+        bundle.putInt("transactionType", transaction.getType());
+        bundle.putString("transactionCategory", transaction.getCategory());
+        //Move to transaction detail fragment
+        Fragment fragment = new DetailTransactionFragment();
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
+
 }

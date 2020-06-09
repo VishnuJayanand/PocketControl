@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -65,7 +64,7 @@ public class AddCategoryFragment extends Fragment {
                 .setTitle("Select the payment method")
                 .setItems(dropdownItems, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(final DialogInterface dialog, final int which) {
                         dropdown.setText(dropdownItems[which]);
 
                     }
@@ -73,7 +72,7 @@ public class AddCategoryFragment extends Fragment {
 
         dropdown.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+            public void onFocusChange(final View v, final boolean hasFocus) {
                 if (hasFocus) {
                     dialogBuilder.show();
                 }
@@ -82,7 +81,7 @@ public class AddCategoryFragment extends Fragment {
 
         dropdown.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 dialogBuilder.show();
             }
         });

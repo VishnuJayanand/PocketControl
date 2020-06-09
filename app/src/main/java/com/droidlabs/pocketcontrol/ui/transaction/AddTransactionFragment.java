@@ -8,15 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -180,7 +176,7 @@ public class AddTransactionFragment extends Fragment {
             .setTitle("Select the transaction type")
             .setItems(dropdownItems, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which) {
+                public void onClick(final DialogInterface dialog, final int which) {
                     dropdownTransactionType.setText(dropdownItems[which]);
 
                 }
@@ -188,7 +184,7 @@ public class AddTransactionFragment extends Fragment {
 
         dropdownTransactionType.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+            public void onFocusChange(final View v, final boolean hasFocus) {
                 if (hasFocus) {
                     dialogBuilder.show();
                 }
@@ -197,7 +193,7 @@ public class AddTransactionFragment extends Fragment {
 
         dropdownTransactionType.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 dialogBuilder.show();
             }
         });
@@ -217,7 +213,7 @@ public class AddTransactionFragment extends Fragment {
                 .setTitle("Select the payment method")
                 .setItems(dropdownItems, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(final DialogInterface dialog, final int which) {
                         dropdownTransactionMethod.setText(dropdownItems[which]);
 
                     }
@@ -225,7 +221,7 @@ public class AddTransactionFragment extends Fragment {
 
         dropdownTransactionMethod.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+            public void onFocusChange(final View v, final boolean hasFocus) {
                 if (hasFocus) {
                     dialogBuilder.show();
                 }
@@ -234,7 +230,7 @@ public class AddTransactionFragment extends Fragment {
 
         dropdownTransactionMethod.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 dialogBuilder.show();
             }
         });
@@ -254,14 +250,14 @@ public class AddTransactionFragment extends Fragment {
                 .setTitle("Select the transaction category")
                 .setItems(dropdownItems, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(final DialogInterface dialog, final int which) {
                         dropdownTransactionCategory.setText(dropdownItems[which]);
                     }
                 });
 
         dropdownTransactionCategory.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+            public void onFocusChange(final View v, final boolean hasFocus) {
                 if (hasFocus) {
                     dialogBuilder.show();
                 }
@@ -270,7 +266,7 @@ public class AddTransactionFragment extends Fragment {
 
         dropdownTransactionCategory.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 dialogBuilder.show();
             }
         });
@@ -291,12 +287,12 @@ public class AddTransactionFragment extends Fragment {
                 .setTitle("Select the transaction category")
                 .setItems(dropdownItems, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(dropdownItems[which].equals("Custom")) {
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        if (dropdownItems[which].equals("Custom")) {
                             customDaysIntervalWrapper.setVisibility(View.VISIBLE);
                         } else {
                             customDaysIntervalWrapper.setVisibility(View.GONE);
-                        };
+                        }
 
                         dropdownRecurringTransaction.setText(dropdownItems[which]);
                     }
@@ -304,7 +300,7 @@ public class AddTransactionFragment extends Fragment {
 
         dropdownRecurringTransaction.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+            public void onFocusChange(final View v, final boolean hasFocus) {
                 if (hasFocus) {
                     dialogBuilder.show();
                 }
@@ -313,7 +309,7 @@ public class AddTransactionFragment extends Fragment {
 
         dropdownRecurringTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 dialogBuilder.show();
             }
         });

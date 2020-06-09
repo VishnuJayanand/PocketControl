@@ -102,7 +102,20 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
      */
     @Override
     public void onTransactionClick(final Transaction transaction, final int position) {
-        DetailTransactionBottomSheet detailTransactionBottomSheet = new DetailTransactionBottomSheet(transaction);
-        detailTransactionBottomSheet.show(getChildFragmentManager(), "Tag");
+        Bundle bundle = new Bundle();
+        bundle.putLong("transactionDate", transaction.getDate());
+        bundle.putFloat("transactionAmount", transaction.getAmount());
+        bundle.putString("transactionNote", transaction.getTextNote());
+        bundle.putInt("transactionType", transaction.getType());
+        bundle.putString("transactionCategory", transaction.getCategory());
+        //Move to transaction detail fragment
+        Fragment fragment = new DetailTransactionFragment();
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
+
 }

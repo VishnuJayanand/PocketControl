@@ -18,8 +18,12 @@ public class SignInActivity extends AppCompatActivity {
 
     private View mContentView;
 
+    /**
+     * Create a new activity.
+     * @param savedInstanceState bundle.
+     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_sign_in_screen);
@@ -30,13 +34,16 @@ public class SignInActivity extends AppCompatActivity {
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                SignIn();
+            public void onClick(final View v) {
+                signIn();
             }
         });
     }
 
-    private void SignIn() {
+    /**
+     * Execute sign in and move to home screen.
+     */
+    private void signIn() {
 
         Intent intent = new Intent(getApplication(), HomeActivity.class);
         startActivity(intent);

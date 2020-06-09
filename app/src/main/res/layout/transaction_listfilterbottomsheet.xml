@@ -30,12 +30,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/categoryFilterInputLayout"
-            style="@style/OutlinedExposedDropdownMenu"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:hint="@string/filterTransactionsCategory">
 
-            <AutoCompleteTextView
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/categoryFilterSpinner"
                 android:minHeight="50dp"
                 android:layout_width="match_parent"
