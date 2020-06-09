@@ -47,4 +47,7 @@
 
     <!-- Sign in strings -->
     <string name="title_activity_sign_in_screen">Sign In</string>
+
+    <!-- Shared Preferences strings -->
+    <string name="shared_preferences_file_key">com.droidlabs.pocketcontrol.sharedpreferences</string>
 </resources>

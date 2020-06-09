@@ -21,10 +21,14 @@ import com.droidlabs.pocketcontrol.db.icon.Icon;
 import com.droidlabs.pocketcontrol.db.icon.IconDao;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentMode;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
+import com.droidlabs.pocketcontrol.db.project.Project;
+import com.droidlabs.pocketcontrol.db.project.ProjectDao;
 import com.droidlabs.pocketcontrol.db.recurrent.Recurrent;
 import com.droidlabs.pocketcontrol.db.recurrent.RecurrentDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
+import com.droidlabs.pocketcontrol.db.user.User;
+import com.droidlabs.pocketcontrol.db.user.UserDao;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 
 import java.util.Calendar;
@@ -42,7 +46,9 @@ import java.util.concurrent.Executors;
         PaymentMode.class,
         Transaction.class,
         Defaults.class,
-        Recurrent.class
+        Recurrent.class,
+        User.class,
+        Project.class
 }, version = 1, exportSchema = false)
 public abstract class PocketControlDB extends RoomDatabase {
 
@@ -94,6 +100,18 @@ public abstract class PocketControlDB extends RoomDatabase {
      */
     public abstract RecurrentDao recurrentDao();
 
+    /**
+     * Project Dao.
+     * @return Project Dao
+     */
+    public abstract ProjectDao projectDao();
+
+    /**
+     * User Dao.
+     * @return User Dao
+     */
+    public abstract UserDao userDao();
+
     private static final String DB_NAME = "PocketControl.db";
     private static final int DB_VERSION = 1;
 
@@ -142,6 +160,8 @@ public abstract class PocketControlDB extends RoomDatabase {
         IconDao iconDao = dbInstance.iconDao();
         PaymentModeDao paymentModeDao = dbInstance.paymentModeDao();
         TransactionDao transactionDao = dbInstance.transactionDao();
+        UserDao userDao = dbInstance.userDao();
+        ProjectDao projectDao = dbInstance.projectDao();
 
         budgetDao.deleteAll();
         categoryDao.deleteAll();
@@ -150,6 +170,8 @@ public abstract class PocketControlDB extends RoomDatabase {
         paymentModeDao.deleteAll();
         transactionDao.deleteAll();
         defaultsDao.deleteAll();
+        userDao.deleteAll();
+        projectDao.deleteAll();
 
         Calendar someDay = DateUtils.getStartOfCurrentDay();
         someDay.add(Calendar.DAY_OF_YEAR, -8);
