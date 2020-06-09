@@ -1,5 +1,6 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -7,14 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -31,26 +29,28 @@ import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.droidlabs.pocketcontrol.utils.FormatterUtils;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class AddTransactionFragment extends Fragment {
     private TextInputEditText tiedtTransactionAmount, tiedtTransactionNote;
     private TextInputEditText customRecurringDaysInterval;
-    private TextInputLayout tilTransactionAmount, tilTransactionNote, tilCustomRecurringDaysInterval;
+    private TextInputLayout tilTransactionAmount, tilTransactionNote, tilCustomRecurringDaysInterval, tilCategory;
     private boolean isTransactionRecurring;
     private int transactionType;
     private int transactionMethod;
     private int transactionRecurringIntervalType;
-    private Spinner dropdownTransactionType;
-    private Spinner dropdownTransactionMethod;
-    private Spinner dropdownTransactionCategory;
-    private Spinner dropdownRecurringTransaction;
-    private EditText editText;
+    private TextInputEditText dropdownTransactionType;
+    private TextInputEditText dropdownTransactionMethod;
+    private TextInputEditText dropdownTransactionCategory;
+    private TextInputEditText dropdownRecurringTransaction;
+    private TextInputEditText editText;
     private Long transactionDate;
     private CategoryDao categoryDao;
     private TransactionViewModel transactionViewModel;
@@ -69,6 +69,7 @@ public class AddTransactionFragment extends Fragment {
         tiedtTransactionNote = view.findViewById(R.id.tiedt_transactionNote);
         tilTransactionAmount = view.findViewById(R.id.til_transactionAmount);
         tilTransactionNote = view.findViewById(R.id.til_transactionNote);
+        tilCategory = view.findViewById(R.id.tilCategory);
         tilCustomRecurringDaysInterval = view.findViewById(R.id.til_customRecurringDaysInterval);
         recurringSwitch = view.findViewById(R.id.recurringSwitch);
         recurringTransactionWrapper = view.findViewById(R.id.recurringTransactionWrapper);
@@ -168,14 +169,35 @@ public class AddTransactionFragment extends Fragment {
      * @param view the transaction add layout
      */
     private void setTransactionTypeSpinner(final View view) {
-        //get the spinner from the xml.
+
         dropdownTransactionType = view.findViewById(R.id.spinnerTransactionType);
-        //create a list of items for the spinner.
         String[] dropdownItems = new String[]{"Expense", "Income"};
-        ArrayAdapter<String> adapterType = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        //set the spinners adapter to the previously created one.
-        dropdownTransactionType.setAdapter(adapterType);
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+            .setTitle("Select the transaction type")
+            .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(final DialogInterface dialog, final int which) {
+                    dropdownTransactionType.setText(dropdownItems[which]);
+
+                }
+            });
+
+        dropdownTransactionType.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdownTransactionType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialogBuilder.show();
+            }
+        });
+        dropdownTransactionType.setInputType(0);
     }
 
     /**
@@ -183,14 +205,36 @@ public class AddTransactionFragment extends Fragment {
      * @param view the transaction add layout
      */
     private void setTransactionMethodSpinner(final View view) {
-        //get the spinner from the xml.
+
         dropdownTransactionMethod = view.findViewById(R.id.spinnerTransactionMethod);
-        //create a list of items for the spinner.
         String[] dropdownItems = new String[]{"Cash", "Card"};
-        ArrayAdapter<String> adapterType = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        //set the spinners adapter to the previously created one.
-        dropdownTransactionMethod.setAdapter(adapterType);
+
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the payment method")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dropdownTransactionMethod.setText(dropdownItems[which]);
+
+                    }
+                });
+
+        dropdownTransactionMethod.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdownTransactionMethod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialogBuilder.show();
+            }
+        });
+        dropdownTransactionMethod.setInputType(0);
     }
 
     /**
@@ -198,14 +242,35 @@ public class AddTransactionFragment extends Fragment {
      * @param view the transaction add layout
      */
     private void setTransactionCategorySpinner(final View view) {
-        //get the spinner from the xml.
+
         dropdownTransactionCategory = view.findViewById(R.id.spinnerTransactionCategory);
-        //create a list of items for the spinner.
         String[] dropdownItems = categoryDao.getCategoriesName();
-        ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        //set the spinners adapter to the previously created one.
-        dropdownTransactionCategory.setAdapter(adapterCategory);
+
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the transaction category")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dropdownTransactionCategory.setText(dropdownItems[which]);
+                    }
+                });
+
+        dropdownTransactionCategory.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdownTransactionCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialogBuilder.show();
+            }
+        });
+        dropdownTransactionCategory.setInputType(0);
     }
 
     /**
@@ -213,35 +278,42 @@ public class AddTransactionFragment extends Fragment {
      * @param view the transaction add layout
      */
     private void setRecurringTransactionsSpinner(final View view) {
-        //get the spinner from the xml.
-        dropdownRecurringTransaction = view.findViewById(R.id.spinnerRecurringInterval);
-        //create a list of items for the spinner.
-        String[] dropdownItems = {"Daily", "Weekly", "Monthly", "Custom"};
-        ArrayAdapter<String> adapterRecurring = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        //set the spinners adapter to the previously created one.
-        dropdownRecurringTransaction.setAdapter(adapterRecurring);
-        dropdownRecurringTransaction.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(
-                    final AdapterView<?> parent,
-                    final View view,
-                    final int position,
-                    final long id) {
-                String selected = (String) parent.getItemAtPosition(position);
 
-                if (selected.equals("Custom")) {
-                    customDaysIntervalWrapper.setVisibility(View.VISIBLE);
-                } else {
-                    customDaysIntervalWrapper.setVisibility(View.GONE);
+        dropdownRecurringTransaction = view.findViewById(R.id.spinnerRecurringInterval);
+        String[] dropdownItems = {"Daily", "Weekly", "Monthly", "Custom"};
+
+        //set the spinners adapter to the previously created one.
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the transaction category")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        if (dropdownItems[which].equals("Custom")) {
+                            customDaysIntervalWrapper.setVisibility(View.VISIBLE);
+                        } else {
+                            customDaysIntervalWrapper.setVisibility(View.GONE);
+                        }
+
+                        dropdownRecurringTransaction.setText(dropdownItems[which]);
+                    }
+                });
+
+        dropdownRecurringTransaction.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
                 }
             }
+        });
 
+        dropdownRecurringTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(final AdapterView<?> parent) {
-
+            public void onClick(final View v) {
+                dialogBuilder.show();
             }
         });
+        dropdownRecurringTransaction.setInputType(0);
     }
 
     /**
@@ -309,12 +381,26 @@ public class AddTransactionFragment extends Fragment {
     }
 
     /**
+     * Method to check the input of transaction Date.
+     * @return Boolean if the input is qualify or not
+     */
+    private boolean checkTransactionCategory() {
+        String[] dropdownItems = categoryDao.getCategoriesName();
+        if (!Arrays.asList(dropdownItems).contains(dropdownTransactionCategory.getText().toString().trim())) {
+            tilCategory.setError("Category is not valid");
+            requestFocus(dropdownTransactionCategory);
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Check if recurring conditions are met.
      * @return validation result.
      */
     private boolean checkRecurringConditions() {
-        if (dropdownRecurringTransaction.getSelectedItem().equals("Custom")) {
-            if (customRecurringDaysInterval.getText().toString().trim().isEmpty()) {
+        if (dropdownRecurringTransaction.getText().toString().equals("Custom")) {
+            if (customRecurringDaysInterval.getText().toString().equals("")) {
                 tilCustomRecurringDaysInterval.setError("Required");
                 requestFocus(customRecurringDaysInterval);
                 return false;
@@ -334,11 +420,11 @@ public class AddTransactionFragment extends Fragment {
      * Method to convert transactionType.
      */
     private void convertTransactionType() {
-        String text = dropdownTransactionType.getSelectedItem().toString();
-        if (text == "Expense") {
-            transactionType = 1;
-        } else {
+        String text = dropdownTransactionType.getText().toString();
+        if (text.equals("Income")) {
             transactionType = 2;
+        } else {
+            transactionType = 1;
         }
     }
 
@@ -346,8 +432,8 @@ public class AddTransactionFragment extends Fragment {
      * Method to convert transactionType.
      */
     private void convertTransactionMethod() {
-        String text = dropdownTransactionMethod.getSelectedItem().toString();
-        if (text == "Cash") {
+        String text = dropdownTransactionMethod.getText().toString();
+        if (text.equals("Cash")) {
             transactionMethod = 1;
         } else {
             transactionMethod = 2;
@@ -359,7 +445,7 @@ public class AddTransactionFragment extends Fragment {
      */
     private void convertRecurringTransaction() {
         if (recurringSwitch.isChecked()) {
-            String text = dropdownRecurringTransaction.getSelectedItem().toString();
+            String text = dropdownRecurringTransaction.getText().toString();
             switch (text) {
                 case "Daily":
                     transactionRecurringIntervalType = 1;
@@ -397,11 +483,14 @@ public class AddTransactionFragment extends Fragment {
         if (!checkRecurringConditions()) {
             return;
         }
+        if (!checkTransactionCategory()) {
+            return;
+        }
         convertTransactionType();
         convertTransactionMethod();
         convertRecurringTransaction();
 
-        String transactionCategory = dropdownTransactionCategory.getSelectedItem().toString();
+        String transactionCategory = dropdownTransactionCategory.getText().toString();
         Category selectedCategory = categoryDao.getSingleCategory(transactionCategory);
         int categoryId = selectedCategory.getId();
 

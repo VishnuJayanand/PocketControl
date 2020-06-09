@@ -4,8 +4,9 @@
     android:id="@+id/addCategoryFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    android:orientation="vertical">
+    android:padding="10dp"
+    android:orientation="vertical"
+    android:background="#ffffff">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_categoryName"
@@ -18,7 +19,7 @@
             style="@style/font_family_normal_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Category Name">
+            android:hint="@string/newCategoryHintName">
 
         </com.google.android.material.textfield.TextInputEditText>
 
@@ -35,19 +36,32 @@
             android:layout_width="200dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/choose_category_icon"
+            android:text="@string/newCategorySelectIconText"
             android:textSize="17sp" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/newCategoryHintIcon">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/newCategoryIcon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
         <Spinner
             android:id="@+id/spinnerCategoryIcon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/btn_dropdown"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:background="@android:drawable/editbox_dropdown_light_frame"
             android:spinnerMode="dialog" />
     </LinearLayout>
 
     <Button
         android:id="@+id/addNewCategory"
+        style="@style/basePrimaryRoundedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

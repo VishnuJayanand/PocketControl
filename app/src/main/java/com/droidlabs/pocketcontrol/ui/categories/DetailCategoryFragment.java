@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 
-import com.droidlabs.pocketcontrol.ui.transaction.DetailTransacionFragment;
+import com.droidlabs.pocketcontrol.ui.transaction.DetailTransactionFragment;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionListAdapter;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 
@@ -88,7 +88,7 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
         bundle.putInt("transactionType", transaction.getType());
         bundle.putString("transactionCategory", transaction.getCategory());
         //Move to transaction detail fragment
-        Fragment fragment = new DetailTransacionFragment();
+        Fragment fragment = new DetailTransactionFragment();
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -96,4 +96,5 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
 }

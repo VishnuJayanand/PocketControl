@@ -109,7 +109,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         bundle.putInt("transactionType", transaction.getType());
         bundle.putString("transactionCategory", transaction.getCategory());
         //Move to transaction detail fragment
-        Fragment fragment = new DetailTransacionFragment();
+        Fragment fragment = new DetailTransactionFragment();
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -117,4 +117,5 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
 }

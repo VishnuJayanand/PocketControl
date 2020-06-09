@@ -189,7 +189,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:paddingLeft="8dp"
-                        android:text="@string/category_title"
+                        android:text="@string/categoryTitle"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="#4D4D50"
                         android:textSize="12sp" />

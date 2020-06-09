@@ -1,13 +1,12 @@
 package com.droidlabs.pocketcontrol.ui.categories;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -19,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -27,8 +27,9 @@ import com.google.android.material.textfield.TextInputLayout;
 public class AddCategoryFragment extends Fragment {
     private TextInputEditText tiedtCategoryName;
     private TextInputLayout tilCategoryName;
-    private Spinner dropdown;
+    private TextInputEditText dropdown;
     private CategoryDao categoryDao;
+
     @Nullable
     @Override
     public final View onCreateView(
@@ -56,13 +57,35 @@ public class AddCategoryFragment extends Fragment {
      */
     private void setCategoryIconSpinner(final View view) {
         //get the spinner from the xml.
-        dropdown = view.findViewById(R.id.spinnerCategoryIcon);
+        dropdown = view.findViewById(R.id.newCategoryIcon);
         //create a list of items for the spinner.
-        String[] dropdownItems = new String[]{"food", "study", "health", "rent", "shopping", "transport"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        //set the spinners adapter to the previously created one.
-        dropdown.setAdapter(adapter);
+        String[] dropdownItems = new String[]{"Food", "Study", "Health", "Rent", "Shopping", "Transport"};
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the payment method")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dropdown.setText(dropdownItems[which]);
+
+                    }
+                });
+
+        dropdown.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialogBuilder.show();
+            }
+        });
+        dropdown.setInputType(0);
     }
 
     /**
@@ -116,10 +139,12 @@ public class AddCategoryFragment extends Fragment {
         if (!validateCategoryName()) {
             return;
         }
+
         if (!validateIfCategoryNameIsAvailable()) {
             return;
         }
-        String categoryIcon = dropdown.getSelectedItem().toString();
+
+        String categoryIcon = dropdown.getText().toString().toLowerCase();
         int resID = this.getResources().getIdentifier(categoryIcon, "drawable", getContext().getPackageName());
         String categoryName = tiedtCategoryName.getText().toString().trim() + "";
         Category newCategory = new Category(categoryName, resID);

@@ -1,178 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFBFB"
+    android:background="#ffffff">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@color/colorPrimary"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/addTransactionButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:paddingTop="20sp"
+            android:paddingBottom="30sp">
+
+            <TextView
+                android:id="@+id/transactionAmount"
+                style="@style/font_family_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:text="Transaction Amount"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                tools:ignore="RtlHardcoded" />
+
+            <ImageView
+                android:id="@+id/transactionCategoryImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20sp"
+                android:src="@mipmap/ic_launcher" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <TextView
+            android:id="@+id/transactionCategoryTitle"
+            style="@style/font_family_normal_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Category Name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#090909"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/layout_bg"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical"
-            android:clickable="true"
-                >
-
-            <LinearLayout
-                android:id="@+id/addTransactionButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#03A9F4"
-                android:clickable="true"
-                android:orientation="vertical"
-                android:paddingTop="20sp"
-                android:paddingBottom="30sp">
-
-                <TextView
-                    android:id="@+id/transactionAmount"
-                    style="@style/font_family_normal_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:text="Transaction Amount"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#FFFFFF"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    tools:ignore="RtlHardcoded" />
-
-                <ImageView
-                    android:id="@+id/transactionCategoryImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20sp"
-                    android:src="@mipmap/ic_launcher" />
-
-            </LinearLayout>
-            </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-
-            <TextView
-                android:id="@+id/transactionCategoryTitle"
-                style="@style/font_family_normal_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="Category Name"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#090909"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                tools:ignore="RtlHardcoded" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    style="@style/font_family_normal_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="left"
-                    android:text="Date"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#4D4D50"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:ignore="RtlHardcoded" />
-
-                <TextView
-                    android:id="@+id/transactionDate"
-                    style="@style/font_family_normal_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:gravity="right"
-                    android:text="21-05-2020"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#4D4D50"
-                    android:textSize="20sp"
-                    tools:ignore="RtlHardcoded" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    style="@style/font_family_normal_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="left"
-                    android:text="Type"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#4D4D50"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:ignore="RtlHardcoded" />
-
-                <TextView
-                    android:id="@+id/transactionType"
-                    style="@style/font_family_normal_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:gravity="right"
-                    android:text="Expense"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#4D4D50"
-                    android:textSize="20sp"
-                    tools:ignore="RtlHardcoded" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    style="@style/font_family_normal_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="left"
-                    android:text="Method"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#4D4D50"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:ignore="RtlHardcoded" />
-
-                <TextView
-                    android:id="@+id/transactionMethod"
-                    style="@style/font_family_normal_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:gravity="right"
-                    android:text="Cash"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#4D4D50"
-                    android:textSize="20sp"
-                    tools:ignore="RtlHardcoded" />
-            </LinearLayout>
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
             <TextView
                 style="@style/font_family_normal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
                 android:gravity="left"
-                android:text="Note"
+                android:text="Date"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#4D4D50"
                 android:textSize="20sp"
@@ -180,18 +92,114 @@
                 tools:ignore="RtlHardcoded" />
 
             <TextView
-                android:id="@+id/transactionNote"
+                android:id="@+id/transactionDate"
                 style="@style/font_family_normal_text"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="left"
-                android:text="Note Descrition"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:text="21-05-2020"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#4D4D50"
                 android:textSize="20sp"
                 tools:ignore="RtlHardcoded" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/font_family_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:text="Type"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#4D4D50"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:ignore="RtlHardcoded" />
+
+            <TextView
+                android:id="@+id/transactionType"
+                style="@style/font_family_normal_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:text="Expense"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#4D4D50"
+                android:textSize="20sp"
+                tools:ignore="RtlHardcoded" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/font_family_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:text="Method"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#4D4D50"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:ignore="RtlHardcoded" />
+
+            <TextView
+                android:id="@+id/transactionMethod"
+                style="@style/font_family_normal_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:text="Cash"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#4D4D50"
+                android:textSize="20sp"
+                tools:ignore="RtlHardcoded" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/font_family_normal_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:text="Note"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#4D4D50"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/transactionNote"
+            style="@style/font_family_normal_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
+            android:gravity="left"
+            android:text="Note Descrition"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#4D4D50"
+            android:textSize="20sp"
+            tools:ignore="RtlHardcoded" />
+    </LinearLayout>
+
 </LinearLayout>
+</ScrollView>

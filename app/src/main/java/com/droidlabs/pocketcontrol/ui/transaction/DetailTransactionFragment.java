@@ -19,7 +19,7 @@ import com.droidlabs.pocketcontrol.utils.DateUtils;
 
 import static java.lang.Integer.parseInt;
 
-public class DetailTransacionFragment extends Fragment {
+public class DetailTransactionFragment extends Fragment {
     @Nullable
     @Override
     public final View onCreateView(
