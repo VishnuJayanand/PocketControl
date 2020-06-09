@@ -24,7 +24,9 @@
             android:textColor="#FFFFFF"
             android:textColorHighlight="#EDF4F6"
             android:textColorLink="#337BB5"
-            android:textSize="@dimen/home_text_net_balance" />
+            android:textSize="@dimen/home_text_net_balance"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
         <TextView
             android:id="@+id/homeScreenNetBalanceText"
@@ -50,7 +52,9 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginStart="20dp"
-            android:textSize="@dimen/home_text_income_expense" />
+            android:textSize="@dimen/home_text_income_expense"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
         <TextView
             android:id="@+id/homeScreenTotalIncome"
@@ -58,7 +62,9 @@
             android:layout_height="40dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
-            android:textSize="@dimen/home_text_income_expense" />
+            android:textSize="@dimen/home_text_income_expense"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
     </LinearLayout>
 
