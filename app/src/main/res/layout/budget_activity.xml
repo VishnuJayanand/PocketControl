@@ -88,59 +88,6 @@
                         android:background="@color/inputBorder"
                         android:gravity="end" />
                 </TableRow>
-                <!-- Category -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/inputBorderThickness"
-                    android:background="@color/inputBorder" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:background="@color/inputBackground">
-
-                    <View
-                        android:layout_width="@dimen/inputBorderThickness"
-                        android:layout_height="match_parent"
-                        android:background="@color/inputBorder"
-                        android:gravity="start" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_column="1"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            style="@style/font_family_normal_text"
-                            android:layout_width="150sp"
-                            android:layout_height="wrap_content"
-                            android:labelFor="@+id/budgetNameEdit"
-                            android:padding="@dimen/inputPadding"
-                            android:text="Category"
-                            android:textSize="@dimen/inputSize" />
-
-                        <EditText
-                            android:id="@+id/budgetCategoryEdit"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textCapCharacters"
-                            android:padding="@dimen/inputPadding"
-                            android:textSize="@dimen/inputSize" />
-
-                        <TextView
-                            android:id="@+id/budgetCategoryView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/inputPadding"
-                            android:textIsSelectable="true"
-                            android:textSize="@dimen/inputSize" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="@dimen/inputBorderThickness"
-                        android:layout_height="match_parent"
-                        android:background="@color/inputBorder"
-                        android:gravity="end" />
-                </TableRow>
                 <!-- Value -->
                 <View
                     android:layout_width="match_parent"
@@ -195,10 +142,58 @@
                         android:gravity="end" />
                 </TableRow>
 
+                <!-- Category -->
                 <View
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/inputBorderThickness"
                     android:background="@color/inputBorder" />
 
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:background="@color/inputBackground">
+
+                    <View
+                        android:layout_width="@dimen/inputBorderThickness"
+                        android:layout_height="match_parent"
+                        android:background="@color/inputBorder"
+                        android:gravity="start" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_column="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/font_family_normal_text"
+                            android:layout_width="150sp"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/budgetNameEdit"
+                            android:padding="@dimen/inputPadding"
+                            android:text="Category"
+                            android:textSize="@dimen/inputSize" />
+
+                        <Spinner
+                            android:id="@+id/spinnerBudgetCategory"
+                            android:layout_width="match_parent"
+                            android:layout_height="45sp"
+                            android:background="@android:drawable/btn_dropdown"
+                            android:spinnerMode="dialog" />
+
+                        <TextView
+                            android:id="@+id/budgetCategoryView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/inputPadding"
+                            android:textIsSelectable="true"
+                            android:textSize="@dimen/inputSize" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="@dimen/inputBorderThickness"
+                        android:layout_height="match_parent"
+                        android:background="@color/inputBorder"
+                        android:gravity="end" />
+                </TableRow>
                 <!-- Ending spacer -->
                 <TableRow android:background="@color/inputContrastBackground">
 

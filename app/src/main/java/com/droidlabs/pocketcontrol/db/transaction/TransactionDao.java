@@ -49,6 +49,14 @@ public interface TransactionDao {
     LiveData<List<Transaction>> getTransactionsByCategoryId(String categoryId);
 
     /**
+     * Retrieve all transactions from a specified category.
+     * @param categoryId category id
+     * @return list of transactions with matching categoryId
+     */
+    @Query("SELECT * FROM transactions WHERE category=:categoryId ORDER BY date DESC")
+    List<Transaction> getAmountByCategoryId(String categoryId);
+
+    /**
      * Retrieve all transactions within a specified date range.
      * @param lowerBound lower date bound.
      * @param upperBound upper date bound.

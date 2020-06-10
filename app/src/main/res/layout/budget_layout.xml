@@ -17,10 +17,11 @@
     <TextView
         android:id="@+id/budgetCategory"
         style="@style/font_family_normal_text"
-        android:layout_width="174dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="200dp"
         android:layout_marginTop="-27dp"
+        android:layout_gravity="end"
         android:textSize="20.0sp" />
 
     <LinearLayout android:orientation="horizontal"

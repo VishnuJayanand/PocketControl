@@ -60,6 +60,15 @@ public class TransactionRepository {
     }
 
     /**
+     * Get transactions by date range.
+     * @param categoryId date lower bound.
+     * @return all transactions within date range.
+     */
+    public List<Transaction> getAmountByCategoryId(final String categoryId) {
+        return transactionDao.getAmountByCategoryId(categoryId);
+    }
+
+    /**
      * Get transactions by amount range.
      * @param lba amount lower bound.
      * @param uba amount upper bound.

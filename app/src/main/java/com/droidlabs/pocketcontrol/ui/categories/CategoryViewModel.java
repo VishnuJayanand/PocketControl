@@ -33,6 +33,14 @@ public class CategoryViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get all categories.
+     * @return return all transactions from the database.
+     */
+    public String[] getCategoriesName() {
+        return repository.getCategoriesName();
+    }
+
+    /**
      * Insert a new category in the database.
      * @param category transaction to be added.
      */
