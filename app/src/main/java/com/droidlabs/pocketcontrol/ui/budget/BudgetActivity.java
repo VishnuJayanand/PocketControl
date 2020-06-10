@@ -29,7 +29,7 @@ public class BudgetActivity extends Fragment {
     private BudgetViewModel budgetViewModel;
     private PocketControlDB db = PocketControlDB.getDatabase(getContext());
     private Budget budget;
-    private String name, category, svalue;
+    private String name, svalue;
     private float value;
     private EditText nameEdit, categoryEdit, valueEdit;
     private Button button;
@@ -51,29 +51,49 @@ public class BudgetActivity extends Fragment {
 
         nameEdit.addTextChangedListener(budgetTextWatcher);
         valueEdit.addTextChangedListener(budgetTextWatcher);
-        category = budgetCategory.getSelectedItem().toString();
+        budgetCategory.getSelectedItem().toString();
+
 
        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                value = Float.parseFloat(svalue);
-                budget = new Budget(value, name, category);
-                budgetViewModel.insert(budget);
 
-                Fragment fragment = new BudgetFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_budget, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                if (validateIfCategoryName(budgetCategory.getSelectedItem().toString())) {
+                    value = Float.parseFloat(svalue);
+                    budget = new Budget(value, name, budgetCategory.getSelectedItem().toString());
+                    budgetViewModel.insert(budget);
 
-                Toast.makeText(getContext(), "Budget added", Toast.LENGTH_SHORT).show();
+                    Fragment fragment = new BudgetFragment();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_budget, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+
+                    Toast.makeText(getContext(), "Budget added", Toast.LENGTH_SHORT).show();
+                } else {
+                    String message = "Budget for this category already exist. Please choose other category";
+                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });
 
-
         return view;
+    }
+
+    /**
+     * Validate the input of category name if it's already exist or not.
+     * @param category string
+     * @return boolean if input is exist or not
+     */
+    private boolean validateIfCategoryName(final String category) {
+        Budget budgetValidate = budgetViewModel.getBudgetForCategory(category);
+        if (budgetValidate == null) {
+            return true;
+        }
+        return false;
     }
 
     private TextWatcher budgetTextWatcher = new TextWatcher() {
