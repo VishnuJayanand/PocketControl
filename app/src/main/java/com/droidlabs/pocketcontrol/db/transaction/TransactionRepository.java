@@ -50,6 +50,25 @@ public class TransactionRepository {
     }
 
     /**
+     * Get sum of transaction income amount by categoryID.
+     * @param categoryId category id.
+     * @return sum of transaction income amount with matching categoryId
+     */
+    public Float getTotalIncomeByCategoryId(final String categoryId) {
+        return transactionDao.getTotalIncomeByCategoryId(categoryId);
+    }
+
+    /**
+     * Get sum of transaction expense amount by categoryID.
+     * @param categoryId category id.
+     * @return sum of transaction expense amount with matching categoryId
+     */
+    public Float getTotalIExpenseByCategoryId(final String categoryId) {
+        return transactionDao.getTotalIExpenseByCategoryId(categoryId);
+    }
+
+
+    /**
      * Get transactions by date range.
      * @param lb date lower bound.
      * @param ub date upper bound.

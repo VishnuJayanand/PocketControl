@@ -17,10 +17,11 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
@@ -35,13 +36,10 @@ import com.droidlabs.pocketcontrol.utils.FormatterUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
-
 import java.util.Locale;
 
 public class AddTransactionFragment extends Fragment {
@@ -564,11 +562,11 @@ public class AddTransactionFragment extends Fragment {
         BudgetViewModel budgetViewModel;
         String sCatId = String.valueOf(categoryId);
         budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
-        Budget budget = budgetViewModel.getBudgetForCategory(transactionCategory);
+        Budget budget = budgetViewModel.getBudgetForCategory(sCatId);
 
         if (budget != null) {
             Float budgetAmount = budget.getMaxAmount();
-            Float totalAmount = transactionViewModel.filterTransactionsByCategoryId(sCatId);
+            Float totalAmount = transactionViewModel.getTotalIAmountByCategoryId(sCatId);
 
             if (budgetAmount - totalAmount <= 50) {
                 message = "Low Budget: Monitor your expenses";

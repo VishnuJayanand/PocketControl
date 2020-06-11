@@ -107,19 +107,12 @@ public class TransactionViewModel extends AndroidViewModel {
      * @param catId category id
      * @return LiveData of transaction list.
      */
-    public Float filterTransactionsByCategoryId(final String catId) {
+    public Float getTotalIAmountByCategoryId(final String catId) {
 
-        Float totalAmount = 0f;
-        List<Transaction> list = repository.getAmountByCategoryId(catId);
-        for (Transaction transaction : list) {
-            if (transaction.getType() == 1) {
-                totalAmount = totalAmount + transaction.getAmount();
-            } else {
-                totalAmount  = totalAmount - transaction.getAmount();
-            }
-        }
+        Float totalIncome = repository.getTotalIncomeByCategoryId(catId);
+        Float totalExpenses = repository.getTotalIExpenseByCategoryId(catId);
 
-        return totalAmount;
+        return totalExpenses - totalIncome;
     }
 
     /**
