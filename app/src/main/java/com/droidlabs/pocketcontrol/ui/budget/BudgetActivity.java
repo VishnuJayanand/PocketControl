@@ -7,18 +7,20 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-import androidx.fragment.app.Fragment;
-import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
-import com.droidlabs.pocketcontrol.db.budget.Budget;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.droidlabs.pocketcontrol.R;
+import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 
 
@@ -67,7 +69,8 @@ public class BudgetActivity extends Fragment {
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.fragment_budget, fragment);
-                    fragmentTransaction.addToBackStack(null);
+                    //TODO - fix this bug
+                    // fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
 
                     Toast.makeText(getContext(), "Budget added", Toast.LENGTH_SHORT).show();
