@@ -5,9 +5,22 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
+import com.droidlabs.pocketcontrol.db.category.Category;
+
+import static androidx.room.ForeignKey.SET_NULL;
+
 
 @Entity(
-    tableName = "budgets"
+        tableName = "budgets",
+        foreignKeys = @ForeignKey(
+                entity = Category.class,
+                parentColumns = "id",
+                childColumns = "category",
+                onDelete = SET_NULL
+        ),
+        indices = {@Index("category")}
 )
 public class Budget {
 

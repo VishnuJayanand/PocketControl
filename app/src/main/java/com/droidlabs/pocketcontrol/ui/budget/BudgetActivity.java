@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
+import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 
 
@@ -62,7 +63,10 @@ public class BudgetActivity extends Fragment {
 
                 if (validateIfCategoryName(budgetCategory.getSelectedItem().toString())) {
                     value = Float.parseFloat(svalue);
-                    budget = new Budget(value, name, budgetCategory.getSelectedItem().toString());
+                    Category selectedCategory = categoryViewModel.getSingleCategory(
+                            budgetCategory.getSelectedItem().toString());
+
+                    budget = new Budget(value, name, selectedCategory.getId().toString());
                     budgetViewModel.insert(budget);
 
                     Fragment fragment = new BudgetFragment();
