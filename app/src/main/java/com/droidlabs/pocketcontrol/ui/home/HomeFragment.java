@@ -1,6 +1,7 @@
 package com.droidlabs.pocketcontrol.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
@@ -34,12 +37,14 @@ public class HomeFragment extends Fragment {
     private Animation topAnimation;
     private TextView textViewAmount, textViewNetBalance;
     private List<Project> projectList;
+    private ProjectListAdapter projectListAdapter;
 
     @Nullable
     @Override
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.fragment_home, container, false);
+        RecyclerView projectsRecyclerView = view.findViewById(R.id.projectsList);
 
         textViewAmount = view.findViewById(R.id.homeScreenTop);
         textViewNetBalance = view.findViewById(R.id.homeScreenNetBalanceText);
@@ -52,10 +57,13 @@ public class HomeFragment extends Fragment {
         projectViewModel.getProjects().observe(getViewLifecycleOwner(), new Observer<List<Project>>() {
             @Override
             public void onChanged(List<Project> projects) {
-                projectList = projects;
+                projectListAdapter.setProjects(projects);
             }
         });
 
+        projectListAdapter = new ProjectListAdapter(getActivity(), getActivity().getApplication());
+        projectsRecyclerView.setAdapter(projectListAdapter);
+        projectsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {

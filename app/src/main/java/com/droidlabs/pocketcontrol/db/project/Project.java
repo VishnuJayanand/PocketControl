@@ -31,7 +31,7 @@ public class Project {
 
     @ColumnInfo(name = "color")
     @Nullable
-    private String color;
+    private Integer color;
 
     @ColumnInfo(name = "is_public", defaultValue = "0")
     @Nullable
@@ -53,7 +53,7 @@ public class Project {
     }
 
     @Nullable
-    public String getColor() {
+    public Integer getColor() {
         return color;
     }
 
@@ -75,7 +75,7 @@ public class Project {
         this.name = mName;
     }
 
-    public void setColor(@Nullable String mColor) {
+    public void setColor(@Nullable Integer mColor) {
         this.color = mColor;
     }
 

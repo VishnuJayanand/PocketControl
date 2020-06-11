@@ -211,14 +211,21 @@ public abstract class PocketControlDB extends RoomDatabase {
 
         Project project1 = new Project();
         project1.setName("Project 1");
+        project1.setColor(R.color.projectColorBlue);
         project1.setOwnerId(String.valueOf(userId));
 
         Project project2 = new Project();
         project2.setName("Project 2");
+        project2.setColor(R.color.projectColorPurple);
         project2.setOwnerId(String.valueOf(userId));
+
+        Project project3 = new Project();
+        project3.setName("Project 3");
+        project3.setOwnerId(String.valueOf(userId));
 
         projectDao.insert(project1);
         projectDao.insert(project2);
+        projectDao.insert(project3);
 
         Currency currency = new Currency("EUR");
         currencyDao.insert(currency);
