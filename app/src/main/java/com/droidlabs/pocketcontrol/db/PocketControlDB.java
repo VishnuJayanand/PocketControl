@@ -209,6 +209,17 @@ public abstract class PocketControlDB extends RoomDatabase {
         long studyCatId = categoryDao.insert(study);
         long rentCatId = categoryDao.insert(rent);
 
+        Project project1 = new Project();
+        project1.setName("Project 1");
+        project1.setOwnerId(String.valueOf(userId));
+
+        Project project2 = new Project();
+        project2.setName("Project 2");
+        project2.setOwnerId(String.valueOf(userId));
+
+        projectDao.insert(project1);
+        projectDao.insert(project2);
+
         Currency currency = new Currency("EUR");
         currencyDao.insert(currency);
 

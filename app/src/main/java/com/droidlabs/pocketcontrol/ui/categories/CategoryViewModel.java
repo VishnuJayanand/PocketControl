@@ -21,7 +21,6 @@ public class CategoryViewModel extends AndroidViewModel {
     public CategoryViewModel(final Application application) {
         super(application);
         this.repository = new CategoryRepository(application);
-        allCategories = repository.getAllCategories();
     }
 
     /**
@@ -29,7 +28,7 @@ public class CategoryViewModel extends AndroidViewModel {
      * @return return all transactions from the database.
      */
     public List<Category> getAllCategories() {
-        return allCategories;
+        return repository.getAllCategories();
     }
 
     /**

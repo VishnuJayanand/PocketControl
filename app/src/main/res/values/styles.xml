@@ -151,4 +151,8 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
     </style>
+
+    <style name="StyleProjectRow">
+        <item name="android:background">@drawable/project_row_rounded_left</item>
+    </style>
 </resources>

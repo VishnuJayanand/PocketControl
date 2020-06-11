@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.ui.home.HomeActivity;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -85,6 +86,7 @@ public class SignInActivity extends AppCompatActivity {
                 Log.v("USER", String.valueOf(users.size()));
 
                 if (users.size() > 0) {
+                    new SharedPreferencesUtils(getApplication()).setCurrentUserId(String.valueOf(users.get(0).getId()));
                     currentUser.setText(users.get(0).getEmail());
                     user = userViewModel.getUserById(users.get(0).getId());
                 }

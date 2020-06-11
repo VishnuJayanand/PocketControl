@@ -3,6 +3,7 @@ package com.droidlabs.pocketcontrol.db.category;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
@@ -32,6 +33,8 @@ public class CategoryRepository {
      */
     public List<Category> getAllCategories() {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        Log.v("USERINFO", currentUserId);
 
         if (currentUserId.equals("")) {
             return null;

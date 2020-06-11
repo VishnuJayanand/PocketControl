@@ -15,7 +15,6 @@ import java.util.List;
 public class ProjectRepository {
 
     private ProjectDao projectDao;
-    private LiveData<List<Project>> allProjects;
     private SharedPreferencesUtils sharedPreferencesUtils;
 
     public ProjectRepository(final Application application) {
