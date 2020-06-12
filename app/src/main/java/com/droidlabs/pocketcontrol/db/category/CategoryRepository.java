@@ -49,9 +49,19 @@ public class CategoryRepository {
 
     /**
      * get a category.
-     * @param categoryName category id.
+     * @param categoryName category name.
+     * @return category.
      */
-    public void getSingleCategory(final String categoryName) {
-        categoryDao.getSingleCategory(categoryName);
+    public Category getSingleCategory(final String categoryName) {
+        return categoryDao.getSingleCategory(categoryName);
     }
+
+    /**
+     * get a category.
+     * @return the category names
+     */
+    public String[] getCategoriesName() {
+        return categoryDao.getCategoriesName();
+    }
+
 }

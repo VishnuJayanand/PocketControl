@@ -103,6 +103,19 @@ public class TransactionViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get all transactions.
+     * @param catId category id
+     * @return LiveData of transaction list.
+     */
+    public Float getTotalIAmountByCategoryId(final String catId) {
+
+        Float totalIncome = repository.getTotalIncomeByCategoryId(catId);
+        Float totalExpenses = repository.getTotalIExpenseByCategoryId(catId);
+
+        return totalExpenses - totalIncome;
+    }
+
+    /**
      * Get single transaction by is.
      * @param id id.
      * @return transaction

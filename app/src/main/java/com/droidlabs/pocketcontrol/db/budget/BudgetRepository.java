@@ -16,7 +16,7 @@ public class BudgetRepository {
      * Creates a new budget repository.
      * @param application application to the used.
      */
-    BudgetRepository(final Application application) {
+    public BudgetRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
         budgetDao = db.budgetDao();
         allBudgets = budgetDao.getAllBudgets();
@@ -38,5 +38,14 @@ public class BudgetRepository {
         PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
             budgetDao.insert(budget);
         });
+    }
+
+    /**
+     * Fetch the budget for the selected category.
+     * @param category amount lower bound.
+     * @return Budget.
+     */
+    public Budget getBudgetForCategory(final String category) {
+        return budgetDao.getBudgetForCategory(category);
     }
 }
