@@ -1,135 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#ffffff"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_height="fill_parent"
+    android:background="#ffffff">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:adjustViewBounds="true"
-            android:contentDescription=""
-            app:srcCompat="@drawable/app_logo_text" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/signin_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/selectedUser"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/currentUserEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-            <Button
-                android:id="@+id/changeUserButton"
-                style="@style/basePrimaryRoundedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Change user" />
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:adjustViewBounds="true"
+                android:contentDescription=""
+                app:srcCompat="@drawable/app_logo_text" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/enterUserPin"
+            android:id="@+id/signinContainer"
+            style="@style/SignInSignUpContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordInputSignInGroup"
+            <LinearLayout
+                android:id="@+id/selectedUser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="15dp"
-                android:hint="Your password"
-                android:visibility="gone"
-                app:endIconMode="password_toggle">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passwordSignInValue"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
+                    android:layout_marginEnd="5dp"
+                    app:srcCompat="@drawable/ic_account_circle_gray_24dp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:id="@+id/currentUserEmail"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxWidth="200dp"
+                    android:maxLines="1"
+                    android:text="TextView" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/accessPinInputGroup"
+                <Button
+                    android:id="@+id/changeUserButton"
+                    style="@style/baseSmallButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="Switch" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/enterUserPin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Your 4-digit token">
+                android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/fourDigitPinValue"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/accessPinInputGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:hint="Your 4-digit access token"
+                    app:endIconMode="password_toggle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fourDigitPinValue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberPassword" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/validateCredentialsButton"
+                    style="@style/basePrimaryRoundedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberPassword" />
+                    android:text="Sign In" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <Button
+                    android:id="@+id/createNewAccountButton"
+                    style="@style/baseSmallButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Create a new user account" />
 
-            <Button
-                android:id="@+id/validateCredentialsButton"
-                style="@style/basePrimaryRoundedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sign In" />
-
-            <Button
-                android:id="@+id/signInWithPasswordButton"
-                style="@style/basePrimaryRoundedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sign in with password" />
-
-            <Button
-                android:id="@+id/signInWithPinButton"
-                style="@style/basePrimaryRoundedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sign in with pin"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/createNewAccountButton"
-                style="@style/basePrimaryRoundedButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Create a new user account" />
+            </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/createNewUser"
+            android:id="@+id/signupContainer"
+            style="@style/SignInSignUpContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emailInput"
+                android:id="@+id/emailInputGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Your email">
@@ -141,11 +129,26 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passwordInput"
+                android:id="@+id/accessTokenInputGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:hint="Your password"
+                android:hint="Your access token"
+                app:endIconMode="password_toggle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/repeatAccessTokenInputGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:hint="Repeat your access token"
                 app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -157,18 +160,17 @@
 
             <Button
                 android:id="@+id/signUpButton"
-                style="@style/basePrimaryRoundedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/primaryRoundedButtonBlock"
                 android:text="Sign Up" />
 
             <Button
                 android:id="@+id/alreadyHaveAnAccountButton"
-                style="@style/basePrimaryRoundedButton"
-                android:layout_width="match_parent"
+                style="@style/baseSmallButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="I already have an account" />
-        </LinearLayout>
 
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>
