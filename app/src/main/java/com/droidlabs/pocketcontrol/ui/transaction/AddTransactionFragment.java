@@ -23,6 +23,8 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -30,9 +32,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.droidlabs.pocketcontrol.utils.FormatterUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -717,8 +721,53 @@ public class AddTransactionFragment extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
+        // Show notification after checking budget
+        checkBudget(transactionCategory, categoryId);
+
         String total = "Added new transaction";
         Toast.makeText(getContext(), total, Toast.LENGTH_LONG).show();
+    }
+    /**
+     * This method to check the budget of the selected Transaction Category.
+     * @param transactionCategory the transaction category
+     * @param categoryId the transaction category id
+     */
+    private void checkBudget(final String transactionCategory, final int categoryId) {
+
+        String message = "";
+        BudgetViewModel budgetViewModel;
+        String sCatId = String.valueOf(categoryId);
+        budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
+        Budget budget = budgetViewModel.getBudgetForCategory(sCatId);
+
+        if (budget != null) {
+            Float budgetAmount = budget.getMaxAmount();
+            Float totalAmount = transactionViewModel.getTotalIAmountByCategoryId(sCatId);
+
+            if (budgetAmount - totalAmount <= 50) {
+                message = "Low Budget: Monitor your expenses for " +  transactionCategory;
+            }
+            if (budgetAmount - totalAmount == 0) {
+                message = "Budget limit is full for " + transactionCategory;
+            }
+            if (budgetAmount - totalAmount < 0) {
+                message = "Budget limit exceeded for " + transactionCategory;
+            }
+        }
+
+        if (!message.isEmpty()) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                    getContext()
+            )
+                    .setSmallIcon(R.drawable.ic_message)
+                    .setContentTitle("New Notification")
+                    .setContentText(message)
+                    .setAutoCancel(true);
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+            notificationManager.notify(001, builder.build());
+        }
+
     }
 
     /**

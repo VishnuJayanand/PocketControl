@@ -27,4 +27,12 @@ public interface BudgetDao {
      */
     @Query("SELECT * FROM budgets")
     List<Budget> getAllBudgets();
+
+    /**
+     * Retrieve all budgets.
+     * @param category is the category
+     * @return list of budgets saved on db.
+     */
+    @Query("SELECT * FROM budgets WHERE category=:category")
+    Budget getBudgetForCategory(String category);
 }
