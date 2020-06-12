@@ -143,16 +143,102 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/font_family_normal_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/newTransactionHintCategory"
+                android:textSize="18sp" />
+
+            <Switch
+                android:id="@+id/transactionFriendSwitch"
+                style="@style/font_family_normal_text"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|end"
+                android:paddingStart="15dp"
+                android:showText="false"
+                android:switchPadding="7dp"
+                android:text="Add a friend"
+                android:textAlignment="inherit"
+                android:textAllCaps="false"
+                android:textIsSelectable="false"
+                android:textSize="12sp"
+                android:theme="@style/recurring_switch" />
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilCategory"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/newTransactionHintCategory">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/spinnerTransactionCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/addFriendWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_friendContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Select a friend from your contact">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/spinnerTransactionFriend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/MethodForFriendWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/textViewMethodForFriend"
+            style="@style/font_family_normal_text"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingTop="7sp"
+            android:text="Did you :"
+            android:textSize="17sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_methodForFriend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Lend or Borrow">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/spinnerTransactionMethodForFriend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="50dp" />

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -32,6 +33,8 @@ public class DetailTransactionFragment extends Fragment {
         String note = bundle.getString("transactionNote");
         int type = bundle.getInt("transactionType");
         String category = bundle.getString("transactionCategory");
+        String friend = bundle.getString("transactionFriend");
+        String methodForFriend = bundle.getString("transactionMethodForFriend");
 
         TextView transactionDate = view.findViewById(R.id.transactionDate);
         TextView transactionAmount = view.findViewById(R.id.transactionAmount);
@@ -39,7 +42,10 @@ public class DetailTransactionFragment extends Fragment {
         TextView transactionNote = view.findViewById(R.id.transactionNote);
         TextView transactionMethod = view.findViewById(R.id.transactionMethod);
         TextView transactionCategoryTitle = view.findViewById(R.id.transactionCategoryTitle);
+        TextView transactionFriend = view.findViewById(R.id.transactionFriend);
+        TextView transactionMethodForFriend = view.findViewById(R.id.transactionMethodForFriend);
         ImageView transactionCategoryImage = view.findViewById(R.id.transactionCategoryImage);
+        LinearLayout friendWrapper = view.findViewById(R.id.friendWrapper);
 
         // turn float to string
         String amountToString = CurrencyUtils.formatAmount(amount, "€");
@@ -63,10 +69,22 @@ public class DetailTransactionFragment extends Fragment {
             transactionCategoryImage.setImageResource(category1.getIcon());
         }
 
+        if (!methodForFriend.equals("")) {
+            friendWrapper.setVisibility(View.VISIBLE);
+            if (methodForFriend.equals("Borrow")) {
+                methodForFriend = methodForFriend + " From ";
+            } else {
+                System.out.println(methodForFriend);
+                methodForFriend = methodForFriend + " To ";
+            }
+        }
+
         transactionDate.setText(DateUtils.formatDate(date));
         transactionAmount.setText(amountToString);
         transactionType.setText(typeAsString);
         transactionNote.setText(note);
+        transactionFriend.setText(friend);
+        transactionMethodForFriend.setText(methodForFriend);
         return view;
     }
 }

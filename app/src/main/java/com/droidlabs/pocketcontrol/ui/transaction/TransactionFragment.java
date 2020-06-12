@@ -108,6 +108,8 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         bundle.putString("transactionNote", transaction.getTextNote());
         bundle.putInt("transactionType", transaction.getType());
         bundle.putString("transactionCategory", transaction.getCategory());
+        bundle.putString("transactionFriend", transaction.getFriend());
+        bundle.putString("transactionMethodForFriend", transaction.getMethodForFriend());
         //Move to transaction detail fragment
         Fragment fragment = new DetailTransactionFragment();
         fragment.setArguments(bundle);
