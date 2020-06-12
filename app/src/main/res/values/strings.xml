@@ -53,6 +53,7 @@
 
     <!-- Sign in strings -->
     <string name="title_activity_sign_in_screen">Sign In</string>
+    <string name="signInNoUserInDbText">There seem to be no user registered for this app! Let\'s start by registering a user?</string>
 
     <!-- Shared Preferences strings -->
     <string name="shared_preferences_file_key">com.droidlabs.pocketcontrol.sharedpreferences</string>

@@ -31,8 +31,8 @@ public class UserViewModel extends AndroidViewModel {
      * Insert a new user in the database.
      * @param user transaction to be added.
      */
-    public void insert(final User user) {
-        repository.insert(user);
+    public long insert(final User user) {
+        return repository.insert(user);
     }
 
     /**

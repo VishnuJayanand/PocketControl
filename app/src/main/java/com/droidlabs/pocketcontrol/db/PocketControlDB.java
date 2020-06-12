@@ -153,6 +153,9 @@ public abstract class PocketControlDB extends RoomDatabase {
      * Populates the database at startup.
      */
     private static void populateDatabase() {
+        cleanDB();
+
+        /*
         BudgetDao budgetDao = dbInstance.budgetDao();
         CategoryDao categoryDao = dbInstance.categoryDao();
         CurrencyDao currencyDao = dbInstance.currencyDao();
@@ -162,16 +165,6 @@ public abstract class PocketControlDB extends RoomDatabase {
         TransactionDao transactionDao = dbInstance.transactionDao();
         UserDao userDao = dbInstance.userDao();
         AccountDao accountDao = dbInstance.projectDao();
-
-        budgetDao.deleteAll();
-        categoryDao.deleteAll();
-        currencyDao.deleteAll();
-        iconDao.deleteAll();
-        paymentModeDao.deleteAll();
-        transactionDao.deleteAll();
-        defaultsDao.deleteAll();
-        userDao.deleteAll();
-        accountDao.deleteAll();
 
         User newUser = new User();
 
@@ -247,7 +240,6 @@ public abstract class PocketControlDB extends RoomDatabase {
 
         Icon icon = new Icon("icon_1");
         iconDao.insert(icon);
-/*
 
         Budget budget = new Budget(700f, "Monthly budget", true);
         budgetDao.insert(budget);
@@ -281,8 +273,28 @@ public abstract class PocketControlDB extends RoomDatabase {
         transactionDao.insert(transactionF);
 
         transactionDao.insert(recurringTransaction);
-
- */
+        */
     }
 
+    private static void cleanDB() {
+        BudgetDao budgetDao = dbInstance.budgetDao();
+        CategoryDao categoryDao = dbInstance.categoryDao();
+        CurrencyDao currencyDao = dbInstance.currencyDao();
+        DefaultsDao defaultsDao = dbInstance.defaultsDao();
+        IconDao iconDao = dbInstance.iconDao();
+        PaymentModeDao paymentModeDao = dbInstance.paymentModeDao();
+        TransactionDao transactionDao = dbInstance.transactionDao();
+        UserDao userDao = dbInstance.userDao();
+        AccountDao accountDao = dbInstance.projectDao();
+
+        budgetDao.deleteAll();
+        categoryDao.deleteAll();
+        currencyDao.deleteAll();
+        iconDao.deleteAll();
+        paymentModeDao.deleteAll();
+        transactionDao.deleteAll();
+        defaultsDao.deleteAll();
+        userDao.deleteAll();
+        accountDao.deleteAll();
+    }
 }

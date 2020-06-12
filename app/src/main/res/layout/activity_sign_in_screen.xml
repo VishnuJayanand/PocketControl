@@ -69,13 +69,13 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/enterUserPin"
+                android:id="@+id/enterAccessToken"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/accessPinInputGroup"
+                    android:id="@+id/enterAccessTokenInputGroup"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
@@ -83,7 +83,7 @@
                     app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/fourDigitPinValue"
+                        android:id="@+id/accessTokenValueText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberPassword" />
@@ -123,6 +123,7 @@
                 android:hint="Your email">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailInputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -137,6 +138,7 @@
                 app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/accessTokenInputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword" />
@@ -152,6 +154,7 @@
                 app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/repeatAccessTokenInputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword" />
@@ -171,6 +174,32 @@
                 android:layout_gravity="center"
                 android:text="I already have an account" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/noUserInDbContainer"
+            style="@style/SignInSignUpContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:text="@string/signInNoUserInDbText"
+                android:textAlignment="center"
+                android:textSize="18dp" />
+
+            <Button
+                android:id="@+id/createNewAccountButton2"
+                style="@style/primaryRoundedButtonBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Create a new user account" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
