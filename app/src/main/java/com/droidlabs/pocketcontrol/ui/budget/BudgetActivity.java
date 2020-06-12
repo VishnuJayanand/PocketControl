@@ -1,13 +1,13 @@
 package com.droidlabs.pocketcontrol.ui.budget;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,10 +23,19 @@ import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.utils.FormatterUtils;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Arrays;
 
 
 public class BudgetActivity extends Fragment {
 
+    private TextInputEditText tiedtBudgetAmount;
+    private TextInputLayout tilAmount, tilCategory;
+    private TextInputEditText dropdownBudgetCategory;
     private Spinner budgetCategory;
     private CategoryViewModel categoryViewModel;
     private BudgetViewModel budgetViewModel;
@@ -45,45 +54,33 @@ public class BudgetActivity extends Fragment {
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
 
-        setBudgetCategorySpinner(view);
-
-        nameEdit = (EditText) view.findViewById(R.id.budgetNameEdit);
-        valueEdit = (EditText) view.findViewById(R.id.budgetValueEdit);
-
+        tiedtBudgetAmount = view.findViewById(R.id.budgetAmount);
+        tilAmount = view.findViewById(R.id.tileAmount);
+        tilCategory = view.findViewById(R.id.tilCategory);
         button = view.findViewById(R.id.save_button);
 
-        nameEdit.addTextChangedListener(budgetTextWatcher);
-        valueEdit.addTextChangedListener(budgetTextWatcher);
-        budgetCategory.getSelectedItem().toString();
+        setBudgetCategorySpinner(view);
 
+        tiedtBudgetAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (!hasFocus) {
+                    Editable editableContent = tiedtBudgetAmount.getText();
 
-       button.setOnClickListener(new View.OnClickListener() {
+                    if (editableContent != null) {
+                        try {
+                            float amtValue = Float.parseFloat(editableContent.toString());
+                            tiedtBudgetAmount.setText(FormatterUtils.roundToTwoDecimals(amtValue));
+                        } catch (Exception e) { }
+                    }
+                }
+            }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
-                if (validateIfCategoryName(budgetCategory.getSelectedItem().toString())) {
-                    value = Float.parseFloat(svalue);
-                    Category selectedCategory = categoryViewModel.getSingleCategory(
-                            budgetCategory.getSelectedItem().toString());
-
-                    budget = new Budget(value, name, selectedCategory.getId().toString());
-                    budgetViewModel.insert(budget);
-
-                    Fragment fragment = new BudgetFragment();
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.fragment_budget, fragment);
-                    //TODO - fix this bug
-                    // fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-
-                    Toast.makeText(getContext(), "Budget added", Toast.LENGTH_SHORT).show();
-                } else {
-                    String message = "Budget for this category already exist. Please choose other category";
-                    Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                }
-
-
+                submitForm();
             }
         });
 
@@ -103,43 +100,141 @@ public class BudgetActivity extends Fragment {
         return false;
     }
 
-    private TextWatcher budgetTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {
-            name = nameEdit.getText().toString().trim();
-            svalue = valueEdit.getText().toString().trim();
-
-            if (name.isEmpty() || svalue.isEmpty()) {
-                button.setEnabled(false);
-            } else {
-                button.setEnabled(true);
-            }
-        }
-
-        @Override
-        public void afterTextChanged(final Editable s) {
-
-        }
-    };
-
     /**
      * This method to set the spinner of Transaction Category.
      * @param view the transaction add layout
      */
     private void setBudgetCategorySpinner(final View view) {
-        //get the spinner from the xml.
-        budgetCategory = view.findViewById(R.id.spinnerBudgetCategory);
-        //create a list of items for the spinner.
+
+        dropdownBudgetCategory = view.findViewById(R.id.spinnerBudgetCategory);
         String[] dropdownItems = categoryViewModel.getCategoriesName();
-        ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        //set the spinners adapter to the previously created one.
-        budgetCategory.setAdapter(adapterCategory);
+
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the budget category")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dropdownBudgetCategory.setText(dropdownItems[which]);
+                    }
+                });
+
+        dropdownBudgetCategory.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdownBudgetCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialogBuilder.show();
+            }
+        });
+        dropdownBudgetCategory.setInputType(0);
     }
 
+    /**
+     * Method to check the input of transaction Date.
+     * @return Boolean if the input is qualify or not
+     */
+    private boolean checkTransactionCategory() {
+        String[] dropdownItems = categoryViewModel.getCategoriesName();
+        if (!Arrays.asList(dropdownItems).contains(dropdownBudgetCategory.getText().toString().trim())) {
+            tilCategory.setError("Category is not valid");
+            requestFocus(dropdownBudgetCategory);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Method to focus on the view that have the wrong input.
+     * @param view the view
+     */
+    public void requestFocus(final View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    /**
+     * Method to check the input of transaction amount.
+     * @return Boolean if the input is qualify or not
+     */
+    private boolean checkBudgetAmount() {
+        if (tiedtBudgetAmount.getText().toString().trim().isEmpty()) {
+            tilAmount.setError("Please enter the amount of your transaction");
+            requestFocus(tiedtBudgetAmount);
+            return false;
+        }
+
+        if (Float.parseFloat(tiedtBudgetAmount.getText().toString().trim()) <= 0) {
+            tilAmount.setError("Amount should be larger than 0");
+            requestFocus(tiedtBudgetAmount);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Method to check the input of transaction amount is Acceptable or not.
+     * @return Boolean if the input is Acceptable or not
+     */
+    private boolean checkBudgetAmountIsAcceptable() {
+        float amount = Float.valueOf(tiedtBudgetAmount.getText().toString().trim());
+        boolean isInfinite = Float.isInfinite(amount);
+        double amountLimited = 999999999;
+        if (isInfinite) {
+            tilAmount.setError("The amount of transaction is infinity please enter different amount");
+            requestFocus(tiedtBudgetAmount);
+            return false;
+        }
+        if (amount > amountLimited) {
+            tilAmount.setError("The amount of transaction need to be between 0 - 999999999");
+            requestFocus(tiedtBudgetAmount);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Submit method to submit the input from user.
+     */
+    private void submitForm() {
+        if (!checkBudgetAmount()) {
+            return;
+        }
+        if (!checkBudgetAmountIsAcceptable()) {
+            return;
+        }
+        if (!checkTransactionCategory()) {
+            return;
+        }
+        Category selectedCategory = categoryViewModel.getSingleCategory(dropdownBudgetCategory.getText().toString());
+
+        if (validateIfCategoryName(selectedCategory.getId().toString())) {
+
+            float bAmount = Float.parseFloat(tiedtBudgetAmount.getText().toString().trim());
+
+            budget = new Budget(bAmount, selectedCategory.getId().toString());
+
+            budgetViewModel.insert(budget);
+
+            Fragment fragment = new BudgetFragment();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_budget, fragment);
+            //TODO - fix this bug
+            // fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+
+            Toast.makeText(getContext(), "Budget added", Toast.LENGTH_SHORT).show();
+        } else {
+            String message = "Budget for this category already exist. Please choose other category";
+            Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
 }

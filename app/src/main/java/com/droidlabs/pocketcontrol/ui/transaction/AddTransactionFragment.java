@@ -569,13 +569,13 @@ public class AddTransactionFragment extends Fragment {
             Float totalAmount = transactionViewModel.getTotalIAmountByCategoryId(sCatId);
 
             if (budgetAmount - totalAmount <= 50) {
-                message = "Low Budget: Monitor your expenses";
+                message = "Low Budget: Monitor your expenses for " +  transactionCategory;
             }
             if (budgetAmount - totalAmount == 0) {
-                message = "Budget limit is full";
+                message = "Budget limit is full for " + transactionCategory;
             }
             if (budgetAmount - totalAmount < 0) {
-                message = "Budget limit exceeded";
+                message = "Budget limit exceeded for " + transactionCategory;
             }
         }
 

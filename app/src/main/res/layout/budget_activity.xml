@@ -1,219 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/budget_activty"
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/addTransactionFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:background="#ffffff">
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:background="@color/inputContrastBackground"
-        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tileAmount"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <TextView
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/budgetAmount"
                 style="@style/font_family_normal_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30sp"
-                android:gravity="center"
-                android:text="ADD BUDGET"
-                android:textSize="30dp" />
+                android:hint="Budget Amount"
+                android:inputType="numberDecimal">
 
-            <TableLayout
-                android:layout_width="fill_parent"
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCategory"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/inputContrastBackground"
-                android:stretchColumns="1">
+                android:hint="@string/newTransactionHintCategory">
 
-                <!-- Name -->
-                <View
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/spinnerBudgetCategory"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/inputBorderThickness"
-                    android:background="@color/inputBorder" />
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:background="@color/inputBackground">
-
-                    <View
-                        android:layout_width="@dimen/inputBorderThickness"
-                        android:layout_height="match_parent"
-                        android:background="@color/inputBorder"
-                        android:gravity="start" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_column="1"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            style="@style/font_family_normal_text"
-                            android:layout_width="150sp"
-                            android:layout_height="wrap_content"
-                            android:labelFor="@+id/budgetNameEdit"
-                            android:padding="@dimen/inputPadding"
-                            android:text="Name"
-                            android:textSize="@dimen/inputSize" />
-
-                        <EditText
-                            android:id="@+id/budgetNameEdit"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:padding="@dimen/inputPadding"
-                            android:textSize="@dimen/inputSize" />
-
-                        <TextView
-                            android:id="@+id/budgetNameView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/inputPadding"
-                            android:textIsSelectable="true"
-                            android:textSize="@dimen/inputSize" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="@dimen/inputBorderThickness"
-                        android:layout_height="match_parent"
-                        android:background="@color/inputBorder"
-                        android:gravity="end" />
-                </TableRow>
-                <!-- Value -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/inputBorderThickness"
-                    android:background="@color/inputBorder" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:background="@color/inputBackground">
-
-                    <View
-                        android:layout_width="@dimen/inputBorderThickness"
-                        android:layout_height="match_parent"
-                        android:background="@color/inputBorder"
-                        android:gravity="start" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_column="1"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            style="@style/font_family_normal_text"
-                            android:layout_width="150sp"
-                            android:layout_height="wrap_content"
-                            android:labelFor="@+id/budgetNameEdit"
-                            android:padding="@dimen/inputPadding"
-                            android:text="Value"
-                            android:textSize="@dimen/inputSize" />
-
-                        <EditText
-                            android:id="@+id/budgetValueEdit"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:padding="@dimen/inputPadding"
-                            android:textSize="@dimen/inputSize" />
-
-                        <TextView
-                            android:id="@+id/valueView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/inputPadding"
-                            android:textIsSelectable="true"
-                            android:textSize="@dimen/inputSize" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="@dimen/inputBorderThickness"
-                        android:layout_height="match_parent"
-                        android:background="@color/inputBorder"
-                        android:gravity="end" />
-                </TableRow>
-
-                <!-- Category -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/inputBorderThickness"
-                    android:background="@color/inputBorder" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:background="@color/inputBackground">
-
-                    <View
-                        android:layout_width="@dimen/inputBorderThickness"
-                        android:layout_height="match_parent"
-                        android:background="@color/inputBorder"
-                        android:gravity="start" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_column="1"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            style="@style/font_family_normal_text"
-                            android:layout_width="150sp"
-                            android:layout_height="wrap_content"
-                            android:labelFor="@+id/budgetNameEdit"
-                            android:padding="@dimen/inputPadding"
-                            android:text="Category"
-                            android:textSize="@dimen/inputSize" />
-
-                        <Spinner
-                            android:id="@+id/spinnerBudgetCategory"
-                            android:layout_width="match_parent"
-                            android:layout_height="45sp"
-                            android:background="@android:drawable/btn_dropdown"
-                            android:spinnerMode="dialog" />
-
-                        <TextView
-                            android:id="@+id/budgetCategoryView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/inputPadding"
-                            android:textIsSelectable="true"
-                            android:textSize="@dimen/inputSize" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="@dimen/inputBorderThickness"
-                        android:layout_height="match_parent"
-                        android:background="@color/inputBorder"
-                        android:gravity="end" />
-                </TableRow>
-                <!-- Ending spacer -->
-                <TableRow android:background="@color/inputContrastBackground">
-
-                    <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="10dip" />
-                </TableRow>
-            </TableLayout>
-
-            <Button
-                android:id="@+id/save_button"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="125dp"
-                android:layout_marginTop="50dp"
-                android:layout_weight="1"
-                android:enabled="false"
-                android:text="SAVE" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-    </ScrollView>
 
+        <Button
+            android:id="@+id/save_button"
+            style="@style/basePrimaryRoundedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:paddingStart="50sp"
+            android:paddingTop="10sp"
+            android:paddingEnd="50sp"
+            android:paddingBottom="10sp"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

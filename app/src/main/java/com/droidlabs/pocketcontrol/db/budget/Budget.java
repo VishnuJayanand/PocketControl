@@ -59,12 +59,12 @@ public class Budget {
     /**
      * Create a budget with amount and description.
      * @param amount maximum budget amount.
-     * @param desc budget description.
+     * @param cat budget description.
      */
     @Ignore
-    public Budget(final Float amount, final @Nullable String desc) {
+    public Budget(final Float amount, final String cat) {
         this.maxAmount = amount;
-        this.description = desc;
+        this.category = cat;
     }
 
     /**
