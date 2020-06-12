@@ -8,14 +8,17 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.droidlabs.pocketcontrol.R;
+import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
+import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
-
 
 import java.util.List;
 
 public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
 
+    private CategoryDao categoryDao;
     private LayoutInflater mInflater;
     private List<Budget> arrayList;
     private int mViewResourceId;
@@ -47,14 +50,13 @@ public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
         Budget budget = arrayList.get(position);
 
         if (budget != null) {
+            categoryDao = PocketControlDB.getDatabase(getContext()).categoryDao();
+            Category category = categoryDao.getSingleCategory(Integer.parseInt(budget.getCategory()));
+
             TextView budgetname = (TextView) convertView.findViewById(R.id.budgetName);
-            TextView budgetcategory = (TextView) convertView.findViewById(R.id.budgetCategory);
             TextView budgetvalue = (TextView) convertView.findViewById(R.id.budgetValue);
             if (budgetname != null) {
-                budgetname.setText(budget.getDescription());
-            }
-            if (budgetcategory != null) {
-                budgetcategory.setText((budget.getCategory()));
+                budgetname.setText(category.getName());
             }
             if (budgetvalue != null) {
                 budgetvalue.setText(CurrencyUtils.formatAmount(budget.getMaxAmount()));

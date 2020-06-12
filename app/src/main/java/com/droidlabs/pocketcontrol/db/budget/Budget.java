@@ -3,16 +3,16 @@ package com.droidlabs.pocketcontrol.db.budget;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
-
+import androidx.room.ForeignKey;
+import androidx.room.Index;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.user.User;
 
 import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_NULL;
+
 
 @Entity(
     tableName = "budgets",
@@ -50,7 +50,6 @@ public class Budget {
 
     // Foreign keys
     @ColumnInfo(name = "category")
-    @Nullable
     private String category;
 
     @ColumnInfo(name = "owner_id")
@@ -74,12 +73,25 @@ public class Budget {
     /**
      * Create a budget with amount and description.
      * @param amount maximum budget amount.
-     * @param desc budget description.
+     * @param cat budget description.
      */
     @Ignore
-    public Budget(final Float amount, final @Nullable String desc) {
+    public Budget(final Float amount, final String cat) {
+        this.maxAmount = amount;
+        this.category = cat;
+    }
+
+    /**
+     * Create a budget with amount and description.
+     * @param amount maximum budget amount.
+     * @param desc budget description.
+     * @param cat category
+     */
+    @Ignore
+    public Budget(final Float amount, final @Nullable String desc, final String cat) {
         this.maxAmount = amount;
         this.description = desc;
+        this.category = cat;
     }
 
     /**

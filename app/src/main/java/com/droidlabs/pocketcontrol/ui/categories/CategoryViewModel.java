@@ -32,6 +32,24 @@ public class CategoryViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get all categories.
+     * @return return all transactions from the database.
+     */
+    public String[] getCategoriesName() {
+        return repository.getCategoriesName();
+    }
+
+    /**
+     * get a  category.
+     * @param categoryName category name.
+     * @return category.
+     */
+    public Category getSingleCategory(final String categoryName) {
+
+        return repository.getSingleCategory(categoryName);
+    }
+
+    /**
      * Insert a new category in the database.
      * @param category transaction to be added.
      */

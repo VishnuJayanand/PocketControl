@@ -54,6 +54,25 @@ public class TransactionRepository {
     }
 
     /**
+     * Get sum of transaction income amount by categoryID.
+     * @param categoryId category id.
+     * @return sum of transaction income amount with matching categoryId
+     */
+    public Float getTotalIncomeByCategoryId(final String categoryId) {
+        return transactionDao.getTotalIncomeByCategoryId(categoryId);
+    }
+
+    /**
+     * Get sum of transaction expense amount by categoryID.
+     * @param categoryId category id.
+     * @return sum of transaction expense amount with matching categoryId
+     */
+    public Float getTotalIExpenseByCategoryId(final String categoryId) {
+        return transactionDao.getTotalIExpenseByCategoryId(categoryId);
+    }
+
+
+    /**
      * Get transactions by date range.
      * @param lb date lower bound.
      * @param ub date upper bound.
@@ -61,6 +80,15 @@ public class TransactionRepository {
      */
     public LiveData<List<Transaction>> filterTransactionsByDate(final long lb, final long ub) {
         return transactionDao.filterTransactionsByDate(lb, ub);
+    }
+
+    /**
+     * Get transactions by date range.
+     * @param categoryId date lower bound.
+     * @return all transactions within date range.
+     */
+    public List<Transaction> getAmountByCategoryId(final String categoryId) {
+        return transactionDao.getAmountByCategoryId(categoryId);
     }
 
     /**

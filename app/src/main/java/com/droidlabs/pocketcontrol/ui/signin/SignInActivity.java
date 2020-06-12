@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -63,6 +64,8 @@ public class SignInActivity extends AppCompatActivity {
         validateCredentialsButton = signInContainer.findViewById(R.id.validateCredentialsButton);
         fourDigitPinValue = signInContainer.findViewById(R.id.fourDigitPinValue);
         accessPinInputGroup = signInContainer.findViewById(R.id.accessPinInputGroup);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         alreadyHaveAnAccountButton = signUpContainer.findViewById(R.id.alreadyHaveAnAccountButton);
         signUpButton = signUpContainer.findViewById(R.id.signUpButton);

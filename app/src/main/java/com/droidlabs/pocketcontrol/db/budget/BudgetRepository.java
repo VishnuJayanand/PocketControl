@@ -57,4 +57,19 @@ public class BudgetRepository {
             budgetDao.insert(budget);
         });
     }
+
+    /**
+     * Fetch the budget for the selected category.
+     * @param category amount lower bound.
+     * @return Budget.
+     */
+    public Budget getBudgetForCategory(final String category) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return budgetDao.getBudgetForCategory(category, currentUserId);
+    }
 }
