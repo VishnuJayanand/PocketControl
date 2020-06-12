@@ -226,6 +226,15 @@ public abstract class PocketControlDB extends RoomDatabase {
         accountDao.insert(account1);
         accountDao.insert(account2);
         accountDao.insert(account3);
+        accountDao.insert(account1);
+        accountDao.insert(account2);
+        accountDao.insert(account3);
+        accountDao.insert(account1);
+        accountDao.insert(account2);
+        accountDao.insert(account3);
+        accountDao.insert(account1);
+        accountDao.insert(account2);
+        accountDao.insert(account3);
 
         Currency currency = new Currency("EUR");
         currencyDao.insert(currency);
