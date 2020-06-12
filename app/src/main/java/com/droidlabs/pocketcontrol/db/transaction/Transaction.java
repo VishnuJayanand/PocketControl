@@ -10,7 +10,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.droidlabs.pocketcontrol.db.category.Category;
-import com.droidlabs.pocketcontrol.db.project.Project;
+import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.user.User;
 
 
@@ -33,13 +33,13 @@ import static androidx.room.ForeignKey.SET_NULL;
                     onDelete = CASCADE
             ),
             @ForeignKey(
-                    entity = Project.class,
+                    entity = Account.class,
                     parentColumns = "id",
-                    childColumns = "project",
+                    childColumns = "account",
                     onDelete = SET_NULL
             ),
     },
-    indices = {@Index("category"), @Index("owner_id"), @Index("project")}
+    indices = {@Index("category"), @Index("owner_id"), @Index("account")}
 )
 public class Transaction {
 
@@ -86,9 +86,9 @@ public class Transaction {
     @Nullable
     private String category;
 
-    @ColumnInfo(name = "project")
+    @ColumnInfo(name = "account")
     @Nullable
-    private String project;
+    private String account;
 
     @ColumnInfo(name = "owner_id")
     @Nullable
@@ -264,8 +264,8 @@ public class Transaction {
     }
 
     @Nullable
-    public String getProject() {
-        return project;
+    public String getAccount() {
+        return account;
     }
 
     /**
@@ -332,8 +332,8 @@ public class Transaction {
         this.ownerId = mOwnerId;
     }
 
-    public void setProject(@Nullable String mProject) {
-        this.project = mProject;
+    public void setAccount(@Nullable String mAccount) {
+        this.account = mAccount;
     }
 
     /**

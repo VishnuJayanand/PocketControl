@@ -10,7 +10,7 @@ public final class SharedPreferencesUtils {
 
     private static SharedPreferences sharedPreferences;
     private static String CURRENT_USER_ID_KEY = "currentUserId";
-    private static String CURRENT_PROJECT_ID_KEY = "currentProjectId";
+    private static String CURRENT_ACCOUNT_ID_KEY = "currentAccountId";
 
     public SharedPreferencesUtils(final Application application) {
         sharedPreferences = application.getSharedPreferences(application.getString(R.string.shared_preferences_file_key), Context.MODE_PRIVATE);
@@ -26,13 +26,13 @@ public final class SharedPreferencesUtils {
         return sharedPreferences.getString(CURRENT_USER_ID_KEY, "");
     }
 
-    public SharedPreferencesUtils setCurrentProjectId(String projectId) {
-        sharedPreferences.edit().putString(CURRENT_PROJECT_ID_KEY, projectId).commit();
+    public SharedPreferencesUtils setCurrentAccountId(String accountId) {
+        sharedPreferences.edit().putString(CURRENT_ACCOUNT_ID_KEY, accountId).commit();
 
         return this;
     }
 
     public String getCurrentProjectIdKey() {
-        return sharedPreferences.getString(CURRENT_PROJECT_ID_KEY, "");
+        return sharedPreferences.getString(CURRENT_ACCOUNT_ID_KEY, "");
     }
 }

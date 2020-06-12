@@ -1,4 +1,4 @@
-package com.droidlabs.pocketcontrol.db.project;
+package com.droidlabs.pocketcontrol.db.account;
 
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
@@ -12,7 +12,7 @@ import com.droidlabs.pocketcontrol.db.user.User;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(
-        tableName = "projects",
+        tableName = "accounts",
         foreignKeys = @ForeignKey(
                 entity = User.class,
                 parentColumns = "id",
@@ -21,7 +21,7 @@ import static androidx.room.ForeignKey.CASCADE;
         ),
         indices = {@Index("owner_id")}
 )
-public class Project {
+public class Account {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -42,7 +42,7 @@ public class Project {
     @Nullable
     private String ownerId;
 
-    public Project() { }
+    public Account() { }
 
     public int getId() {
         return id;

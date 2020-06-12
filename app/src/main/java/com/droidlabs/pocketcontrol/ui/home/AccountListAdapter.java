@@ -13,24 +13,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
-import com.droidlabs.pocketcontrol.db.project.Project;
-import com.droidlabs.pocketcontrol.ui.transaction.TransactionListAdapter;
-import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
+import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
 
-public final class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.ProjectViewHolder>{
+public final class AccountListAdapter extends RecyclerView.Adapter<AccountListAdapter.ProjectViewHolder>{
 
-    private List<Project> projects; // Cached copy of transactions
+    private List<Account> accounts; // Cached copy of transactions
     private final LayoutInflater layoutInflater;
     private final Context context;
     private final Application application;
 
-    public ProjectListAdapter(final @NonNull Context context, final @NonNull Application application) {
+    public AccountListAdapter(final @NonNull Context context, final @NonNull Application application) {
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
         this.application = application;
@@ -38,20 +34,20 @@ public final class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAd
 
     @Override
     public void onBindViewHolder(final @NonNull ProjectViewHolder holder, final int position) {
-        if (projects != null) {
-            Project project = projects.get(position);
+        if (accounts != null) {
+            Account account = accounts.get(position);
 
-            holder.projectName.setText(project.getName());
+            holder.projectName.setText(account.getName());
 
-            if (project.getColor() != null) {
-                holder.projectRowColorColumn.setBackgroundTintList(context.getColorStateList(project.getColor()));
+            if (account.getColor() != null) {
+                holder.projectRowColorColumn.setBackgroundTintList(context.getColorStateList(account.getColor()));
             } else {
                 holder.projectRowColorColumn.setBackgroundTintList(context.getColorStateList(R.color.projectColorDefault));
             }
 
             String currentProjectId = new SharedPreferencesUtils(application).getCurrentProjectIdKey();
 
-            if (String.valueOf(project.getId()).equals(currentProjectId)) {
+            if (String.valueOf(account.getId()).equals(currentProjectId)) {
                 holder.projectSelected.setVisibility(View.VISIBLE);
                 holder.projectWrapperInfoLinearLayout.setBackground(context.getDrawable(R.drawable.project_row_rounded_right_selected));
             } else {
@@ -63,22 +59,22 @@ public final class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAd
 
     @Override
     public int getItemCount() {
-        if (projects != null) {
-            return projects.size();
+        if (accounts != null) {
+            return accounts.size();
         } else {
             return 0;
         }
     }
 
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.project_listitem, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.account_listitem, parent, false);
         return new ProjectViewHolder(itemView);
     }
 
@@ -101,8 +97,8 @@ public final class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAd
             View.OnClickListener clickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    Log.v("PROJECTS", "PROJECT " + projects.get(getAdapterPosition()).getId() + " CLICKED");
-                    new SharedPreferencesUtils(application).setCurrentProjectId(String.valueOf(projects.get(getAdapterPosition()).getId()));
+                    Log.v("ACCOUNTS", "ACCOUNT " + accounts.get(getAdapterPosition()).getId() + " CLICKED");
+                    new SharedPreferencesUtils(application).setCurrentAccountId(String.valueOf(accounts.get(getAdapterPosition()).getId()));
                     notifyDataSetChanged();
                 }
             };

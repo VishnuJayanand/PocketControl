@@ -21,8 +21,8 @@ import com.droidlabs.pocketcontrol.db.icon.Icon;
 import com.droidlabs.pocketcontrol.db.icon.IconDao;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentMode;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
-import com.droidlabs.pocketcontrol.db.project.Project;
-import com.droidlabs.pocketcontrol.db.project.ProjectDao;
+import com.droidlabs.pocketcontrol.db.account.AccountDao;
+import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.recurrent.Recurrent;
 import com.droidlabs.pocketcontrol.db.recurrent.RecurrentDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
@@ -48,7 +48,7 @@ import java.util.concurrent.Executors;
         Defaults.class,
         Recurrent.class,
         User.class,
-        Project.class
+        Account.class
 }, version = 1, exportSchema = false)
 public abstract class PocketControlDB extends RoomDatabase {
 
@@ -104,7 +104,7 @@ public abstract class PocketControlDB extends RoomDatabase {
      * Project Dao.
      * @return Project Dao
      */
-    public abstract ProjectDao projectDao();
+    public abstract AccountDao projectDao();
 
     /**
      * User Dao.
@@ -161,7 +161,7 @@ public abstract class PocketControlDB extends RoomDatabase {
         PaymentModeDao paymentModeDao = dbInstance.paymentModeDao();
         TransactionDao transactionDao = dbInstance.transactionDao();
         UserDao userDao = dbInstance.userDao();
-        ProjectDao projectDao = dbInstance.projectDao();
+        AccountDao accountDao = dbInstance.projectDao();
 
         budgetDao.deleteAll();
         categoryDao.deleteAll();
@@ -171,7 +171,7 @@ public abstract class PocketControlDB extends RoomDatabase {
         transactionDao.deleteAll();
         defaultsDao.deleteAll();
         userDao.deleteAll();
-        projectDao.deleteAll();
+        accountDao.deleteAll();
 
         User newUser = new User();
 
@@ -209,23 +209,23 @@ public abstract class PocketControlDB extends RoomDatabase {
         long studyCatId = categoryDao.insert(study);
         long rentCatId = categoryDao.insert(rent);
 
-        Project project1 = new Project();
-        project1.setName("Project 1");
-        project1.setColor(R.color.projectColorBlue);
-        project1.setOwnerId(String.valueOf(userId));
+        Account account1 = new Account();
+        account1.setName("Account 1");
+        account1.setColor(R.color.projectColorBlue);
+        account1.setOwnerId(String.valueOf(userId));
 
-        Project project2 = new Project();
-        project2.setName("Project 2");
-        project2.setColor(R.color.projectColorPurple);
-        project2.setOwnerId(String.valueOf(userId));
+        Account account2 = new Account();
+        account2.setName("Account 2");
+        account2.setColor(R.color.projectColorPurple);
+        account2.setOwnerId(String.valueOf(userId));
 
-        Project project3 = new Project();
-        project3.setName("Project 3");
-        project3.setOwnerId(String.valueOf(userId));
+        Account account3 = new Account();
+        account3.setName("Account 3");
+        account3.setOwnerId(String.valueOf(userId));
 
-        projectDao.insert(project1);
-        projectDao.insert(project2);
-        projectDao.insert(project3);
+        accountDao.insert(account1);
+        accountDao.insert(account2);
+        accountDao.insert(account3);
 
         Currency currency = new Currency("EUR");
         currencyDao.insert(currency);

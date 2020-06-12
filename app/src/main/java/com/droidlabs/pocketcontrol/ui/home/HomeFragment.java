@@ -1,7 +1,6 @@
 package com.droidlabs.pocketcontrol.ui.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,10 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
-import com.droidlabs.pocketcontrol.db.project.Project;
+import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
-import com.droidlabs.pocketcontrol.ui.categories.AddCategoryFragment;
-import com.droidlabs.pocketcontrol.ui.transaction.AddTransactionFragment;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 
@@ -36,8 +30,8 @@ public class HomeFragment extends Fragment {
     private PocketControlDB db = PocketControlDB.getDatabase(getContext());
     private Animation topAnimation;
     private TextView textViewAmount, textViewNetBalance;
-    private List<Project> projectList;
-    private ProjectListAdapter projectListAdapter;
+    private List<Account> projectList;
+    private AccountListAdapter accountListAdapter;
 
     @Nullable
     @Override
@@ -53,16 +47,16 @@ public class HomeFragment extends Fragment {
         textViewAmount.setAnimation(topAnimation);
         textViewNetBalance.setAnimation(topAnimation);
 
-        ProjectViewModel projectViewModel = new ViewModelProvider(this).get(ProjectViewModel.class);
-        projectViewModel.getProjects().observe(getViewLifecycleOwner(), new Observer<List<Project>>() {
+        AccountViewModel projectViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
+        projectViewModel.getAccounts().observe(getViewLifecycleOwner(), new Observer<List<Account>>() {
             @Override
-            public void onChanged(List<Project> projects) {
-                projectListAdapter.setProjects(projects);
+            public void onChanged(List<Account> projects) {
+                accountListAdapter.setAccounts(projects);
             }
         });
 
-        projectListAdapter = new ProjectListAdapter(getActivity(), getActivity().getApplication());
-        projectsRecyclerView.setAdapter(projectListAdapter);
+        accountListAdapter = new AccountListAdapter(getActivity(), getActivity().getApplication());
+        projectsRecyclerView.setAdapter(accountListAdapter);
         projectsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
