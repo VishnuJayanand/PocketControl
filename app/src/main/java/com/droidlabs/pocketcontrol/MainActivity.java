@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 Intent intent = new Intent(getApplication(), SignInActivity.class);
                 startActivity(intent);
+                finish();
             }
         }, TIMER);
 

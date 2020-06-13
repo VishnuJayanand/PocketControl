@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
