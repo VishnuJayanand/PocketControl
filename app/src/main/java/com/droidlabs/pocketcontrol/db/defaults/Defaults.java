@@ -101,12 +101,20 @@ public class Defaults {
         this.defaultValue = value;
     }
 
+    /**
+     * Get owner id.
+     * @return owner id.
+     */
     @Nullable
     public String getOwnerId() {
         return ownerId;
     }
 
-    public void setOwnerId(@Nullable String mOwnerId) {
+    /**
+     * Set owner id.
+     * @param mOwnerId owner id.
+     */
+    public void setOwnerId(final @Nullable String mOwnerId) {
         this.ownerId = mOwnerId;
     }
 }

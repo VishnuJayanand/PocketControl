@@ -104,6 +104,10 @@ public class Category {
         return icon;
     }
 
+    /**
+     * Get category owner id.
+     * @return owner id.
+     */
     @Nullable
     public String getOwnerId() {
         return ownerId;
@@ -133,7 +137,11 @@ public class Category {
         this.icon = categoryIcon;
     }
 
-    public void setOwnerId(@Nullable String mOwnerId) {
+    /**
+     * Set category owner id.
+     * @param mOwnerId owner id.
+     */
+    public void setOwnerId(final @Nullable String mOwnerId) {
         this.ownerId = mOwnerId;
     }
 

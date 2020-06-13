@@ -14,6 +14,10 @@ public class AccountRepository {
     private AccountDao accountDao;
     private SharedPreferencesUtils sharedPreferencesUtils;
 
+    /**
+     * Constructor.
+     * @param application application.
+     */
     public AccountRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
         sharedPreferencesUtils = new SharedPreferencesUtils(application);

@@ -25,10 +25,11 @@ public interface AccountDao {
 
     /**
      * Retrieve all accounts from the database.
+     * @param ownerId account owner.
      * @return all accounts.
      */
-    @Query("SELECT * FROM accounts WHERE is_public=1 OR owner_id=:userId")
-    LiveData<List<Account>> getAllAccounts(String userId);
+    @Query("SELECT * FROM accounts WHERE is_public=1 OR owner_id=:ownerId")
+    LiveData<List<Account>> getAllAccounts(String ownerId);
 
     /**
      * Get account by id.

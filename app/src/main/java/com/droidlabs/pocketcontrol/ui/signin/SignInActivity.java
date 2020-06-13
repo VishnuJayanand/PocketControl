@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,10 +17,11 @@ import android.widget.Toast;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
-import com.droidlabs.pocketcontrol.db.category.CategoryDao;
+import com.droidlabs.pocketcontrol.db.defaults.Defaults;
 import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.ui.home.HomeActivity;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -56,6 +56,7 @@ public class SignInActivity extends AppCompatActivity {
     private TextInputEditText repeatAccessTokenInputText;
     private SharedPreferencesUtils sharedPreferencesUtils;
     private CategoryViewModel categoryViewModel;
+    private DefaultsViewModel defaultsViewModel;
     private MaterialAlertDialogBuilder switchUserDialog;
     private User user;
 
@@ -68,7 +69,8 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         sharedPreferencesUtils = new SharedPreferencesUtils(getApplication());
-        categoryViewModel = new CategoryViewModel(getApplication());
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
 
         setContentView(R.layout.activity_sign_in_screen);
 
@@ -102,12 +104,12 @@ public class SignInActivity extends AppCompatActivity {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         userViewModel.getAllUsers().observe(this, new Observer<List<User>>() {
             @Override
-            public void onChanged(List<User> users) {
+            public void onChanged(final List<User> users) {
                 userList = users;
 
                 if (users.size() > 0) {
                     showSignInContent();
-                    initializeSwitchUserDialog(users);
+                    initializeSwitchUserDialog();
 
                     String currentUserId = sharedPreferencesUtils.getCurrentUserId();
                     if (currentUserId.equals("")) {
@@ -125,16 +127,20 @@ public class SignInActivity extends AppCompatActivity {
 
         createNewAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 showSignUpContent();
             }
         });
 
         alreadyHaveAnAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (userList.size() == 0) {
-                    Toast.makeText(getBaseContext(), "No users registered! Please create an account.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(
+                            getBaseContext(),
+                            "No users registered! Please create an account.",
+                            Toast.LENGTH_LONG
+                    ).show();
                 } else {
                     showSignInContent();
                 }
@@ -150,14 +156,14 @@ public class SignInActivity extends AppCompatActivity {
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 signUp();
             }
         });
 
         changeUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 switchUserDialog.show();
             }
         });
@@ -195,14 +201,15 @@ public class SignInActivity extends AppCompatActivity {
             repeatAccessTokenInputGroup.setError(null);
         }
 
-        User user = new User();
-        user.setAccessPin(accessTokenInputText.getText().toString());
-        user.setEmail(emailInputText.getText().toString());
+        User newUser = new User();
+        newUser.setAccessPin(accessTokenInputText.getText().toString());
+        newUser.setEmail(emailInputText.getText().toString());
 
-        long userId = userViewModel.insert(user);
+        long userId = userViewModel.insert(newUser);
         sharedPreferencesUtils.setCurrentUserId(String.valueOf(userId));
 
-        createDefaultUserCategories(String.valueOf(userId));
+        createDefaultUserCategories();
+        createDefaultUserDefaults();
     }
 
     /**
@@ -219,7 +226,10 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
-    private void initializeSwitchUserDialog(List<User> userList) {
+    /**
+     * Initialize switch user dialog.
+     */
+    private void initializeSwitchUserDialog() {
         String[] userListEmails = new String[userList.size()];
 
         for (int i = 0; i < userList.size(); i++) {
@@ -231,31 +241,43 @@ public class SignInActivity extends AppCompatActivity {
                 .setItems(userListEmails, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
-                        User selectedUser = userList.get(which);
-                        sharedPreferencesUtils.setCurrentUserId(String.valueOf(selectedUser.getId()));
+                        User selected = userList.get(which);
+                        sharedPreferencesUtils.setCurrentUserId(String.valueOf(selected.getId()));
                         setUser();
                     }
                 });
 
     }
 
+    /**
+     * Set user locally and in the text.
+     */
     private void setUser() {
         user = userViewModel.getUserById(Long.parseLong(sharedPreferencesUtils.getCurrentUserId()));
         currentUser.setText(user.getEmail());
     }
 
+    /**
+     * Show sign up content.
+     */
     private void showSignUpContent() {
         resetSignUpState();
         signInContainer.setVisibility(View.GONE);
         signUpContainer.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Show sign in content.
+     */
     private void showSignInContent() {
         resetSignInState();
         signInContainer.setVisibility(View.VISIBLE);
         signUpContainer.setVisibility(View.GONE);
     }
 
+    /**
+     * Clear sign up errors and values.
+     */
     private void resetSignUpState() {
         emailInputText.setText("");
         accessTokenInputText.setText("");
@@ -266,17 +288,23 @@ public class SignInActivity extends AppCompatActivity {
         repeatAccessTokenInputGroup.setError(null);
     }
 
+    /**
+     * Clear sign in errors and values.
+     */
     private void resetSignInState() {
         accessTokenValueText.setText("");
         enterAccessTokenInputGroup.setError(null);
     }
 
-    private void createDefaultUserCategories(String userId) {
+    /**
+     * Create user's default categories.
+     */
+    private void createDefaultUserCategories() {
         Category health = new Category("Health", R.drawable.health);
         Category transport = new Category("Transport", R.drawable.transport);
-        Category shopping = new Category( "Shopping", R.drawable.shopping);
-        Category food = new Category( "Food", R.drawable.food);
-        Category study = new Category( "Study", R.drawable.study);
+        Category shopping = new Category("Shopping", R.drawable.shopping);
+        Category food = new Category("Food", R.drawable.food);
+        Category study = new Category("Study", R.drawable.study);
         Category rent = new Category("Rent", R.drawable.rent);
 
         categoryViewModel.insert(health);
@@ -286,5 +314,13 @@ public class SignInActivity extends AppCompatActivity {
         categoryViewModel.insert(study);
         categoryViewModel.insert(rent);
 
+    }
+
+    /**
+     * Create user's default defaults.
+     */
+    private void createDefaultUserDefaults() {
+        Defaults defaultValue = new Defaults("Currency", "EUR");
+        defaultsViewModel.insert(defaultValue);
     }
 }

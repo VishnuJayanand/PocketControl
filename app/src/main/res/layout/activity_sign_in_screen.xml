@@ -102,7 +102,7 @@
                     style="@style/baseSmallButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Create a new user account" />
+                    android:text="Create a new user profile" />
 
             </LinearLayout>
 
@@ -122,7 +122,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="Create a new user account!"
+                android:text="Create a new user profile!"
                 android:textAlignment="center"
                 android:textSize="20dp" />
 
@@ -182,7 +182,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="I already have a user account" />
+                android:text="I already have a user profile" />
 
         </LinearLayout>
 

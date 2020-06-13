@@ -7,28 +7,28 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/projectWrapperLinearLayout"
+        android:id="@+id/accountWrapperLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/project_row_rounded_border"
+        android:background="@drawable/account_row_rounded_border"
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/projectRowColorColumn"
+            android:id="@+id/accountRowColorColumn"
             android:layout_width="10dp"
             android:layout_height="match_parent"
-            android:background="@drawable/project_row_rounded_left"
+            android:background="@drawable/account_row_rounded_left"
             android:backgroundTint="@color/colorAccent" />
 
         <LinearLayout
-            android:id="@+id/projectWrapperInfoLinearLayout"
+            android:id="@+id/accountWrapperInfoLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/project_row_rounded_right"
+            android:background="@drawable/account_row_rounded_right"
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical"
@@ -42,19 +42,19 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/projectName"
+                    android:id="@+id/accountName"
                     style="@style/font_family_normal_text"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="Project Name"
+                    android:text="Account Name"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="#0A0A0B"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/projectSelectedText"
+                    android:id="@+id/accountSelectedText"
                     style="@style/font_family_normal_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

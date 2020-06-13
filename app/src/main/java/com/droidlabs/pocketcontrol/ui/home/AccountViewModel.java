@@ -14,12 +14,20 @@ public class AccountViewModel extends AndroidViewModel {
 
     private AccountRepository accountRepository;
 
+    /**
+     * Constructor.
+     * @param application application.
+     */
     public AccountViewModel(final Application application) {
         super(application);
 
         this.accountRepository = new AccountRepository(application);
     }
 
+    /**
+     * Get all accounts.
+     * @return all accounts.
+     */
     public LiveData<List<Account>> getAccounts() {
         return accountRepository.getAllAccounts();
     }

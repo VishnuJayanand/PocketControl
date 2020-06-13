@@ -1,12 +1,9 @@
 package com.droidlabs.pocketcontrol.db.transaction;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 
-import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
@@ -32,7 +29,13 @@ public class TransactionRepository {
      * @return all transactions in the database.
      */
     public LiveData<List<Transaction>> getAllTransactions() {
-        return transactionDao.getAllTransactions();
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getAllTransactions(currentUserId);
     }
 
     /**
@@ -41,7 +44,13 @@ public class TransactionRepository {
      * @return transaction.
      */
     public Transaction getTransactionById(final long transactionId) {
-        return transactionDao.getTransactionById(transactionId);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTransactionById(transactionId, currentUserId);
     };
 
     /**
@@ -50,7 +59,13 @@ public class TransactionRepository {
      * @return all transactions with the corresponding categoryID.
      */
     public LiveData<List<Transaction>> filterTransactionsByCategoryId(final String categoryId) {
-        return transactionDao.getTransactionsByCategoryId(categoryId);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTransactionsByCategoryId(categoryId, currentUserId);
     }
 
     /**
@@ -59,7 +74,13 @@ public class TransactionRepository {
      * @return sum of transaction income amount with matching categoryId
      */
     public Float getTotalIncomeByCategoryId(final String categoryId) {
-        return transactionDao.getTotalIncomeByCategoryId(categoryId);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTotalIncomeByCategoryId(categoryId, currentUserId);
     }
 
     /**
@@ -68,7 +89,13 @@ public class TransactionRepository {
      * @return sum of transaction expense amount with matching categoryId
      */
     public Float getTotalIExpenseByCategoryId(final String categoryId) {
-        return transactionDao.getTotalIExpenseByCategoryId(categoryId);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTotalIExpenseByCategoryId(categoryId, currentUserId);
     }
 
 
@@ -79,7 +106,13 @@ public class TransactionRepository {
      * @return all transactions within date range.
      */
     public LiveData<List<Transaction>> filterTransactionsByDate(final long lb, final long ub) {
-        return transactionDao.filterTransactionsByDate(lb, ub);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.filterTransactionsByDate(lb, ub, currentUserId);
     }
 
     /**
@@ -88,7 +121,13 @@ public class TransactionRepository {
      * @return all transactions within date range.
      */
     public List<Transaction> getAmountByCategoryId(final String categoryId) {
-        return transactionDao.getAmountByCategoryId(categoryId);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getAmountByCategoryId(categoryId, currentUserId);
     }
 
     /**
@@ -98,7 +137,13 @@ public class TransactionRepository {
      * @return all transactions within date range.
      */
     public LiveData<List<Transaction>> filterTransactionsByAmount(final float lba, final float uba) {
-        return transactionDao.filterTransactionsByAmount(lba, uba);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.filterTransactionsByAmount(lba, uba, currentUserId);
     }
 
     /**
@@ -113,7 +158,13 @@ public class TransactionRepository {
             final long lb,
             final long ub
     ) {
-        return transactionDao.filterTransactionsByCategoryAndDate(catId, lb, ub);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.filterTransactionsByCategoryAndDate(catId, lb, ub, currentUserId);
     }
 
     /**
@@ -127,7 +178,13 @@ public class TransactionRepository {
      */
     public LiveData<List<Transaction>> filterTransactionsByCategoryAndDateAndAmount(
             final String catId, final long lb, final long ub, final float lba, final float uba) {
-        return transactionDao.filterTransactionsByCategoryAndDateAndAmount(catId, lb, ub, lba, uba);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.filterTransactionsByCategoryAndDateAndAmount(catId, lb, ub, lba, uba, currentUserId);
     }
 
     /**
@@ -140,7 +197,13 @@ public class TransactionRepository {
      */
     public LiveData<List<Transaction>> filterTransactionsByAmountAndDate(
             final long lb, final long ub, final float lba, final float uba) {
-        return transactionDao.filterTransactionsByAmountAndDate(lb, ub, lba, uba);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.filterTransactionsByAmountAndDate(lb, ub, lba, uba, currentUserId);
     }
 
     /**
@@ -152,7 +215,13 @@ public class TransactionRepository {
      */
     public LiveData<List<Transaction>> filterTransactionsByAmountAndCategory(
             final String catId, final float lba, final float uba) {
-        return transactionDao.filterTransactionsByAmountAndCategory(catId, lba, uba);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.filterTransactionsByAmountAndCategory(catId, lba, uba, currentUserId);
     }
 
     /**
@@ -160,8 +229,12 @@ public class TransactionRepository {
      * @param transaction transaction to be saved.
      * @return transaction id.
      */
-    public long insert(final Transaction transaction) {
+    public Long insert(final Transaction transaction) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
 
         transaction.setOwnerId(currentUserId);
 
@@ -181,11 +254,18 @@ public class TransactionRepository {
             final Integer recurringIntervalType,
             final Integer recurringIntervalDays
     ) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return;
+        }
+
         transactionDao.updateTransactionRecurringFields(
                 transactionId,
                 isRecurring,
                 recurringIntervalType,
-                recurringIntervalDays
+                recurringIntervalDays,
+                currentUserId
         );
     }
 

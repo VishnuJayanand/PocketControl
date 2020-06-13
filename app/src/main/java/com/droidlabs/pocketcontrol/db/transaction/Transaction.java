@@ -258,11 +258,19 @@ public class Transaction {
         return category;
     }
 
+    /**
+     * Get owner id.
+     * @return owner id.
+     */
     @Nullable
     public String getOwnerId() {
         return ownerId;
     }
 
+    /**
+     * Get account id.
+     * @return account id.
+     */
     @Nullable
     public String getAccount() {
         return account;
@@ -328,11 +336,19 @@ public class Transaction {
         this.recurringIntervalDays = recIntDays;
     }
 
-    public void setOwnerId(@Nullable String mOwnerId) {
+    /**
+     * Set owner id.
+     * @param mOwnerId owner id.
+     */
+    public void setOwnerId(final @Nullable String mOwnerId) {
         this.ownerId = mOwnerId;
     }
 
-    public void setAccount(@Nullable String mAccount) {
+    /**
+     * Set account id.
+     * @param mAccount account id.
+     */
+    public void setAccount(final @Nullable String mAccount) {
         this.account = mAccount;
     }
 

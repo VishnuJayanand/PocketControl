@@ -24,6 +24,7 @@ public interface RecurrentDao {
     /**
      * Retrieve recurrent by date.
      * @param date current date.
+     * @param ownerId owner id.
      * @return recurrent.
      */
     @Query("SELECT * FROM recurrents WHERE date=:date AND owner_id=:ownerId")

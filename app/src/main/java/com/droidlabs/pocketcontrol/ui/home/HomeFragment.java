@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment {
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.fragment_home, container, false);
-        RecyclerView projectsRecyclerView = view.findViewById(R.id.projectsList);
+        RecyclerView accountsRecyclerView = view.findViewById(R.id.accountsList);
 
         textViewAmount = view.findViewById(R.id.homeScreenTop);
         textViewNetBalance = view.findViewById(R.id.homeScreenNetBalanceText);
@@ -50,14 +50,14 @@ public class HomeFragment extends Fragment {
         AccountViewModel projectViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         projectViewModel.getAccounts().observe(getViewLifecycleOwner(), new Observer<List<Account>>() {
             @Override
-            public void onChanged(List<Account> projects) {
-                accountListAdapter.setAccounts(projects);
+            public void onChanged(final List<Account> accounts) {
+                accountListAdapter.setAccounts(accounts);
             }
         });
 
         accountListAdapter = new AccountListAdapter(getActivity(), getActivity().getApplication());
-        projectsRecyclerView.setAdapter(accountListAdapter);
-        projectsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        accountsRecyclerView.setAdapter(accountListAdapter);
+        accountsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {

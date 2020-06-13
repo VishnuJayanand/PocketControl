@@ -94,7 +94,10 @@ public class MainActivity extends AppCompatActivity {
     private void createRecurringTransactions() {
         long startOfDay = DateUtils.getStartOfCurrentDay().getTimeInMillis();
 
-        SharedPreferences sharedPreferences = getApplication().getSharedPreferences(getApplication().getString(R.string.shared_preferences_file_key), Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getApplication().getSharedPreferences(
+                getApplication().getString(R.string.shared_preferences_file_key),
+                Context.MODE_PRIVATE
+        );
 
         String currentUserId = sharedPreferences.getString("currentUserId", "");
 

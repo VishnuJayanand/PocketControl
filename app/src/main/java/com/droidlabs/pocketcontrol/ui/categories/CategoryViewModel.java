@@ -12,7 +12,6 @@ import java.util.List;
 public class CategoryViewModel extends AndroidViewModel {
 
     private CategoryRepository repository;
-    private List<Category> allCategories;
 
     /**
      * View model constructor.
@@ -45,6 +44,16 @@ public class CategoryViewModel extends AndroidViewModel {
      * @return category.
      */
     public Category getSingleCategory(final String categoryName) {
+
+        return repository.getSingleCategory(categoryName);
+    }
+
+    /**
+     * get a  category.
+     * @param categoryName category name.
+     * @return category.
+     */
+    public Category getSingleCategory(final int categoryName) {
 
         return repository.getSingleCategory(categoryName);
     }

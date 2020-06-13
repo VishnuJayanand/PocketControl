@@ -1,10 +1,7 @@
 package com.droidlabs.pocketcontrol.db.defaults;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 
-import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
@@ -18,7 +15,7 @@ public class DefaultsRepository {
      * Currency repository constructor.
      * @param application application to be used.
      */
-    DefaultsRepository(final Application application) {
+    public DefaultsRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
         sharedPreferencesUtils = new SharedPreferencesUtils(application);
         defaultsDao = db.defaultsDao();
@@ -39,11 +36,30 @@ public class DefaultsRepository {
     }
 
     /**
+     * Get default value.
+     * @param name default name.
+     * @return default value.
+     */
+    public String getDefaultValue(final String name) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return defaultsDao.getDefaultValue(name, currentUserId);
+    }
+
+    /**
      * Insert single default entity.
      * @param defaults entity to be saved.
      */
     public void insert(final Defaults defaults) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return;
+        }
 
         defaults.setOwnerId(currentUserId);
 

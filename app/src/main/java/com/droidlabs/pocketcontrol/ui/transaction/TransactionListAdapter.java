@@ -2,7 +2,6 @@ package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,23 +18,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
-import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 
 import java.util.Calendar;
 import java.util.List;
 
-import static java.lang.Integer.parseInt;
-
 public final class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.TransactionViewHolder> {
 
     private List<Transaction> transactions; // Cached copy of transactions
     private final LayoutInflater layoutInflater;
-    private final CategoryDao categoryDao;
+    private final CategoryViewModel categoryViewModel;
     private final TransactionViewModel transactionViewModel;
     private final OnTransactionNoteListener mOnNoteListener;
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
@@ -45,14 +41,16 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
      * @param context context
      * @param onNoteListener the onNotelistener
      * @param transactionVM the view model for creating new transactions
+     * @param categoryVM  category viewmodel.
      */
     public TransactionListAdapter(
             final @NonNull Context context,
             final OnTransactionNoteListener onNoteListener,
-            final TransactionViewModel transactionVM
+            final TransactionViewModel transactionVM,
+            final CategoryViewModel categoryVM
     ) {
         layoutInflater = LayoutInflater.from(context);
-        categoryDao = PocketControlDB.getDatabase(context).categoryDao();
+        categoryViewModel = categoryVM;
         transactionViewModel = transactionVM;
         mOnNoteListener = onNoteListener;
     }
@@ -100,8 +98,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             }
 
             if (category != null) {
-
-                Category category1 = categoryDao.getSingleCategory(parseInt(category));
+                Category category1 = categoryViewModel.getSingleCategory(Integer.parseInt(category));
                 holder.transactionCategoryTitle.setText(category1.getName());
                 holder.transactionCategoryImage.setImageResource(category1.getIcon());
             }
@@ -163,7 +160,6 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
      * @param transactionList transactions from db.
      */
     public void setTransactions(final List<Transaction> transactionList) {
-        Log.v("TRANSACTIONS", String.valueOf(transactionList.size()));
         this.transactions = transactionList;
         notifyDataSetChanged();
     }

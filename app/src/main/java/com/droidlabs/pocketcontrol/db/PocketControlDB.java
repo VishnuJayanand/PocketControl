@@ -8,7 +8,6 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.budget.BudgetDao;
 import com.droidlabs.pocketcontrol.db.category.Category;
@@ -29,9 +28,7 @@ import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
 import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.db.user.UserDao;
-import com.droidlabs.pocketcontrol.utils.DateUtils;
 
-import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -155,6 +152,15 @@ public abstract class PocketControlDB extends RoomDatabase {
     private static void populateDatabase() {
         cleanDB();
 
+        CurrencyDao currencyDao = dbInstance.currencyDao();
+        PaymentModeDao paymentModeDao = dbInstance.paymentModeDao();
+
+        Currency currency = new Currency("EUR");
+        currencyDao.insert(currency);
+
+        PaymentMode paymentMode = new PaymentMode("Credit card");
+        paymentModeDao.insert(paymentMode);
+
         /*
         BudgetDao budgetDao = dbInstance.budgetDao();
         CategoryDao categoryDao = dbInstance.categoryDao();
@@ -219,24 +225,6 @@ public abstract class PocketControlDB extends RoomDatabase {
         accountDao.insert(account1);
         accountDao.insert(account2);
         accountDao.insert(account3);
-        accountDao.insert(account1);
-        accountDao.insert(account2);
-        accountDao.insert(account3);
-        accountDao.insert(account1);
-        accountDao.insert(account2);
-        accountDao.insert(account3);
-        accountDao.insert(account1);
-        accountDao.insert(account2);
-        accountDao.insert(account3);
-
-        Currency currency = new Currency("EUR");
-        currencyDao.insert(currency);
-
-        PaymentMode paymentMode = new PaymentMode("Credit card");
-        paymentModeDao.insert(paymentMode);
-
-        Defaults defaultValue = new Defaults("Currency", "EUR");
-        defaultsDao.insert(defaultValue);
 
         Icon icon = new Icon("icon_1");
         iconDao.insert(icon);
@@ -276,6 +264,9 @@ public abstract class PocketControlDB extends RoomDatabase {
         */
     }
 
+    /**
+     * Clean current DB.
+     */
     private static void cleanDB() {
         BudgetDao budgetDao = dbInstance.budgetDao();
         CategoryDao categoryDao = dbInstance.categoryDao();

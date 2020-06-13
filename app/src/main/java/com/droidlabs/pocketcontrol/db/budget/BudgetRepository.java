@@ -1,13 +1,8 @@
 package com.droidlabs.pocketcontrol.db.budget;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 
-import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
-import com.droidlabs.pocketcontrol.db.user.User;
-import com.droidlabs.pocketcontrol.db.user.UserDao;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
@@ -50,6 +45,10 @@ public class BudgetRepository {
      */
     public void insert(final Budget budget) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return;
+        }
 
         budget.setOwnerId(currentUserId);
 

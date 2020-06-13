@@ -2,7 +2,6 @@ package com.droidlabs.pocketcontrol.db.user;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Ignore;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -15,6 +14,7 @@ public interface UserDao {
     /**
      * Insert new user into the database.
      * @param user user to be saved.
+     * @return user id.
      */
     @Insert(onConflict = OnConflictStrategy.ABORT)
     long insert(User user);

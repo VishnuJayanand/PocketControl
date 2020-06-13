@@ -30,53 +30,101 @@ public class User {
     @ColumnInfo(name = "access_pin")
     private String accessPin;
 
+    /**
+     * Get user id.
+     * @return user id.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Get user access pin.
+     * @return access pin.
+     */
     public String getAccessPin() {
         return accessPin;
     }
 
+    /**
+     * Get user email.
+     * @return email.
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Get user first name.
+     * @return first name.
+     */
     @Nullable
     public String getFirstName() {
         return firstName;
     }
 
+    /**
+     * Get user last name.
+     * @return last name.
+     */
     @Nullable
     public String getLastName() {
         return lastName;
     }
 
+    /**
+     * Get user password.
+     * @return password.
+     */
     public String getPassword() {
         return password;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    /**
+     * Set user id.
+     * @param mId id.
+     */
+    public void setId(final int mId) {
+        this.id = mId;
     }
 
-    public void setAccessPin(String accessPin) {
-        this.accessPin = accessPin;
+    /**
+     * Set user access pin.
+     * @param mAccessPin access pin.
+     */
+    public void setAccessPin(final String mAccessPin) {
+        this.accessPin = mAccessPin;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    /**
+     * Set user email.
+     * @param mEmail email.
+     */
+    public void setEmail(final String mEmail) {
+        this.email = mEmail;
     }
 
-    public void setFirstName(@Nullable String firstName) {
-        this.firstName = firstName;
+    /**
+     * Set user first name.
+     * @param fn name.
+     */
+    public void setFirstName(final @Nullable String fn) {
+        this.firstName = fn;
     }
 
-    public void setLastName(@Nullable String lastName) {
-        this.lastName = lastName;
+    /**
+     * Set user last name.
+     * @param ln last name.
+     */
+    public void setLastName(final @Nullable String ln) {
+        this.lastName = ln;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    /**
+     * Set user password.
+     * @param pwd password.
+     */
+    public void setPassword(final String pwd) {
+        this.password = pwd;
     }
 }

@@ -1,13 +1,10 @@
 package com.droidlabs.pocketcontrol.ui.signin;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.db.user.UserRepository;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
@@ -30,6 +27,7 @@ public class UserViewModel extends AndroidViewModel {
     /**
      * Insert a new user in the database.
      * @param user transaction to be added.
+     * @return user id.
      */
     public long insert(final User user) {
         return repository.insert(user);

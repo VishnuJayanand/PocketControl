@@ -160,7 +160,7 @@
     </style>
 
     <style name="StyleProjectRow">
-        <item name="android:background">@drawable/project_row_rounded_left</item>
+        <item name="android:background">@drawable/account_row_rounded_left</item>
     </style>
 
     <style name="SignInSignUpContainer">

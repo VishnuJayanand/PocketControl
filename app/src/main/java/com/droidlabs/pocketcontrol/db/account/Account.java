@@ -42,48 +42,91 @@ public class Account {
     @Nullable
     private String ownerId;
 
+    /**
+     * Empty constructor.
+     */
     public Account() { }
 
+    /**
+     * Get account id.
+     * @return id.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Get account name.
+     * @return name.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get account color.
+     * @return color.
+     */
     @Nullable
     public Integer getColor() {
         return color;
     }
 
+    /**
+     * Get account owner id.
+     * @return owner id.
+     */
     @Nullable
     public String getOwnerId() {
         return ownerId;
     }
 
+    /**
+     * Get account is public.
+     * @return boolean.
+     */
     @Nullable
     public Boolean getIsPublic() {
         return isPublic;
     }
 
-    public void setId(int mId) {
+    /**
+     * Set account id.
+     * @param mId account id.
+     */
+    public void setId(final int mId) {
         this.id = mId;
     }
 
-    public void setName(String mName) {
+    /**
+     * Set account name.
+     * @param mName name.
+     */
+    public void setName(final String mName) {
         this.name = mName;
     }
 
-    public void setColor(@Nullable Integer mColor) {
+    /**
+     * Set account color.
+     * @param mColor color.
+     */
+    public void setColor(final @Nullable Integer mColor) {
         this.color = mColor;
     }
 
-    public void setOwnerId(@Nullable String mOwnerId) {
+    /**
+     * Set account owner id.
+     * @param mOwnerId owner id.
+     */
+    public void setOwnerId(final @Nullable String mOwnerId) {
         this.ownerId = mOwnerId;
     }
 
-    public void setPublic(@Nullable Boolean mPublic) {
+    /**
+     * Set account is public.
+     * @param mPublic boolean.
+     */
+    public void setPublic(final @Nullable Boolean mPublic) {
         this.isPublic = mPublic;
     }
 }

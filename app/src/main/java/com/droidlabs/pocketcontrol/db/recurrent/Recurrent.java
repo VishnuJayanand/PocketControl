@@ -55,7 +55,11 @@ public class Recurrent {
         this.date = recDate;
     }
 
-    public void setOwnerId(@Nullable String mOwnerId) {
+    /**
+     * Set owner id.
+     * @param mOwnerId owner id.
+     */
+    public void setOwnerId(final @Nullable String mOwnerId) {
         this.ownerId = mOwnerId;
     }
 
@@ -75,6 +79,10 @@ public class Recurrent {
         return date;
     }
 
+    /**
+     * Get owner id.
+     * @return owner id.
+     */
     @Nullable
     public String getOwnerId() {
         return ownerId;

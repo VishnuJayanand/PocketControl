@@ -1,7 +1,6 @@
 package com.droidlabs.pocketcontrol.db.user;
 
 import android.app.Application;
-import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 
@@ -12,8 +11,11 @@ import java.util.List;
 public class UserRepository {
 
     private UserDao userDao;
-    private LiveData<List<User>> allUsers;
 
+    /**
+     * Constructor.
+     * @param application application.
+     */
     public UserRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
         userDao = db.userDao();

@@ -147,6 +147,10 @@ public class Budget {
         return this.category;
     }
 
+    /**
+     * Get owner id.
+     * @return owner id.
+     */
     @Nullable
     public String getOwnerId() {
         return ownerId;
@@ -192,7 +196,11 @@ public class Budget {
         this.category = cat;
     }
 
-    public void setOwnerId(@Nullable String mOwnerId) {
+    /**
+     * Set owner id.
+     * @param mOwnerId owner id.
+     */
+    public void setOwnerId(final @Nullable String mOwnerId) {
         this.ownerId = mOwnerId;
     }
 }
