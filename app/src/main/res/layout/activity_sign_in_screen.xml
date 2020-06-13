@@ -151,7 +151,7 @@
                     android:id="@+id/accessTokenInputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
+                    android:inputType="numberPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -167,7 +167,7 @@
                     android:id="@+id/repeatAccessTokenInputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword" />
+                    android:inputType="numberPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -186,30 +186,5 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/noUserInDbContainer"
-            style="@style/SignInSignUpContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginEnd="50dp"
-                android:text="@string/signInNoUserInDbText"
-                android:textAlignment="center"
-                android:textSize="18dp" />
-
-            <Button
-                android:id="@+id/createNewAccountButton2"
-                style="@style/primaryRoundedButtonBlock"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Create a new user account" />
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>

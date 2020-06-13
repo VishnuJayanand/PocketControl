@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.ui.home.HomeActivity;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -35,19 +37,15 @@ public class SignInActivity extends AppCompatActivity {
 
     private View signInContainer;
     private View signUpContainer;
-    private View noUserInDbContainer;
     private UserViewModel userViewModel;
     private List<User> userList;
     private TextView currentUser;
     private LinearLayout selectedUser;
-    private LinearLayout enterAccessToken;
-    private LinearLayout createNewUser;
+    private Button changeUserButton;
     private Button signUpButton;
     private Button validateCredentialsButton;
     private Button createNewAccountButton;
-    private Button createNewAccountButton2;
     private Button alreadyHaveAnAccountButton;
-    private User user;
     private TextInputEditText accessTokenValueText;
     private TextInputLayout enterAccessTokenInputGroup;
     private TextInputLayout emailInputGroup;
@@ -58,6 +56,8 @@ public class SignInActivity extends AppCompatActivity {
     private TextInputEditText repeatAccessTokenInputText;
     private SharedPreferencesUtils sharedPreferencesUtils;
     private CategoryViewModel categoryViewModel;
+    private MaterialAlertDialogBuilder switchUserDialog;
+    private User user;
 
     /**
      * Create a new activity.
@@ -74,10 +74,10 @@ public class SignInActivity extends AppCompatActivity {
 
         signInContainer = findViewById(R.id.signinContainer);
         signUpContainer = findViewById(R.id.signupContainer);
-        noUserInDbContainer = findViewById(R.id.noUserInDbContainer);
 
         currentUser = signInContainer.findViewById(R.id.currentUserEmail);
         selectedUser = signInContainer.findViewById(R.id.selectedUser);
+        changeUserButton = signInContainer.findViewById(R.id.changeUserButton);
 
         accessTokenValueText = signInContainer.findViewById(R.id.accessTokenValueText);
         enterAccessTokenInputGroup = signInContainer.findViewById(R.id.enterAccessTokenInputGroup);
@@ -99,8 +99,6 @@ public class SignInActivity extends AppCompatActivity {
         repeatAccessTokenInputGroup = signUpContainer.findViewById(R.id.repeatAccessTokenInputGroup);
         repeatAccessTokenInputText = signUpContainer.findViewById(R.id.repeatAccessTokenInputText);
 
-        createNewAccountButton2 = noUserInDbContainer.findViewById(R.id.createNewAccountButton2);
-
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         userViewModel.getAllUsers().observe(this, new Observer<List<User>>() {
             @Override
@@ -109,15 +107,14 @@ public class SignInActivity extends AppCompatActivity {
 
                 if (users.size() > 0) {
                     showSignInContent();
+                    initializeSwitchUserDialog(users);
 
                     String currentUserId = sharedPreferencesUtils.getCurrentUserId();
                     if (currentUserId.equals("")) {
                         currentUser.setText("No user selected.");
                         currentUser.setTextColor(getApplication().getColor(R.color.colorExpense));
                     } else {
-                        user = userViewModel.getUserById(Long.parseLong(currentUserId));
-                        Log.v("USER", user.getEmail());
-                        currentUser.setText(user.getEmail());
+                        setUser();
                         currentUser.setTextColor(getApplication().getColor(android.R.color.darker_gray));
                     }
                 } else {
@@ -127,13 +124,6 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         createNewAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSignUpContent();
-            }
-        });
-
-        createNewAccountButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showSignUpContent();
@@ -164,14 +154,19 @@ public class SignInActivity extends AppCompatActivity {
                 signUp();
             }
         });
+
+        changeUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchUserDialog.show();
+            }
+        });
     }
 
     /**
      * Execute sign in and move to home screen.
      */
     private void signUp() {
-
-
         if (!Patterns.EMAIL_ADDRESS.matcher(emailInputText.getText().toString()).matches()) {
             emailInputGroup.setError("Please enter a valid email address.");
             return;
@@ -224,18 +219,41 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
+    private void initializeSwitchUserDialog(List<User> userList) {
+        String[] userListEmails = new String[userList.size()];
+
+        for (int i = 0; i < userList.size(); i++) {
+            userListEmails[i] = userList.get(i).getEmail();
+        }
+
+        switchUserDialog = new MaterialAlertDialogBuilder(SignInActivity.this)
+                .setTitle("Select user account")
+                .setItems(userListEmails, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        User selectedUser = userList.get(which);
+                        sharedPreferencesUtils.setCurrentUserId(String.valueOf(selectedUser.getId()));
+                        setUser();
+                    }
+                });
+
+    }
+
+    private void setUser() {
+        user = userViewModel.getUserById(Long.parseLong(sharedPreferencesUtils.getCurrentUserId()));
+        currentUser.setText(user.getEmail());
+    }
+
     private void showSignUpContent() {
         resetSignUpState();
         signInContainer.setVisibility(View.GONE);
         signUpContainer.setVisibility(View.VISIBLE);
-        noUserInDbContainer.setVisibility(View.GONE);
     }
 
     private void showSignInContent() {
         resetSignInState();
         signInContainer.setVisibility(View.VISIBLE);
         signUpContainer.setVisibility(View.GONE);
-        noUserInDbContainer.setVisibility(View.GONE);
     }
 
     private void resetSignUpState() {
