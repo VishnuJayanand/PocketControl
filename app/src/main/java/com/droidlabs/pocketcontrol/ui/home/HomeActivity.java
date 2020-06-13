@@ -97,8 +97,8 @@ public class HomeActivity extends AppCompatActivity {
      * Sign user out whenever he / she leaves the application.
      */
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
 
         sharedPreferencesUtils.setIsSignedIn(false);
     }
