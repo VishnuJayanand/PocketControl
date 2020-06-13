@@ -69,11 +69,8 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 Intent intent = new Intent(getApplication(), SignInActivity.class);
-                intent.putExtra(EXTRA_MESSAGE, "YO");
                 startActivity(intent);
-
             }
         }, TIMER);
 

@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
@@ -104,7 +105,7 @@ public class SignInActivity extends AppCompatActivity {
         userViewModel.getAllUsers().observe(this, new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
-                Log.v("USER", String.valueOf(users.size()));
+                userList = users;
 
                 if (users.size() > 0) {
                     showSignInContent();
@@ -120,7 +121,7 @@ public class SignInActivity extends AppCompatActivity {
                         currentUser.setTextColor(getApplication().getColor(android.R.color.darker_gray));
                     }
                 } else {
-                    showNoUserInDbContent();
+                    showSignUpContent();
                 }
             }
         });
@@ -142,7 +143,11 @@ public class SignInActivity extends AppCompatActivity {
         alreadyHaveAnAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSignInContent();
+                if (userList.size() == 0) {
+                    Toast.makeText(getBaseContext(), "No users registered! Please create an account.", Toast.LENGTH_LONG).show();
+                } else {
+                    showSignInContent();
+                }
             }
         });
 
@@ -211,6 +216,7 @@ public class SignInActivity extends AppCompatActivity {
     private void signIn() {
         if (accessTokenValueText.getText().toString().equals(user.getAccessPin())) {
             enterAccessTokenInputGroup.setError(null);
+            sharedPreferencesUtils.setIsSignedIn(true);
             Intent intent = new Intent(getApplication(), HomeActivity.class);
             startActivity(intent);
         } else {
@@ -230,12 +236,6 @@ public class SignInActivity extends AppCompatActivity {
         signInContainer.setVisibility(View.VISIBLE);
         signUpContainer.setVisibility(View.GONE);
         noUserInDbContainer.setVisibility(View.GONE);
-    }
-
-    private void showNoUserInDbContent() {
-        signInContainer.setVisibility(View.GONE);
-        signUpContainer.setVisibility(View.GONE);
-        noUserInDbContainer.setVisibility(View.VISIBLE);
     }
 
     private void resetSignUpState() {

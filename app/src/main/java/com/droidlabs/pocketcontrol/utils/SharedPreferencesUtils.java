@@ -11,6 +11,7 @@ public final class SharedPreferencesUtils {
     private static SharedPreferences sharedPreferences;
     private static String CURRENT_USER_ID_KEY = "currentUserId";
     private static String CURRENT_ACCOUNT_ID_KEY = "currentAccountId";
+    private static String IS_SIGNED_IN_KEY = "isUserSignedIn";
 
     public SharedPreferencesUtils(final Application application) {
         sharedPreferences = application.getSharedPreferences(application.getString(R.string.shared_preferences_file_key), Context.MODE_PRIVATE);
@@ -34,5 +35,15 @@ public final class SharedPreferencesUtils {
 
     public String getCurrentProjectIdKey() {
         return sharedPreferences.getString(CURRENT_ACCOUNT_ID_KEY, "");
+    }
+
+    public SharedPreferencesUtils setIsSignedIn(boolean isSignedIn) {
+        sharedPreferences.edit().putBoolean(IS_SIGNED_IN_KEY, isSignedIn).commit();
+
+        return this;
+    }
+
+    public boolean getIsSignedIn() {
+        return sharedPreferences.getBoolean(IS_SIGNED_IN_KEY, false);
     }
 }
