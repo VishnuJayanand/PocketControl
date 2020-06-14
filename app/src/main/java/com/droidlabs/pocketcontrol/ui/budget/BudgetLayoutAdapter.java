@@ -8,17 +8,16 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
-import com.droidlabs.pocketcontrol.db.category.CategoryDao;
+import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 
 import java.util.List;
 
 public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
 
-    private CategoryDao categoryDao;
+    private CategoryViewModel categoryViewModel;
     private LayoutInflater mInflater;
     private List<Budget> arrayList;
     private int mViewResourceId;
@@ -28,13 +27,20 @@ public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
      * Creating adapter for Budget.
      * @param context context
      * @param textViewResourceId textViewResourceId
-     * @param adapArrayList list of budget
+     * @param adapArrayList list of budget.
+     * @param categoryVM category viewmodel.
      */
-    public BudgetLayoutAdapter(final Context context, final int textViewResourceId, final List<Budget> adapArrayList) {
+    public BudgetLayoutAdapter(
+            final Context context,
+            final int textViewResourceId,
+            final List<Budget> adapArrayList,
+            final CategoryViewModel categoryVM
+    ) {
         super(context, textViewResourceId, adapArrayList);
         this.arrayList = adapArrayList;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mViewResourceId = textViewResourceId;
+        categoryViewModel = categoryVM;
     }
 
     /**
@@ -50,8 +56,7 @@ public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
         Budget budget = arrayList.get(position);
 
         if (budget != null) {
-            categoryDao = PocketControlDB.getDatabase(getContext()).categoryDao();
-            Category category = categoryDao.getSingleCategory(Integer.parseInt(budget.getCategory()));
+            Category category = categoryViewModel.getSingleCategory(Integer.parseInt(budget.getCategory()));
 
             TextView budgetname = (TextView) convertView.findViewById(R.id.budgetName);
             TextView budgetvalue = (TextView) convertView.findViewById(R.id.budgetValue);

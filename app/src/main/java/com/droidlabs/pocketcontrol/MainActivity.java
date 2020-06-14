@@ -2,7 +2,9 @@ package com.droidlabs.pocketcontrol;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.lifecycle.Observer;
@@ -67,11 +69,9 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 Intent intent = new Intent(getApplication(), SignInActivity.class);
-                intent.putExtra(EXTRA_MESSAGE, "YO");
                 startActivity(intent);
-
+                finish();
             }
         }, TIMER);
 
@@ -95,9 +95,20 @@ public class MainActivity extends AppCompatActivity {
     private void createRecurringTransactions() {
         long startOfDay = DateUtils.getStartOfCurrentDay().getTimeInMillis();
 
+        SharedPreferences sharedPreferences = getApplication().getSharedPreferences(
+                getApplication().getString(R.string.shared_preferences_file_key),
+                Context.MODE_PRIVATE
+        );
+
+        String currentUserId = sharedPreferences.getString("currentUserId", "");
+
+        if (currentUserId.equals("")) {
+            return;
+        }
+
         RecurrentDao recurrentDao = PocketControlDB.getDatabase(this).recurrentDao();
 
-        Recurrent today = recurrentDao.getRecurrentByDate(startOfDay);
+        Recurrent today = recurrentDao.getRecurrentByDate(startOfDay, currentUserId);
 
         if (today == null) {
             transactionViewModel.getTransactions().observe(this, new Observer<List<Transaction>>() {

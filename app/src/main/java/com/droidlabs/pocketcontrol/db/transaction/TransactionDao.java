@@ -27,26 +27,56 @@ public interface TransactionDao {
 
     /**
      * Retrieve all transactions from the database.
+     * @param ownerId owner id.
      * @return all transactions.
      */
-    @Query("SELECT * FROM transactions ORDER BY date DESC")
-    LiveData<List<Transaction>> getAllTransactions();
+    @Query("SELECT * FROM transactions WHERE owner_id=:ownerId ORDER BY date DESC")
+    LiveData<List<Transaction>> getAllTransactions(String ownerId);
 
     /**
      * Get transaction by id.
      * @param transactionId id.
+     * @param ownerId owner id.
      * @return transaction.
      */
-    @Query("SELECT * FROM transactions WHERE id=:transactionId")
-    Transaction getTransactionById(long transactionId);
+    @Query("SELECT * FROM transactions WHERE id=:transactionId AND owner_id=:ownerId")
+    Transaction getTransactionById(long transactionId, String ownerId);
 
     /**
      * Retrieve all transactions from a specified category.
-     * @param categoryId category id
+     * @param categoryId category id.
+     * @param ownerId owner id.
      * @return list of transactions with matching categoryId
      */
-    @Query("SELECT * FROM transactions WHERE category=:categoryId ORDER BY date DESC")
-    LiveData<List<Transaction>> getTransactionsByCategoryId(String categoryId);
+    @Query("SELECT * FROM transactions WHERE category=:categoryId AND owner_id=:ownerId ORDER BY date DESC")
+    LiveData<List<Transaction>> getTransactionsByCategoryId(String categoryId, String ownerId);
+
+    /**
+     * Retrieve all transactions from a specified category.
+     * @param categoryId category id.
+     * @param ownerId owner id.
+     * @return list of transactions with matching categoryId
+     */
+    @Query("SELECT * FROM transactions WHERE category=:categoryId AND owner_id=:ownerId ORDER BY date DESC")
+    List<Transaction> getAmountByCategoryId(String categoryId, String ownerId);
+
+    /**
+     * Retrieve sum of transaction income amount for a specified category.
+     * @param categoryId category id.
+     * @param ownerId owner id.
+     * @return sum of transaction income amount with matching categoryId
+     */
+    @Query("SELECT SUM(amount) FROM transactions WHERE category=:categoryId AND owner_id=:ownerId AND type = 2")
+    float getTotalIncomeByCategoryId(String categoryId, String ownerId);
+
+    /**
+     * Retrieve sum of transaction expense amount for a specified category.
+     * @param categoryId category id.
+     * @param ownerId owner id.
+     * @return sum of transaction expense amount with matching categoryId
+     */
+    @Query("SELECT SUM(amount) FROM transactions WHERE category=:categoryId AND owner_id=:ownerId AND type = 1")
+    float getTotalIExpenseByCategoryId(String categoryId, String ownerId);
 
     /**
      * Retrieve all transactions from a specified category.
@@ -76,36 +106,50 @@ public interface TransactionDao {
      * Retrieve all transactions within a specified date range.
      * @param lowerBound lower date bound.
      * @param upperBound upper date bound.
+     * @param ownerId owner id.
      * @return list of transactions within date range.
      */
-    @Query("SELECT * FROM transactions WHERE date BETWEEN :lowerBound AND :upperBound ORDER BY date DESC")
-    LiveData<List<Transaction>> filterTransactionsByDate(long lowerBound, long upperBound);
+    @Query("SELECT * FROM transactions WHERE "
+            + "owner_id=:ownerId "
+            + "AND date BETWEEN :lowerBound AND :upperBound "
+            + "ORDER BY date DESC")
+    LiveData<List<Transaction>> filterTransactionsByDate(long lowerBound, long upperBound, String ownerId);
 
     /**
      * Retrieve all transactions from a specified category and within a specified date range.
      * @param categoryId category id.
      * @param lowerBound lower date bound.
      * @param upperBound upper date bound.
+     * @param ownerId owner id.
      * @return list of transactions matching the filter.
      */
     @Query("SELECT * FROM transactions "
-            + "WHERE category=:categoryId AND date BETWEEN :lowerBound AND :upperBound "
+            + "WHERE category=:categoryId AND owner_id=:ownerId AND date BETWEEN :lowerBound AND :upperBound "
             + "ORDER BY date DESC")
     LiveData<List<Transaction>> filterTransactionsByCategoryAndDate(
             String categoryId,
             long lowerBound,
-            long upperBound
+            long upperBound,
+            String ownerId
     );
 
     /**
      * Retrieve all transactions from a specified amount  range.
      * @param lowerBoundAmount lower amount bound.
      * @param upperBoundAmount upper amount bound.
+     * @param ownerId owner id.
      * @return list of transactions matching the filter.
      */
-    @Query("SELECT * FROM transactions WHERE amount >= :lowerBoundAmount AND amount <= :upperBoundAmount "
+    @Query("SELECT * FROM transactions WHERE "
+            + "owner_id=:ownerId "
+            + "AND amount >= :lowerBoundAmount "
+            + "AND amount <= :upperBoundAmount "
             + "ORDER BY date DESC")
-    LiveData<List<Transaction>> filterTransactionsByAmount(float lowerBoundAmount, float upperBoundAmount);
+    LiveData<List<Transaction>> filterTransactionsByAmount(
+            float lowerBoundAmount,
+            float upperBoundAmount,
+            String ownerId
+    );
 
     /**
      * Retrieve all transactions from a specified category and within a specified date range and amount.
@@ -114,13 +158,20 @@ public interface TransactionDao {
      * @param upperBound upper date bound.
      * @param lowerBoundAmount lower amount bound.
      * @param upperBoundAmount upper amount bound.
+     * @param ownerId owner id.
      * @return list of transactions matching the filter.
      */
-    @Query("SELECT * FROM transactions WHERE category=:categoryId AND "
+    @Query("SELECT * FROM transactions WHERE category=:categoryId AND owner_id=:ownerId AND "
             + "(date BETWEEN :lowerBound AND :upperBound) AND "
             + "(amount >= :lowerBoundAmount AND amount <= :upperBoundAmount) ORDER BY date DESC")
     LiveData<List<Transaction>> filterTransactionsByCategoryAndDateAndAmount(
-            String categoryId, long lowerBound, long upperBound, float lowerBoundAmount, float upperBoundAmount);
+            String categoryId,
+            long lowerBound,
+            long upperBound,
+            float lowerBoundAmount,
+            float upperBoundAmount,
+            String ownerId
+    );
 
     /**
      * Retrieve all transactions within a specified date range and amount.
@@ -128,26 +179,28 @@ public interface TransactionDao {
      * @param upperBound upper date bound.
      * @param lowerBoundAmount lower amount bound.
      * @param upperBoundAmount upper amount bound.
+     * @param ownerId owner id.
      * @return list of transactions matching the filter.
      */
-    @Query("SELECT * FROM transactions WHERE amount >= :lowerBoundAmount AND "
+    @Query("SELECT * FROM transactions WHERE owner_id=:ownerId AND amount >= :lowerBoundAmount AND "
             + "amount <= :upperBoundAmount AND (date BETWEEN :lowerBound AND :upperBound)"
             + "ORDER BY date DESC")
     LiveData<List<Transaction>> filterTransactionsByAmountAndDate(
-            long lowerBound, long upperBound, float lowerBoundAmount, float upperBoundAmount);
+            long lowerBound, long upperBound, float lowerBoundAmount, float upperBoundAmount, String ownerId);
 
     /**
      * Retrieve all transactions from a specified category within a specified amount range.
      * @param categoryId category id.
      * @param lowerBoundAmount lower amount bound.
      * @param upperBoundAmount upper amount bound.
+     * @param ownerId owner id.
      * @return list of transactions matching the filter.
      */
-    @Query("SELECT * FROM transactions WHERE category=:categoryId AND "
+    @Query("SELECT * FROM transactions WHERE category=:categoryId AND owner_id=:ownerId AND "
             + "(amount >= :lowerBoundAmount AND amount <= :upperBoundAmount)"
             + "ORDER BY date DESC")
     LiveData<List<Transaction>> filterTransactionsByAmountAndCategory(
-            String categoryId, float lowerBoundAmount, float upperBoundAmount);
+            String categoryId, float lowerBoundAmount, float upperBoundAmount, String ownerId);
 
     /**
      * Update transaction recurring params.
@@ -155,16 +208,18 @@ public interface TransactionDao {
      * @param isRecurring flag.
      * @param recurringIntervalType type.
      * @param recurringIntervalDays recurring interval in days.
+     * @param ownerId owner id.
      */
     @Query("UPDATE transactions SET "
             + "is_recurring=:isRecurring, "
             + "recurring_interval_type=:recurringIntervalType, "
             + "recurring_interval_days=:recurringIntervalDays "
-            + "WHERE id=:transactionId;")
+            + "WHERE id=:transactionId AND owner_id=:ownerId;")
     void updateTransactionRecurringFields(
             int transactionId,
             Boolean isRecurring,
             Integer recurringIntervalType,
-            Integer recurringIntervalDays
+            Integer recurringIntervalDays,
+            String ownerId
     );
 }

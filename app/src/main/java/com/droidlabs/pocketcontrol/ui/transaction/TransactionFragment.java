@@ -27,7 +27,6 @@ import java.util.List;
 
 public class TransactionFragment extends Fragment implements TransactionListAdapter.OnTransactionNoteListener {
 
-    private TransactionViewModel transactionViewModel;
     private TransactionListAdapter transactionListAdapter;
     private FilterBottomSheetDialog filterBottomSheetDialog;
 
@@ -43,10 +42,15 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         TextView allTransactionsText = view.findViewById(R.id.allTransactionsText);
         Button expandFilterButton = view.findViewById(R.id.expandFilterButton);
 
-        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+        TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
-        transactionListAdapter = new TransactionListAdapter(getActivity(), this, transactionViewModel);
+        transactionListAdapter = new TransactionListAdapter(
+                getActivity(),
+                this,
+                transactionViewModel,
+                categoryViewModel
+        );
 
         recyclerView.setAdapter(transactionListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

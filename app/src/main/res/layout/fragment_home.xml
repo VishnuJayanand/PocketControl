@@ -6,97 +6,91 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:id="@+id/homeScreenTop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/homescreentop_png"
-            android:fontFamily="sans-serif"
-            android:paddingTop="30dp"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#EDF4F6"
-            android:textColorLink="#337BB5"
-            android:textSize="@dimen/home_text_net_balance"
-            android:maxLines="1"
-            android:ellipsize="end"/>
-
-        <TextView
-            android:id="@+id/homeScreenNetBalanceText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-80dp"
-            android:text="@string/home_screen_net_balance"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textSize="@dimen/home_text_income_expense"
-            android:visibility="visible" />
-
-    </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="240dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/homeScreenTotalExpense"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:textSize="@dimen/home_text_income_expense"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            android:layout_height="130dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/homeScreenTotalIncome"
+
+            <TextView
+                android:id="@+id/homeScreenTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/homescreentop_png"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:maxLines="1"
+                android:paddingTop="15dp"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#EDF4F6"
+                android:textColorLink="#337BB5"
+                android:textSize="@dimen/home_text_net_balance" />
+
+            <TextView
+                android:id="@+id/homeScreenNetBalanceText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-50dp"
+                android:text="@string/home_screen_net_balance"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/home_text_income_expense"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/notificationsWrapper"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="30dp"
-            android:textSize="@dimen/home_text_income_expense"
-            android:maxLines="1"
-            android:ellipsize="end"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/notificationsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="You have X new notifications" />
+
+            <Button
+                android:id="@+id/showAllNotificationsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show All Notifications" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/projectsWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/accountsList"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/addAccountButton"
+                style="@style/primaryRoundedButtonBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Add account" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="450dp"
-        android:orientation="vertical"
-        >
-
-        <Button
-            android:id="@+id/addCategoryButton"
-            style="@style/secondaryRoundedButton200dp"
-            android:background="@drawable/pill_button_filter"
-            android:drawableStart="@drawable/ic_add_black_24dp"
-            android:drawablePadding="10sp"
-            android:text="@string/addCategory" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="350dp"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/addTransactionButton"
-            style="@style/primaryRoundedButton200dp"
-            android:background="@drawable/pill_button"
-            android:drawableStart="@drawable/ic_add_black_24dp"
-            android:drawablePadding="10sp"
-            android:text="@string/addTransaction" />
-    </LinearLayout>
-
 </RelativeLayout>

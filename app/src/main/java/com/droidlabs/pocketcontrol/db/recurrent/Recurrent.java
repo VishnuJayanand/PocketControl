@@ -1,10 +1,26 @@
 package com.droidlabs.pocketcontrol.db.recurrent;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "recurrents")
+import com.droidlabs.pocketcontrol.db.user.User;
+
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(
+    tableName = "recurrents",
+    foreignKeys = @ForeignKey(
+        entity = User.class,
+        parentColumns = "id",
+        childColumns = "owner_id",
+        onDelete = CASCADE
+    ),
+    indices = {@Index("owner_id")}
+)
 public class Recurrent {
 
     @PrimaryKey(autoGenerate = true)
@@ -12,6 +28,11 @@ public class Recurrent {
 
     @ColumnInfo(name = "date")
     private Long date;
+
+    // Foreign keys
+    @ColumnInfo(name = "owner_id")
+    @Nullable
+    private String ownerId;
 
     /**
      * Empty constructor.
@@ -35,6 +56,14 @@ public class Recurrent {
     }
 
     /**
+     * Set owner id.
+     * @param mOwnerId owner id.
+     */
+    public void setOwnerId(final @Nullable String mOwnerId) {
+        this.ownerId = mOwnerId;
+    }
+
+    /**
      * Get id.
      * @return id.
      */
@@ -48,5 +77,14 @@ public class Recurrent {
      */
     public Long getDate() {
         return date;
+    }
+
+    /**
+     * Get owner id.
+     * @return owner id.
+     */
+    @Nullable
+    public String getOwnerId() {
+        return ownerId;
     }
 }

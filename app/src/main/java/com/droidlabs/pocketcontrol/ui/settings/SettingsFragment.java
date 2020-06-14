@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.droidlabs.pocketcontrol.R;
 
 import java.io.File;
@@ -22,20 +24,19 @@ import java.nio.charset.Charset;
 
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
-import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.currency.CurrencyDao;
 import com.droidlabs.pocketcontrol.db.defaults.Defaults;
-import com.droidlabs.pocketcontrol.db.defaults.DefaultsDao;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
+import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 
 public class SettingsFragment extends Fragment {
     private Spinner defaultCategory;
     private Spinner defaultCurrency;
     private Spinner defaultPayment;
-    private CategoryDao categoryDao;
+    private CategoryViewModel categoryViewModel;
+    private DefaultsViewModel defaultsViewModel;
     private CurrencyDao currencyDao;
     private PaymentModeDao paymentModeDao;
-    private DefaultsDao defaultsDao;
     private PocketControlDB db = PocketControlDB.getDatabase(getContext());
 
     @Nullable
@@ -46,9 +47,10 @@ public class SettingsFragment extends Fragment {
         Button button = (Button) v.findViewById(R.id.button);
         button.setOnClickListener(this::export);
 
-        categoryDao = PocketControlDB.getDatabase(getContext()).categoryDao();
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
+
         currencyDao = PocketControlDB.getDatabase(getContext()).currencyDao();
-        defaultsDao = PocketControlDB.getDatabase(getContext()).defaultsDao();
         paymentModeDao = PocketControlDB.getDatabase(getContext()).paymentModeDao();
 
         Button saveSettings = v.findViewById(R.id.addDefaults);
@@ -120,12 +122,12 @@ public class SettingsFragment extends Fragment {
         //get the spinner from the xml.
         defaultCategory = view.findViewById(R.id.defaultCategorySpinner);
         //create a list of items for the spinner.
-        String[] dropdownItems = categoryDao.getCategoriesName();
+        String[] dropdownItems = categoryViewModel.getCategoriesName();
         ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item, dropdownItems);
 
         //set category spinner value
-        String defaultCategoryValue = defaultsDao.getDefaultValue("Category");
+        String defaultCategoryValue = defaultsViewModel.getDefaultValue("Category");
         int selectionPosition = adapterCategory.getPosition(defaultCategoryValue);
 
         //set the spinners adapter to the previously created one.
@@ -147,7 +149,7 @@ public class SettingsFragment extends Fragment {
         //set the spinners adapter to the previously created one.
 
         //set currency spinner value
-        String defaultCurrencyValue = defaultsDao.getDefaultValue("Currency");
+        String defaultCurrencyValue = defaultsViewModel.getDefaultValue("Currency");
         int selectionPosition = adapterCategory.getPosition(defaultCurrencyValue);
 
         //set the spinners adapter to the previously created one.
@@ -169,7 +171,7 @@ public class SettingsFragment extends Fragment {
         //set the spinners adapter to the previously created one.
 
         //set payment mode spinner value
-        String defaultCurrencyValue = defaultsDao.getDefaultValue("Payment Mode");
+        String defaultCurrencyValue = defaultsViewModel.getDefaultValue("Payment Mode");
         int selectionPosition = adapterCategory.getPosition(defaultCurrencyValue);
 
         //set the spinners adapter to the previously created one.

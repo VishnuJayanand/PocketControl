@@ -1,7 +1,10 @@
 package com.droidlabs.pocketcontrol.db.budget;
 
 import android.app.Application;
+
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
+
 import java.util.List;
 
 /**
@@ -10,7 +13,7 @@ import java.util.List;
 public class BudgetRepository {
 
     private BudgetDao budgetDao;
-    private List<Budget> allBudgets;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     /**
      * Creates a new budget repository.
@@ -18,8 +21,8 @@ public class BudgetRepository {
      */
     public BudgetRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
+        sharedPreferencesUtils = new SharedPreferencesUtils(application);
         budgetDao = db.budgetDao();
-        allBudgets = budgetDao.getAllBudgets();
     }
 
     /**
@@ -27,7 +30,13 @@ public class BudgetRepository {
      * @return list of saved budgets.
      */
     public List<Budget> getAllBudgets() {
-        return allBudgets;
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return budgetDao.getAllBudgets(currentUserId);
     }
 
     /**
@@ -35,6 +44,14 @@ public class BudgetRepository {
      * @param budget budget to be saved.
      */
     public void insert(final Budget budget) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return;
+        }
+
+        budget.setOwnerId(currentUserId);
+
         PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
             budgetDao.insert(budget);
         });
@@ -46,6 +63,12 @@ public class BudgetRepository {
      * @return Budget.
      */
     public Budget getBudgetForCategory(final String category) {
-        return budgetDao.getBudgetForCategory(category);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return budgetDao.getBudgetForCategory(category, currentUserId);
     }
 }

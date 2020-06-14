@@ -10,19 +10,36 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.account.Account;
+import com.droidlabs.pocketcontrol.db.user.User;
 
 
+import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_NULL;
 
 @Entity(
     tableName = "transactions",
-    foreignKeys = @ForeignKey(
-        entity = Category.class,
-        parentColumns = "id",
-        childColumns = "category",
-        onDelete = SET_NULL
-    ),
-    indices = {@Index("category")}
+    foreignKeys = {
+            @ForeignKey(
+                entity = Category.class,
+                parentColumns = "id",
+                childColumns = "category",
+                onDelete = SET_NULL
+            ),
+            @ForeignKey(
+                    entity = User.class,
+                    parentColumns = "id",
+                    childColumns = "owner_id",
+                    onDelete = CASCADE
+            ),
+            @ForeignKey(
+                    entity = Account.class,
+                    parentColumns = "id",
+                    childColumns = "account",
+                    onDelete = SET_NULL
+            ),
+    },
+    indices = {@Index("category"), @Index("owner_id"), @Index("account")}
 )
 public class Transaction {
 
@@ -68,6 +85,14 @@ public class Transaction {
     @ColumnInfo(name = "category")
     @Nullable
     private String category;
+
+    @ColumnInfo(name = "account")
+    @Nullable
+    private String account;
+
+    @ColumnInfo(name = "owner_id")
+    @Nullable
+    private String ownerId;
 
     /**
      * Transaction constructor with amount, type, category and date.
@@ -234,6 +259,24 @@ public class Transaction {
     }
 
     /**
+     * Get owner id.
+     * @return owner id.
+     */
+    @Nullable
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    /**
+     * Get account id.
+     * @return account id.
+     */
+    @Nullable
+    public String getAccount() {
+        return account;
+    }
+
+    /**
      * ID setter.
      * @param transId transaction id.
      */
@@ -291,6 +334,22 @@ public class Transaction {
      */
     public void setRecurringIntervalDays(final @Nullable Integer recIntDays) {
         this.recurringIntervalDays = recIntDays;
+    }
+
+    /**
+     * Set owner id.
+     * @param mOwnerId owner id.
+     */
+    public void setOwnerId(final @Nullable String mOwnerId) {
+        this.ownerId = mOwnerId;
+    }
+
+    /**
+     * Set account id.
+     * @param mAccount account id.
+     */
+    public void setAccount(final @Nullable String mAccount) {
+        this.account = mAccount;
     }
 
     /**

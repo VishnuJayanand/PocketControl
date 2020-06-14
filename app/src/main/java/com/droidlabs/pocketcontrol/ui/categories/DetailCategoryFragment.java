@@ -45,8 +45,14 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
         categoryImage.setImageResource(image);
 
         TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+        CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         //Create the adapter for Transaction
-        final TransactionListAdapter adapter = new TransactionListAdapter(getActivity(), this, transactionViewModel);
+        final TransactionListAdapter adapter = new TransactionListAdapter(
+                getActivity(),
+                this,
+                transactionViewModel,
+                categoryViewModel
+        );
         RecyclerView recyclerView = view.findViewById(R.id.transactionListView);
         LinearLayout emptyListImage = view.findViewById(R.id.emptyPageViewWrapper);
 
