@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
@@ -32,10 +33,12 @@ public class AddCategoryFragment extends Fragment {
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.category_add, container, false);
-        categoryViewModel = new CategoryViewModel(getActivity().getApplication());
+
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         tilCategoryName = view.findViewById(R.id.til_categoryName);
         tiedtCategoryName = view.findViewById(R.id.tiedt_categoryName);
         Button btnAdd = view.findViewById(R.id.addNewCategory);
+
         //Set spinner
         setCategoryIconSpinner(view);
 

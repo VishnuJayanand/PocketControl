@@ -5,12 +5,14 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
 
 public class UserRepository {
 
     private UserDao userDao;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     /**
      * Constructor.
@@ -18,6 +20,7 @@ public class UserRepository {
      */
     public UserRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
+        sharedPreferencesUtils = new SharedPreferencesUtils(application);
         userDao = db.userDao();
     }
 
@@ -43,8 +46,26 @@ public class UserRepository {
      * @param userId id.
      * @return user.
      */
-    public User getUserById(final long userId) {
+    public User getUserById(final int userId) {
         User user = userDao.getUserById(userId);
+
+        // TODO: add validation, user should be authenticated
+
+        return user;
+    };
+
+    /**
+     * Get user by id.
+     * @return user.
+     */
+    public User getCurrentUser() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        User user = userDao.getUserById(Integer.parseInt(currentUserId));
 
         // TODO: add validation, user should be authenticated
 
@@ -63,4 +84,14 @@ public class UserRepository {
 
         return user;
     };
+
+    public void updateUserSelectedAccount(String selectedAccount) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return;
+        }
+
+        userDao.updateUserSelectedAccount(Integer.parseInt(currentUserId), selectedAccount);
+    }
 }

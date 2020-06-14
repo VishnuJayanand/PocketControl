@@ -31,4 +31,12 @@ public class AccountViewModel extends AndroidViewModel {
     public LiveData<List<Account>> getAccounts() {
         return accountRepository.getAllAccounts();
     }
+
+    public Account getAccountById(long accId) {
+        return accountRepository.getAccountById(accId);
+    }
+
+    public Long insert(final Account account) {
+        return accountRepository.insert(account);
+    }
 }

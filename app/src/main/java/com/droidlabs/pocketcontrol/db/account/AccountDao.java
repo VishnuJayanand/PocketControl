@@ -15,7 +15,7 @@ public interface AccountDao {
      * @param account project to be saved.
      */
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    void insert(Account account);
+    long insert(Account account);
 
     /**
      * Delete all accounts from the database.
@@ -28,7 +28,7 @@ public interface AccountDao {
      * @param ownerId account owner.
      * @return all accounts.
      */
-    @Query("SELECT * FROM accounts WHERE is_public=1 OR owner_id=:ownerId")
+    @Query("SELECT * FROM accounts WHERE owner_id=:ownerId")
     LiveData<List<Account>> getAllAccounts(String ownerId);
 
     /**
@@ -36,6 +36,6 @@ public interface AccountDao {
      * @param accountId id.
      * @return account.
      */
-    @Query("SELECT * FROM accounts WHERE id=:accountId")
-    Account getAccountById(long accountId);
+    @Query("SELECT * FROM accounts WHERE id=:accountId AND owner_id=:ownerId")
+    Account getAccountById(long accountId, String ownerId);
 }

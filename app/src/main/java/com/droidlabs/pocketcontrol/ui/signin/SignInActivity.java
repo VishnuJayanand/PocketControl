@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,10 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidlabs.pocketcontrol.R;
+import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.defaults.Defaults;
 import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.home.AccountViewModel;
 import com.droidlabs.pocketcontrol.ui.home.HomeActivity;
 import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
@@ -55,8 +58,11 @@ public class SignInActivity extends AppCompatActivity {
     private TextInputLayout repeatAccessTokenInputGroup;
     private TextInputEditText repeatAccessTokenInputText;
     private SharedPreferencesUtils sharedPreferencesUtils;
+
     private CategoryViewModel categoryViewModel;
     private DefaultsViewModel defaultsViewModel;
+    private AccountViewModel accountViewModel;
+
     private MaterialAlertDialogBuilder switchUserDialog;
     private User user;
 
@@ -71,6 +77,7 @@ public class SignInActivity extends AppCompatActivity {
         sharedPreferencesUtils = new SharedPreferencesUtils(getApplication());
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
+        accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
 
         setContentView(R.layout.activity_sign_in_screen);
 
@@ -210,6 +217,7 @@ public class SignInActivity extends AppCompatActivity {
 
         createDefaultUserCategories();
         createDefaultUserDefaults();
+        createDefaultUserAccount();
     }
 
     /**
@@ -253,7 +261,7 @@ public class SignInActivity extends AppCompatActivity {
      * Set user locally and in the text.
      */
     private void setUser() {
-        user = userViewModel.getUserById(Long.parseLong(sharedPreferencesUtils.getCurrentUserId()));
+        user = userViewModel.getCurrentUser();
         currentUser.setText(user.getEmail());
     }
 
@@ -322,5 +330,15 @@ public class SignInActivity extends AppCompatActivity {
     private void createDefaultUserDefaults() {
         Defaults defaultValue = new Defaults("Currency", "EUR");
         defaultsViewModel.insert(defaultValue);
+    }
+
+    private void createDefaultUserAccount() {
+        Account defaultAccount = new Account();
+
+        defaultAccount.setName("Default account");
+
+        Long newAccountId = accountViewModel.insert(defaultAccount);
+
+        userViewModel.updateUserSelectedAccount(String.valueOf(newAccountId));
     }
 }

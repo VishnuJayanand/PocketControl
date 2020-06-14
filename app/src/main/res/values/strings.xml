@@ -27,11 +27,9 @@
 
     <!-- Home strings -->
 
-    <!-- Projects strings -->
-    <string name="newProjectHintName">Project Name</string>
-    <string name="newProjectSelectColorText">Select a project color:</string>
-    <string name="newProjectIsGlobalText">Is the project global?</string>
-    <string name="newProjectIsGlobalHelpText">A global project is accessible to other users as well.</string>
+    <!-- Accounts strings -->
+    <string name="newAccountHintName">Account Name</string>
+    <string name="newAccountSelectColorText">Select an account color:</string>
 
     <!-- Categories strings -->
     <string name="categoryTitle">Category Title</string>

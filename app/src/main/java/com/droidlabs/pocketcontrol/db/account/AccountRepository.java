@@ -44,13 +44,26 @@ public class AccountRepository {
      * @return transaction.
      */
     public Account getAccountById(final long accountId) {
-        Account account = accountDao.getAccountById(accountId);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
 
-        if (account.getIsPublic() != null && account.getIsPublic()) {
-            return account;
+        if (currentUserId.equals("")) {
+            return null;
         }
 
-        // TODO: add validation, user should be owner of account
+        Account account = accountDao.getAccountById(accountId, currentUserId);
+
         return account;
     };
+
+    public Long insert(final Account account) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        account.setOwnerId(currentUserId);
+
+        return accountDao.insert(account);
+    }
 }
