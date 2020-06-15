@@ -142,13 +142,15 @@ public class AddTransactionFragment extends Fragment {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
                 if (isChecked) {
-                    if (contactArray == null) {
-                        dropdownTransactionFriend.setText("There are no contacts available on your phone");
-                    }
                     addFriendWrapper.setVisibility(View.VISIBLE);
                     methodForFriendWrapper.setVisibility(View.VISIBLE);
                     //set the spinner for transactionFriend
                     setFriendListSpinner(view);
+                    if (contactArray == null) {
+                        dropdownTransactionFriend.setText("There are no contacts available on your phone");
+//                        dropdownTransactionFriend.setClickable(false);
+//                        dropdownTransactionFriend.setEnabled(false);
+                    }
                 } else {
                     addFriendWrapper.setVisibility(View.GONE);
                     methodForFriendWrapper.setVisibility(View.GONE);

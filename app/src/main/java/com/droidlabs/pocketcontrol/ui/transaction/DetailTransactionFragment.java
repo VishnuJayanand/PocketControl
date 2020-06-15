@@ -84,7 +84,7 @@ public class DetailTransactionFragment extends Fragment {
                 String phoneNumber = friend.split(":")[1];
                 transactionFriend.setText(friendName);
                 transactionFriendPhoneNumber.setText(phoneNumber);
-            } else if (friend.equals("")) {
+            } else if (friend.equals("") || friend.equals("There are no contacts available on your phone")) {
                 transactionFriend.setText("No contact selected");
                 transactionFriendPhoneNumber.setText("");
             } else {
