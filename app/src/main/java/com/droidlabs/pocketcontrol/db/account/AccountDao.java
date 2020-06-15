@@ -37,5 +37,16 @@ public interface AccountDao {
      * @return account.
      */
     @Query("SELECT * FROM accounts WHERE id=:accountId AND owner_id=:ownerId")
-    Account getAccountById(long accountId, String ownerId);
+    Account getAccountById(int accountId, String ownerId);
+
+    /**
+     * Get account by name.
+     * @param accountName name.
+     * @return account.
+     */
+    @Query("SELECT * FROM accounts WHERE name=:accountName AND owner_id=:ownerId")
+    Account getAccountByName(String accountName, String ownerId);
+
+    @Query("SELECT name FROM accounts WHERE owner_id=:ownerId")
+    String[] getAccountNames(String ownerId);
 }

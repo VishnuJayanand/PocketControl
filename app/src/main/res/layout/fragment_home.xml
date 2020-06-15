@@ -67,17 +67,25 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/projectsWrapper"
+            android:id="@+id/accountsWrapper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/accountsList"
+            <Button
+                android:id="@+id/switchAccountButton"
+                style="@style/baseSmallButton"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="Switch account" />
+
+            <TextView
+                android:id="@+id/selectedAccountTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="TextView" />
 
             <Button
                 android:id="@+id/addAccountButton"

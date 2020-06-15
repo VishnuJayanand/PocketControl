@@ -1,5 +1,6 @@
 package com.droidlabs.pocketcontrol.ui.home;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -28,16 +30,22 @@ import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.ui.signin.UserViewModel;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
 
 public class HomeFragment extends Fragment {
 
     private Animation topAnimation;
-    private TextView textViewAmount, textViewNetBalance;
+    private TextView textViewAmount, textViewNetBalance, selectedAccountTitle;
     private List<Account> accountList;
     private Button addAccountButton;
     private UserViewModel userViewModel;
+    private AccountViewModel accountViewModel;
+    private String[] accountNames;
+    private MaterialAlertDialogBuilder dialogBuilder;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     @Nullable
     @Override
@@ -45,11 +53,14 @@ public class HomeFragment extends Fragment {
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.fragment_home, container, false);
 
+        LinearLayout accountsWrapper = view.findViewById(R.id.accountsWrapper);
+        Button switchAccount = accountsWrapper.findViewById(R.id.switchAccountButton);
+
+        sharedPreferencesUtils = new SharedPreferencesUtils(getActivity().getApplication());
+        accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        User currentUser = userViewModel.getCurrentUser();
 
-        Log.v("USER", currentUser.getSelectedAccount());
-
+        selectedAccountTitle = view.findViewById(R.id.selectedAccountTitle);
         textViewAmount = view.findViewById(R.id.homeScreenTop);
         textViewNetBalance = view.findViewById(R.id.homeScreenNetBalanceText);
         addAccountButton = view.findViewById(R.id.addAccountButton);
@@ -62,8 +73,13 @@ public class HomeFragment extends Fragment {
         accountViewModel.getAccounts().observe(getViewLifecycleOwner(), new Observer<List<Account>>() {
             @Override
             public void onChanged(final List<Account> accounts) {
-                Log.v("ACCOUNTS", "User has " + accounts.size() + " accounts.");
-                // TODO: update account list for dropdown
+                accountNames = new String[accounts.size()];
+
+                for (int i = 0; i < accounts.size(); i++) {
+                    accountNames[i] = accounts.get(i).getName();
+                }
+
+                buildSelectAccountDialog(accountNames);
             }
         });
 
@@ -103,6 +119,36 @@ public class HomeFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+
+        switchAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogBuilder.show();
+            }
+        });
+
+        updateSelectedAccountText();
+
         return view;
+    }
+
+    private void buildSelectAccountDialog(String[] names) {
+        dialogBuilder = new MaterialAlertDialogBuilder(getContext()).setTitle("Select your account:").setItems(names, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Account selectedAccount = accountViewModel.getAccountByName(names[which]);
+
+                userViewModel.updateUserSelectedAccount(String.valueOf(selectedAccount.getId()));
+                sharedPreferencesUtils.setCurrentAccountId(String.valueOf(selectedAccount.getId()));
+
+                selectedAccountTitle.setText(selectedAccount.getName());
+            }
+        });
+    }
+
+    private void updateSelectedAccountText() {
+        Log.v("SELECTED ACCOUNT", sharedPreferencesUtils.getCurrentAccountIdKey());
+        Account selectedAcc = accountViewModel.getAccountById(Integer.parseInt(sharedPreferencesUtils.getCurrentAccountIdKey()));
+        selectedAccountTitle.setText(selectedAcc.getName());
     }
 }

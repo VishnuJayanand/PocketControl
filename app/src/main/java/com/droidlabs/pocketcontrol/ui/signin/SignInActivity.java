@@ -226,7 +226,11 @@ public class SignInActivity extends AppCompatActivity {
     private void signIn() {
         if (accessTokenValueText.getText().toString().equals(user.getAccessPin())) {
             enterAccessTokenInputGroup.setError(null);
+
             sharedPreferencesUtils.setIsSignedIn(true);
+            sharedPreferencesUtils.setCurrentUserId(String.valueOf(user.getId()));
+            sharedPreferencesUtils.setCurrentAccountId(user.getSelectedAccount());
+
             Intent intent = new Intent(getApplication(), HomeActivity.class);
             startActivity(intent);
         } else {
@@ -340,5 +344,6 @@ public class SignInActivity extends AppCompatActivity {
         Long newAccountId = accountViewModel.insert(defaultAccount);
 
         userViewModel.updateUserSelectedAccount(String.valueOf(newAccountId));
+        sharedPreferencesUtils.setCurrentAccountId(String.valueOf(newAccountId));
     }
 }

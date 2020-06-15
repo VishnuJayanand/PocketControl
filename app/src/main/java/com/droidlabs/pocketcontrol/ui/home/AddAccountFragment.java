@@ -21,6 +21,7 @@ import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.ui.signin.UserViewModel;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -37,6 +38,7 @@ public class AddAccountFragment extends Fragment {
     private String[] colorsStr = {"Blue", "Dark blue", "Green", "Dark green", "Orange", "Dark orange", "Purple", "Dark purple"};
     private int selectedAccountColor;
     private MaterialAlertDialogBuilder dialogBuilder;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     @Nullable
     @Override
@@ -45,6 +47,7 @@ public class AddAccountFragment extends Fragment {
 
         Button addNewAccount = view.findViewById(R.id.addNewAccount);
 
+        sharedPreferencesUtils = new SharedPreferencesUtils(getActivity().getApplication());
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         accountNameInputLayout = view.findViewById(R.id.tilAccountName);
@@ -103,9 +106,8 @@ public class AddAccountFragment extends Fragment {
 
         long newAccountId = accountViewModel.insert(newAccount);
 
-        Account newSavedAccount = accountViewModel.getAccountById(newAccountId);
-
-        userViewModel.updateUserSelectedAccount(String.valueOf(newSavedAccount.getId()));
+        userViewModel.updateUserSelectedAccount(String.valueOf(newAccountId));
+        sharedPreferencesUtils.setCurrentAccountId(String.valueOf(newAccountId));
 
         Fragment fragment = new HomeFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

@@ -9,6 +9,7 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.user.User;
 
 import static androidx.room.ForeignKey.CASCADE;
@@ -22,6 +23,12 @@ import static androidx.room.ForeignKey.CASCADE;
             childColumns = "owner_id",
             onDelete = CASCADE
         ),
+            @ForeignKey(
+                    entity = Account.class,
+                    parentColumns = "id",
+                    childColumns = "account",
+                    onDelete = CASCADE
+            ),
     },
     indices = {@Index("owner_id")}
 )
@@ -42,6 +49,10 @@ public class Category {
     @ColumnInfo(name = "owner_id")
     @Nullable
     private String ownerId;
+
+    @ColumnInfo(name = "account")
+    @Nullable
+    private String account;
 
     /**
      * Category constructor.
@@ -113,6 +124,11 @@ public class Category {
         return ownerId;
     }
 
+    @Nullable
+    public String getAccount() {
+        return account;
+    }
+
     /**
      * Category id setter.
      * @param categoryId category id.
@@ -153,5 +169,9 @@ public class Category {
     @Override
     public String toString() {
         return getName();
+    }
+
+    public void setAccount(@Nullable String mAccount) {
+        this.account = mAccount;
     }
 }

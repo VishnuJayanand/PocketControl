@@ -55,7 +55,7 @@ public interface UserDao {
      */
     @Query("UPDATE users SET "
             + "selected_account=:selectedAccount "
-            + "WHERE id=:userId;")
+            + "WHERE id=:userId")
     void updateUserSelectedAccount(
             int userId,
             String selectedAccount

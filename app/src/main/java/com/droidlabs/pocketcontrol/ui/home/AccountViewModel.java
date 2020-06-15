@@ -32,11 +32,19 @@ public class AccountViewModel extends AndroidViewModel {
         return accountRepository.getAllAccounts();
     }
 
-    public Account getAccountById(long accId) {
+    public Account getAccountById(int accId) {
         return accountRepository.getAccountById(accId);
     }
 
-    public Long insert(final Account account) {
+    public Account getAccountByName(String accName) {
+        return accountRepository.getAccountByName(accName);
+    }
+
+    public String[] getAccountNames() {
+        return accountRepository.getAccountNames();
+    }
+
+    public long insert(final Account account) {
         return accountRepository.insert(account);
     }
 }

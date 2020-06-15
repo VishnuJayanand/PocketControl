@@ -1,6 +1,7 @@
 package com.droidlabs.pocketcontrol.db.account;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -41,10 +42,12 @@ public class AccountRepository {
     /**
      * Get account by id.
      * @param accountId id.
-     * @return transaction.
+     * @return account.
      */
-    public Account getAccountById(final long accountId) {
+    public Account getAccountById(final int accountId) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        Log.v("USER", currentUserId);
 
         if (currentUserId.equals("")) {
             return null;
@@ -55,11 +58,42 @@ public class AccountRepository {
         return account;
     };
 
-    public Long insert(final Account account) {
+    /**
+     * Get account by id.
+     * @param accountName id.
+     * @return transaction.
+     */
+    public Account getAccountByName(final String accountName) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
 
         if (currentUserId.equals("")) {
             return null;
+        }
+
+        Account account = accountDao.getAccountByName(accountName, currentUserId);
+
+        return account;
+    };
+
+    /**
+     * get account names.
+     * @return the account names
+     */
+    public String[] getAccountNames() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return accountDao.getAccountNames(currentUserId);
+    }
+
+    public long insert(final Account account) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return -1;
         }
 
         account.setOwnerId(currentUserId);
