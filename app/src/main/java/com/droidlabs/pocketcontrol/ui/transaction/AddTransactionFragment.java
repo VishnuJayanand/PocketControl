@@ -148,8 +148,8 @@ public class AddTransactionFragment extends Fragment {
                     setFriendListSpinner(view);
                     if (contactArray == null) {
                         dropdownTransactionFriend.setText("There are no contacts available on your phone");
-//                        dropdownTransactionFriend.setClickable(false);
-//                        dropdownTransactionFriend.setEnabled(false);
+                        dropdownTransactionFriend.setClickable(false);
+                        dropdownTransactionFriend.setEnabled(false);
                     }
                 } else {
                     addFriendWrapper.setVisibility(View.GONE);
