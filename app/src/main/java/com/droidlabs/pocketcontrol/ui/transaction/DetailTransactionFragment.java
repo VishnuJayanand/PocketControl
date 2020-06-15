@@ -79,11 +79,14 @@ public class DetailTransactionFragment extends Fragment {
                 System.out.println(methodForFriend);
                 methodForFriend = methodForFriend + " To ";
             }
-            if (!friend.equals("No contact selected")) {
+            if (friend.contains(",")) {
                 String friendName = friend.split(",")[0];
                 String phoneNumber = friend.split(":")[1];
                 transactionFriend.setText(friendName);
                 transactionFriendPhoneNumber.setText(phoneNumber);
+            } else if (friend.equals("")) {
+                transactionFriend.setText("No contact selected");
+                transactionFriendPhoneNumber.setText("");
             } else {
                 transactionFriend.setText(friend);
                 transactionFriendPhoneNumber.setText("");

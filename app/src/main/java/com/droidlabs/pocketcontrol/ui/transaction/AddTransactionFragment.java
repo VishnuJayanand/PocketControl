@@ -142,7 +142,9 @@ public class AddTransactionFragment extends Fragment {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
                 if (isChecked) {
-
+                    if (contactArray == null) {
+                        dropdownTransactionFriend.setText("There are no contacts available on your phone");
+                    }
                     addFriendWrapper.setVisibility(View.VISIBLE);
                     methodForFriendWrapper.setVisibility(View.VISIBLE);
                     //set the spinner for transactionFriend
@@ -340,7 +342,7 @@ public class AddTransactionFragment extends Fragment {
 
         //set the spinners adapter to the previously created one.
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
-                .setTitle("Select the transaction category")
+                .setTitle("Select the recurring type")
                 .setItems(dropdownItems, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
@@ -378,16 +380,21 @@ public class AddTransactionFragment extends Fragment {
      */
     private void setFriendListSpinner(final View view) {
         //get the list of friend contact
-//        String[] dropdownItems = this.contactArray;
-
+        //Check to see if the contact list is empty or not
         dropdownTransactionFriend = view.findViewById(R.id.spinnerTransactionFriend);
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
-                .setTitle("Select the transaction type")
+                .setTitle("Select friend from contact list")
                 .setItems(contactArray, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
                         dropdownTransactionFriend.setText(contactArray[which]);
-
+                    }
+                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(final DialogInterface dialog) {
+                        if (dropdownTransactionFriend.getText().toString().equals("")) {
+                            dropdownTransactionFriend.setText("No contact selected");
+                        }
                     }
                 });
 
@@ -419,7 +426,7 @@ public class AddTransactionFragment extends Fragment {
 
         dropdownTransactionMethodForFriend = view.findViewById(R.id.spinnerTransactionMethodForFriend);
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
-                .setTitle("Select the transaction type")
+                .setTitle("Select the method for friend")
                 .setItems(dropdownItems, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
