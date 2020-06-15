@@ -44,6 +44,7 @@ public class DetailTransactionFragment extends Fragment {
         TextView transactionCategoryTitle = view.findViewById(R.id.transactionCategoryTitle);
         TextView transactionFriend = view.findViewById(R.id.transactionFriend);
         TextView transactionMethodForFriend = view.findViewById(R.id.transactionMethodForFriend);
+        TextView transactionFriendPhoneNumber = view.findViewById(R.id.transactionFriendPhoneNumber);
         ImageView transactionCategoryImage = view.findViewById(R.id.transactionCategoryImage);
         LinearLayout friendWrapper = view.findViewById(R.id.friendWrapper);
 
@@ -77,13 +78,23 @@ public class DetailTransactionFragment extends Fragment {
                 System.out.println(methodForFriend);
                 methodForFriend = methodForFriend + " To ";
             }
+            if (!friend.equals("No contact selected")) {
+                String friendName = friend.split(",")[0];
+                String phoneNumber = friend.split(":")[1];
+                transactionFriend.setText(friendName);
+                transactionFriendPhoneNumber.setText(phoneNumber);
+            } else {
+                transactionFriend.setText(friend);
+                transactionFriendPhoneNumber.setText("");
+            }
         }
+        //Edit the friend string
+
 
         transactionDate.setText(DateUtils.formatDate(date));
         transactionAmount.setText(amountToString);
         transactionType.setText(typeAsString);
         transactionNote.setText(note);
-        transactionFriend.setText(friend);
         transactionMethodForFriend.setText(methodForFriend);
         return view;
     }

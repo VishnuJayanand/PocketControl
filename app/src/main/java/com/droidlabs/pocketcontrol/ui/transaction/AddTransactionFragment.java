@@ -112,7 +112,7 @@ public class AddTransactionFragment extends Fragment {
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overiden method
         } else {
             // Android version is lesser than 6.0 or the permission is already granted.
-            getContactNames();
+            getContactList();
         }
 
         //set the spinner for transactionType from the xml.
@@ -144,11 +144,11 @@ public class AddTransactionFragment extends Fragment {
             @Override
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
                 if (isChecked) {
-                    //set the spinner for transactionFriend
-                    setFriendListSpinner(view);
+
                     addFriendWrapper.setVisibility(View.VISIBLE);
                     methodForFriendWrapper.setVisibility(View.VISIBLE);
-
+                    //set the spinner for transactionFriend
+                    setFriendListSpinner(view);
                 } else {
                     addFriendWrapper.setVisibility(View.GONE);
                     methodForFriendWrapper.setVisibility(View.GONE);
@@ -380,15 +380,15 @@ public class AddTransactionFragment extends Fragment {
      */
     private void setFriendListSpinner(final View view) {
         //get the list of friend contact
-        String[] dropdownItems = this.contactArray;
+//        String[] dropdownItems = this.contactArray;
 
         dropdownTransactionFriend = view.findViewById(R.id.spinnerTransactionFriend);
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Select the transaction type")
-                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                .setItems(contactArray, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
-                        dropdownTransactionFriend.setText(dropdownItems[which]);
+                        dropdownTransactionFriend.setText(contactArray[which]);
 
                     }
                 });
@@ -426,7 +426,6 @@ public class AddTransactionFragment extends Fragment {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
                         dropdownTransactionMethodForFriend.setText(dropdownItems[which]);
-
                     }
                 });
 
@@ -459,10 +458,11 @@ public class AddTransactionFragment extends Fragment {
         if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission is granted
-                getContactNames();
+                getContactList();
             } else {
                 Toast.makeText(getContext(), "Until you grant the permission, we cannot display the names",
                         Toast.LENGTH_SHORT).show();
+                dropdownTransactionFriend.setText("No contact selected");
             }
         }
     }
@@ -470,26 +470,41 @@ public class AddTransactionFragment extends Fragment {
     /**
      * This method is to take get the contact list of the android.
      */
-    private void getContactNames() {
+    private void getContactList() {
         List<String> contacts = new ArrayList<>();
-        // Get the ContentResolver
         ContentResolver cr = getContext().getContentResolver();
-        // Get the Cursor of all the contacts
-        Cursor cursor = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null);
 
-        // Move the cursor to first. Also check whether the cursor is empty or not.
-        if (cursor.moveToFirst()) {
-            // Iterate through the cursor
-            do {
-                // Get the contacts name
-                String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                contacts.add(name);
-            } while (cursor.moveToNext());
+        if (cur != null && cur.getCount()  > 0) {
+            while (cur != null && cur.moveToNext()) {
+                String id = cur.getString(
+                        cur.getColumnIndex(ContactsContract.Contacts._ID));
+                String name = cur.getString(cur.getColumnIndex(
+                        ContactsContract.Contacts.DISPLAY_NAME));
+
+                if (cur.getInt(cur.getColumnIndex(
+                        ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                    Cursor pCur = cr.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            new String[]{id}, null);
+                    while (pCur.moveToNext()) {
+                        String phoneNo = pCur.getString(pCur.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String contact = name + ", Phone number: " + phoneNo;
+                        contacts.add(contact);
+                    }
+                    pCur.close();
+                    this.contactArray = new String[contacts.size()];
+                    this.contactArray = contacts.toArray(contactArray);
+                }
+            }
         }
-        // Close the curosor
-        cursor.close();
-        this.contactArray = new String[contacts.size()];
-        this.contactArray = contacts.toArray(contactArray);
+        if (cur != null) {
+            cur.close();
+        }
     }
 
     /**
