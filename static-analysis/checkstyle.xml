@@ -104,9 +104,10 @@
         <module name="LineLength">
             <property name="max" value="120"/>
         </module>
-        <module name="MethodLength"/>
+        <module name="MethodLength">
+            <property name="max" value="300"/>
+        </module>
 <!--        <module name="ParameterNumber"/>-->
-
 
         <!-- Checks for whitespace                               -->
         <!-- See http://checkstyle.sf.net/config_whitespace.html -->

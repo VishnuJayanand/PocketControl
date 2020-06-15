@@ -92,6 +92,17 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
                         categoryFilter = selectedCategory;
                         categoryFilterEnabled = categoryFilter.getId() != -1;
                     }
+                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(final DialogInterface dialog) {
+                        if (categoryFilter == null) {
+                            Category selectedCategory = categoryFilterAdapter.getItem(0);
+
+                            categoryFilterSpinner.setText(selectedCategory.getName());
+                            categoryFilter = selectedCategory;
+                            categoryFilterEnabled = categoryFilter.getId() != -1;
+                        }
+                    }
                 });
 
         categoryFilterSpinner.setOnFocusChangeListener(new View.OnFocusChangeListener() {

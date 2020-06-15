@@ -31,12 +31,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
-import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
+import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.droidlabs.pocketcontrol.utils.FormatterUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -66,8 +65,8 @@ public class AddTransactionFragment extends Fragment {
     private TextInputEditText dropdownTransactionMethodForFriend;
     private TextInputEditText editText;
     private Long transactionDate;
-    private CategoryDao categoryDao;
     private TransactionViewModel transactionViewModel;
+    private CategoryViewModel categoryViewModel;
     private Switch recurringSwitch;
     private Switch addFriendSwitch;
     private LinearLayout recurringTransactionWrapper;
@@ -84,8 +83,6 @@ public class AddTransactionFragment extends Fragment {
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.transaction_add, container, false);
-        currentView = view;
-        categoryDao = PocketControlDB.getDatabase(getContext()).categoryDao();
         tiedtTransactionAmount = view.findViewById(R.id.tiedt_transactionAmount);
         tiedtTransactionNote = view.findViewById(R.id.tiedt_transactionNote);
         tilTransactionAmount = view.findViewById(R.id.til_transactionAmount);
@@ -102,6 +99,7 @@ public class AddTransactionFragment extends Fragment {
 
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
         Button btnAdd = view.findViewById(R.id.addNewTransaction);
         //Check for android version and request a permission from the user
@@ -302,7 +300,7 @@ public class AddTransactionFragment extends Fragment {
     private void setTransactionCategorySpinner(final View view) {
 
         dropdownTransactionCategory = view.findViewById(R.id.spinnerTransactionCategory);
-        String[] dropdownItems = categoryDao.getCategoriesName();
+        String[] dropdownItems = categoryViewModel.getCategoriesName();
 
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Select the transaction category")
@@ -332,7 +330,7 @@ public class AddTransactionFragment extends Fragment {
     }
 
     /**
-     * This method to set the spinner of Transaction Category.
+     * This method to set the spinner of Transaction Recurring.
      * @param view the transaction add layout
      */
     private void setRecurringTransactionsSpinner(final View view) {
@@ -576,7 +574,7 @@ public class AddTransactionFragment extends Fragment {
      * @return Boolean if the input is qualify or not
      */
     private boolean checkTransactionCategory() {
-        String[] dropdownItems = categoryDao.getCategoriesName();
+        String[] dropdownItems = categoryViewModel.getCategoriesName();
         if (!Arrays.asList(dropdownItems).contains(dropdownTransactionCategory.getText().toString().trim())) {
             tilCategory.setError("Category is not valid");
             requestFocus(dropdownTransactionCategory);
@@ -682,7 +680,7 @@ public class AddTransactionFragment extends Fragment {
         convertRecurringTransaction();
 
         String transactionCategory = dropdownTransactionCategory.getText().toString();
-        Category selectedCategory = categoryDao.getSingleCategory(transactionCategory);
+        Category selectedCategory = categoryViewModel.getSingleCategory(transactionCategory);
         int categoryId = selectedCategory.getId();
 
         float transactionAmount = Float.parseFloat(tiedtTransactionAmount.getText().toString());

@@ -13,13 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.droidlabs.pocketcontrol.db.category.CategoryDao;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -28,14 +25,14 @@ public class AddCategoryFragment extends Fragment {
     private TextInputEditText tiedtCategoryName;
     private TextInputLayout tilCategoryName;
     private TextInputEditText dropdown;
-    private CategoryDao categoryDao;
+    private CategoryViewModel categoryViewModel;
 
     @Nullable
     @Override
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.category_add, container, false);
-        categoryDao = PocketControlDB.getDatabase(getContext()).categoryDao();
+        categoryViewModel = new CategoryViewModel(getActivity().getApplication());
         tilCategoryName = view.findViewById(R.id.til_categoryName);
         tiedtCategoryName = view.findViewById(R.id.tiedt_categoryName);
         Button btnAdd = view.findViewById(R.id.addNewCategory);
@@ -121,7 +118,8 @@ public class AddCategoryFragment extends Fragment {
      * @return boolean if input is exist or not
      */
     private boolean validateIfCategoryNameIsAvailable() {
-        String[] listCategory = categoryDao.getCategoriesName();
+        String[] listCategory = categoryViewModel.getCategoriesName();
+
         for (String s : listCategory) {
             if (s.equalsIgnoreCase(tiedtCategoryName.getText().toString())) {
                 tilCategoryName.setError("This category already exist. Please choose other name");
@@ -148,8 +146,7 @@ public class AddCategoryFragment extends Fragment {
         int resID = this.getResources().getIdentifier(categoryIcon, "drawable", getContext().getPackageName());
         String categoryName = tiedtCategoryName.getText().toString().trim() + "";
         Category newCategory = new Category(categoryName, resID);
-        //Get CategoryViewModel
-        final CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+
         //Insert new Category in to the database
         categoryViewModel.insert(newCategory);
 

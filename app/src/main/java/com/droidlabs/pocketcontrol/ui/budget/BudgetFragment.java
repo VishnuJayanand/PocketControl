@@ -15,11 +15,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
+import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+
 import java.util.List;
 
 public class BudgetFragment extends Fragment {
 
     private BudgetViewModel budgetViewModel;
+    private CategoryViewModel categoryViewModel;
     private List<Budget> allBudgets;
     private ArrayAdapter<String> nameAdapter;
 
@@ -30,6 +33,8 @@ public class BudgetFragment extends Fragment {
         View view = inf.inflate(R.layout.fragment_budget, container, false);
 
         budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+
         ListView listView = (ListView) view.findViewById(R.id.budget_list);
         LinearLayout emptyTransactions = view.findViewById(R.id.emptyPageViewWrapper);
 
@@ -39,7 +44,12 @@ public class BudgetFragment extends Fragment {
             emptyTransactions.setVisibility(View.VISIBLE);
         } else {
             emptyTransactions.setVisibility(View.GONE);
-            BudgetLayoutAdapter adapter = new BudgetLayoutAdapter(getContext(), R.layout.budget_layout, allBudgets);
+            BudgetLayoutAdapter adapter = new BudgetLayoutAdapter(
+                    getContext(),
+                    R.layout.budget_layout,
+                    allBudgets,
+                    categoryViewModel
+            );
             listView = (ListView) view.findViewById(R.id.budget_list);
             listView.setAdapter(adapter);
         }

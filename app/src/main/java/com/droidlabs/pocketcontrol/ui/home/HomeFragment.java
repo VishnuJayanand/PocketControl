@@ -10,18 +10,16 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
-import com.droidlabs.pocketcontrol.ui.categories.AddCategoryFragment;
-import com.droidlabs.pocketcontrol.ui.transaction.AddTransactionFragment;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 
@@ -31,22 +29,35 @@ public class HomeFragment extends Fragment {
 
     private PocketControlDB db = PocketControlDB.getDatabase(getContext());
     private Animation topAnimation;
-    private TextView textViewAmount, textViewExpense, textViewIncome, textViewNetBalance;
+    private TextView textViewAmount, textViewNetBalance;
+    private List<Account> projectList;
+    private AccountListAdapter accountListAdapter;
 
     @Nullable
     @Override
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.fragment_home, container, false);
+        RecyclerView accountsRecyclerView = view.findViewById(R.id.accountsList);
 
         textViewAmount = view.findViewById(R.id.homeScreenTop);
         textViewNetBalance = view.findViewById(R.id.homeScreenNetBalanceText);
-        textViewIncome = view.findViewById(R.id.homeScreenTotalIncome);
-        textViewExpense = view.findViewById(R.id.homeScreenTotalExpense);
 
         topAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.top_animation);
         textViewAmount.setAnimation(topAnimation);
         textViewNetBalance.setAnimation(topAnimation);
+
+        AccountViewModel projectViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
+        projectViewModel.getAccounts().observe(getViewLifecycleOwner(), new Observer<List<Account>>() {
+            @Override
+            public void onChanged(final List<Account> accounts) {
+                accountListAdapter.setAccounts(accounts);
+            }
+        });
+
+        accountListAdapter = new AccountListAdapter(getActivity(), getActivity().getApplication());
+        accountsRecyclerView.setAdapter(accountListAdapter);
+        accountsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {
@@ -67,39 +78,12 @@ public class HomeFragment extends Fragment {
 
                 float totalAmount =  totalIncome - totalExpense;
 
-                textViewExpense.setText("Total Expense:  " + CurrencyUtils.formatAmount(totalExpense));
-                textViewIncome.setText("Total Income:    " + CurrencyUtils.formatAmount(totalIncome));
                 textViewAmount.setText(CurrencyUtils.formatAmount(totalAmount));
             }
         });
 
         transactionViewModel.setCategoryFilter(false, "-1");
 
-        AppCompatButton addCategoryButton = view.findViewById(R.id.addCategoryButton);
-        addCategoryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v)  {
-                Fragment fragment = new AddCategoryFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
-
-        AppCompatButton addTransactionLayout = view.findViewById(R.id.addTransactionButton);
-        addTransactionLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v)  {
-                Fragment fragment = new AddTransactionFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
         return view;
     }
 }

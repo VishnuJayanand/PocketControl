@@ -3,13 +3,14 @@ package com.droidlabs.pocketcontrol.db.category;
 import android.app.Application;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
 
 public class CategoryRepository {
 
     private CategoryDao categoryDao;
-    private List<Category> allCategories;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     /**
      * Category repository constructor.
@@ -17,8 +18,8 @@ public class CategoryRepository {
      */
     public CategoryRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
+        sharedPreferencesUtils = new SharedPreferencesUtils(application);
         categoryDao = db.categoryDao();
-        allCategories = categoryDao.getAllCategories();
     }
 
     /**
@@ -26,7 +27,13 @@ public class CategoryRepository {
      * @return list of saved categories.
      */
     public List<Category> getAllCategories() {
-        return allCategories;
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return categoryDao.getAllCategories(currentUserId);
     }
 
     /**
@@ -34,6 +41,14 @@ public class CategoryRepository {
      * @param category category to be saved.
      */
     public void insert(final Category category) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return;
+        }
+
+        category.setOwnerId(currentUserId);
+
         PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
             categoryDao.insert(category);
         });
@@ -42,9 +57,16 @@ public class CategoryRepository {
     /**
      * get a  category.
      * @param categoryId category id.
+     * @return Category.
      */
-    public void getSingleCategory(final int categoryId) {
-        categoryDao.getSingleCategory(categoryId);
+    public Category getSingleCategory(final int categoryId) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return categoryDao.getSingleCategory(categoryId, currentUserId);
     }
 
     /**
@@ -53,7 +75,13 @@ public class CategoryRepository {
      * @return category.
      */
     public Category getSingleCategory(final String categoryName) {
-        return categoryDao.getSingleCategory(categoryName);
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return categoryDao.getSingleCategory(categoryName, currentUserId);
     }
 
     /**
@@ -61,7 +89,13 @@ public class CategoryRepository {
      * @return the category names
      */
     public String[] getCategoriesName() {
-        return categoryDao.getCategoriesName();
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return categoryDao.getCategoriesName(currentUserId);
     }
 
 }

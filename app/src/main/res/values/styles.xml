@@ -58,6 +58,13 @@
         <item name="android:layout_width">200dp</item>
     </style>
 
+    <style name="baseSmallButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog.Flush">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/button_small_text</item>
+    </style>
+
     <style name="featured_add_button" parent="RoundedButton">
         <item name="android:layout_width">200dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -150,5 +157,17 @@
     <style name="ShapeAppearanceOverlayRoundedInput" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="StyleProjectRow">
+        <item name="android:background">@drawable/account_row_rounded_left</item>
+    </style>
+
+    <style name="SignInSignUpContainer">
+        <item name="android:layout_marginTop">30dp</item>
+        <item name="android:layout_marginBottom">30dp</item>
+        <item name="android:layout_marginEnd">40dp</item>
+        <item name="android:layout_marginStart">40dp</item>
+        <item name="android:gravity">center</item>
     </style>
 </resources>

@@ -8,7 +8,6 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.budget.BudgetDao;
 import com.droidlabs.pocketcontrol.db.category.Category;
@@ -21,13 +20,15 @@ import com.droidlabs.pocketcontrol.db.icon.Icon;
 import com.droidlabs.pocketcontrol.db.icon.IconDao;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentMode;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
+import com.droidlabs.pocketcontrol.db.account.AccountDao;
+import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.recurrent.Recurrent;
 import com.droidlabs.pocketcontrol.db.recurrent.RecurrentDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionDao;
-import com.droidlabs.pocketcontrol.utils.DateUtils;
+import com.droidlabs.pocketcontrol.db.user.User;
+import com.droidlabs.pocketcontrol.db.user.UserDao;
 
-import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -42,7 +43,9 @@ import java.util.concurrent.Executors;
         PaymentMode.class,
         Transaction.class,
         Defaults.class,
-        Recurrent.class
+        Recurrent.class,
+        User.class,
+        Account.class
 }, version = 1, exportSchema = false)
 public abstract class PocketControlDB extends RoomDatabase {
 
@@ -94,6 +97,18 @@ public abstract class PocketControlDB extends RoomDatabase {
      */
     public abstract RecurrentDao recurrentDao();
 
+    /**
+     * Project Dao.
+     * @return Project Dao
+     */
+    public abstract AccountDao projectDao();
+
+    /**
+     * User Dao.
+     * @return User Dao
+     */
+    public abstract UserDao userDao();
+
     private static final String DB_NAME = "PocketControl.db";
     private static final int DB_VERSION = 1;
 
@@ -135,6 +150,18 @@ public abstract class PocketControlDB extends RoomDatabase {
      * Populates the database at startup.
      */
     private static void populateDatabase() {
+        cleanDB();
+
+        CurrencyDao currencyDao = dbInstance.currencyDao();
+        PaymentModeDao paymentModeDao = dbInstance.paymentModeDao();
+
+        Currency currency = new Currency("EUR");
+        currencyDao.insert(currency);
+
+        PaymentMode paymentMode = new PaymentMode("Credit card");
+        paymentModeDao.insert(paymentMode);
+
+        /*
         BudgetDao budgetDao = dbInstance.budgetDao();
         CategoryDao categoryDao = dbInstance.categoryDao();
         CurrencyDao currencyDao = dbInstance.currencyDao();
@@ -142,14 +169,18 @@ public abstract class PocketControlDB extends RoomDatabase {
         IconDao iconDao = dbInstance.iconDao();
         PaymentModeDao paymentModeDao = dbInstance.paymentModeDao();
         TransactionDao transactionDao = dbInstance.transactionDao();
+        UserDao userDao = dbInstance.userDao();
+        AccountDao accountDao = dbInstance.projectDao();
 
-        budgetDao.deleteAll();
-        categoryDao.deleteAll();
-        currencyDao.deleteAll();
-        iconDao.deleteAll();
-        paymentModeDao.deleteAll();
-        transactionDao.deleteAll();
-        defaultsDao.deleteAll();
+        User newUser = new User();
+
+        newUser.setAccessPin("1234");
+        newUser.setEmail("laurofmuller@gmail.com");
+        newUser.setFirstName("Lauro");
+        newUser.setLastName("Müller");
+        newUser.setPassword("123456");
+
+        long userId = userDao.insert(newUser);
 
         Calendar someDay = DateUtils.getStartOfCurrentDay();
         someDay.add(Calendar.DAY_OF_YEAR, -8);
@@ -163,6 +194,13 @@ public abstract class PocketControlDB extends RoomDatabase {
         Category study = new Category(5, "Study", R.drawable.study);
         Category rent = new Category(6, "Rent", R.drawable.rent);
 
+        health.setOwnerId(String.valueOf(userId));
+        transport.setOwnerId(String.valueOf(userId));
+        shopping.setOwnerId(String.valueOf(userId));
+        food.setOwnerId(String.valueOf(userId));
+        study.setOwnerId(String.valueOf(userId));
+        rent.setOwnerId(String.valueOf(userId));
+
         long healthCatId = categoryDao.insert(health);
         long transportCatId = categoryDao.insert(transport);
         long shoppingCatId = categoryDao.insert(shopping);
@@ -170,18 +208,26 @@ public abstract class PocketControlDB extends RoomDatabase {
         long studyCatId = categoryDao.insert(study);
         long rentCatId = categoryDao.insert(rent);
 
-        Currency currency = new Currency("EUR");
-        currencyDao.insert(currency);
+        Account account1 = new Account();
+        account1.setName("Account 1");
+        account1.setColor(R.color.projectColorBlue);
+        account1.setOwnerId(String.valueOf(userId));
 
-        PaymentMode paymentMode = new PaymentMode("Credit card");
-        paymentModeDao.insert(paymentMode);
+        Account account2 = new Account();
+        account2.setName("Account 2");
+        account2.setColor(R.color.projectColorPurple);
+        account2.setOwnerId(String.valueOf(userId));
 
-        Defaults defaultValue = new Defaults("Currency", "EUR");
-        defaultsDao.insert(defaultValue);
+        Account account3 = new Account();
+        account3.setName("Account 3");
+        account3.setOwnerId(String.valueOf(userId));
+
+        accountDao.insert(account1);
+        accountDao.insert(account2);
+        accountDao.insert(account3);
 
         Icon icon = new Icon("icon_1");
         iconDao.insert(icon);
-/*
 
         Budget budget = new Budget(700f, "Monthly budget", true);
         budgetDao.insert(budget);
@@ -215,8 +261,31 @@ public abstract class PocketControlDB extends RoomDatabase {
         transactionDao.insert(transactionF);
 
         transactionDao.insert(recurringTransaction);
-
- */
+        */
     }
 
+    /**
+     * Clean current DB.
+     */
+    private static void cleanDB() {
+        BudgetDao budgetDao = dbInstance.budgetDao();
+        CategoryDao categoryDao = dbInstance.categoryDao();
+        CurrencyDao currencyDao = dbInstance.currencyDao();
+        DefaultsDao defaultsDao = dbInstance.defaultsDao();
+        IconDao iconDao = dbInstance.iconDao();
+        PaymentModeDao paymentModeDao = dbInstance.paymentModeDao();
+        TransactionDao transactionDao = dbInstance.transactionDao();
+        UserDao userDao = dbInstance.userDao();
+        AccountDao accountDao = dbInstance.projectDao();
+
+        budgetDao.deleteAll();
+        categoryDao.deleteAll();
+        currencyDao.deleteAll();
+        iconDao.deleteAll();
+        paymentModeDao.deleteAll();
+        transactionDao.deleteAll();
+        defaultsDao.deleteAll();
+        userDao.deleteAll();
+        accountDao.deleteAll();
+    }
 }

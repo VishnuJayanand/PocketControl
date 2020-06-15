@@ -11,21 +11,23 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
-import com.droidlabs.pocketcontrol.db.category.CategoryDao;
+import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 
-import static java.lang.Integer.parseInt;
-
 public class DetailTransactionFragment extends Fragment {
+    private CategoryViewModel categoryViewModel;
     @Nullable
     @Override
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.transaction_detail, container, false);
+
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
         Bundle bundle = this.getArguments();
         Long date = bundle.getLong("transactionDate");
@@ -64,8 +66,7 @@ public class DetailTransactionFragment extends Fragment {
 
         //get Category Title and Image
         if (category != null) {
-            CategoryDao categoryDao = PocketControlDB.getDatabase(getContext()).categoryDao();
-            Category category1 = categoryDao.getSingleCategory(parseInt(category));
+            Category category1 = categoryViewModel.getSingleCategory(Integer.parseInt(category));
             transactionCategoryTitle.setText(category1.getName());
             transactionCategoryImage.setImageResource(category1.getIcon());
         }

@@ -27,31 +27,35 @@ public interface CategoryDao {
 
     /**
      * Get all categories from the database.
+     * @param ownerId owner id.
      * @return list of categories.
      */
-    @Query("SELECT * FROM categories")
-    List<Category> getAllCategories();
+    @Query("SELECT * FROM categories WHERE owner_id=:ownerId")
+    List<Category> getAllCategories(String ownerId);
 
     /**
      * Get single category.
-     * @param id category ID
+     * @param id category ID.
+     * @param ownerId owner id.
      * @return Single category matching the ID
      */
-    @Query("SELECT * FROM categories WHERE id=:id")
-    Category getSingleCategory(int id);
+    @Query("SELECT * FROM categories WHERE id=:id AND owner_id=:ownerId")
+    Category getSingleCategory(int id, String ownerId);
 
     /**
      * Get single category.
-     * @param name category name
+     * @param name category name.
+     * @param ownerId owner id.
      * @return Single category matching with name
      */
-    @Query("SELECT * FROM categories WHERE name=:name")
-    Category getSingleCategory(String name);
+    @Query("SELECT * FROM categories WHERE name=:name AND owner_id=:ownerId")
+    Category getSingleCategory(String name, String ownerId);
 
     /**
      * Get all categories name from the database.
+     * @param ownerId owner id.
      * @return list of categories name.
      */
-    @Query("SELECT name FROM categories")
-    String[] getCategoriesName();
+    @Query("SELECT name FROM categories WHERE owner_id=:ownerId")
+    String[] getCategoriesName(String ownerId);
 }

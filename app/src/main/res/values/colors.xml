@@ -13,4 +13,17 @@
     <color name="inputBorder">#DDDDDD</color>
 
     <color name="black_overlay">#66000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="projectSelectedBackground">#EEEEEE</color>
+    <color name="projectColorBlue">#2196F3</color>
+    <color name="projectColorDarkBlue">#3F51B5</color>
+    <color name="projectColorOrange">#FFC107</color>
+    <color name="projectColorDarkOrange">#FF9800</color>
+    <color name="projectColorGreen">#8BC34A</color>
+    <color name="projectColorDarkGreen">#4CAF50</color>
+    <color name="projectColorPurple">#9C27B0</color>
+    <color name="projectColorDarkPurple">#673AB7</color>
+    <color name="projectColorDefault">#707070</color>
+
 </resources>
