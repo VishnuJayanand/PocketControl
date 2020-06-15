@@ -54,6 +54,15 @@ public class Transaction {
     @Nullable
     private String textNote;
 
+    @ColumnInfo(name = "friend", defaultValue = "")
+    @Nullable
+    private String friend;
+
+    // 1 - borrow, 2 - lend
+    @ColumnInfo(name = "methodForFriend", defaultValue = "")
+    @Nullable
+    private String methodForFriend;
+
     @ColumnInfo(name = "is_recurring", defaultValue = "0")
     @Nullable
     private Boolean isRecurring;
@@ -101,6 +110,8 @@ public class Transaction {
      * @param transactionCategory String transaction String
      * @param transactionDate Date transaction date
      * @param transactionNote String transaction note
+     * @param transactionFriend String transaction friend
+     * @param transactionMethodForFriend int transaction method for friend
      * @param transactionMethod int transaction method
      */
     public Transaction(
@@ -109,6 +120,8 @@ public class Transaction {
             final @Nullable String transactionCategory,
             final Long transactionDate,
             final @Nullable String transactionNote,
+            final @Nullable String transactionFriend,
+            final @Nullable String transactionMethodForFriend,
             final Integer transactionMethod
     ) {
         this.amount = transactionAmount;
@@ -116,6 +129,8 @@ public class Transaction {
         this.category = transactionCategory;
         this.date = transactionDate;
         this.textNote = transactionNote;
+        this.friend = transactionFriend;
+        this.methodForFriend = transactionMethodForFriend;
         this.method = transactionMethod;
     }
 
@@ -390,6 +405,40 @@ public class Transaction {
      */
     public Integer getMethod() {
         return method; }
+
+    /**
+     * Friend getter.
+      * @return String transaction friend
+     */
+    @Nullable
+    public String getFriend() {
+        return friend;
+    }
+
+    /**
+     * Friend setter.
+     * @param transactionFriend string transaction friend
+     */
+    public void setFriend(final @Nullable String transactionFriend) {
+        this.friend = transactionFriend;
+    }
+
+    /**
+     * methodForFriend getter.
+     * @return String transaction method for friend
+     */
+    @Nullable
+    public String getMethodForFriend() {
+        return methodForFriend;
+    }
+
+    /**
+     * methodForFriend setter.
+     * @param transactionMethodForFriend String transaction method for friend
+     */
+    public void setMethodForFriend(final @Nullable String transactionMethodForFriend) {
+        this.methodForFriend = transactionMethodForFriend;
+    }
 
     /**
      * Method setter.
