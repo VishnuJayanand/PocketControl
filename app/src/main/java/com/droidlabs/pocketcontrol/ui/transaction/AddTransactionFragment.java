@@ -1,7 +1,13 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,8 +43,10 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class AddTransactionFragment extends Fragment {
@@ -53,14 +61,22 @@ public class AddTransactionFragment extends Fragment {
     private TextInputEditText dropdownTransactionMethod;
     private TextInputEditText dropdownTransactionCategory;
     private TextInputEditText dropdownRecurringTransaction;
+    private TextInputEditText dropdownTransactionFriend;
+    private TextInputEditText dropdownTransactionMethodForFriend;
     private TextInputEditText editText;
     private Long transactionDate;
     private TransactionViewModel transactionViewModel;
     private CategoryViewModel categoryViewModel;
     private Switch recurringSwitch;
+    private Switch addFriendSwitch;
     private LinearLayout recurringTransactionWrapper;
     private LinearLayout customDaysIntervalWrapper;
     private Transaction lastAddedTransaction;
+    private LinearLayout addFriendWrapper;
+    private LinearLayout methodForFriendWrapper;
+    private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
+    private String[] contactArray;
+    private View currentView;
 
     @Nullable
     @Override
@@ -74,21 +90,40 @@ public class AddTransactionFragment extends Fragment {
         tilCategory = view.findViewById(R.id.tilCategory);
         tilCustomRecurringDaysInterval = view.findViewById(R.id.til_customRecurringDaysInterval);
         recurringSwitch = view.findViewById(R.id.recurringSwitch);
+        addFriendSwitch = view.findViewById(R.id.transactionFriendSwitch);
         recurringTransactionWrapper = view.findViewById(R.id.recurringTransactionWrapper);
         customDaysIntervalWrapper = view.findViewById(R.id.customDaysIntervalWrapper);
         customRecurringDaysInterval = view.findViewById(R.id.customRecurringDaysInterval);
+        addFriendWrapper = view.findViewById(R.id.addFriendWrapper);
+        methodForFriendWrapper = view.findViewById(R.id.MethodForFriendWrapper);
+
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
         Button btnAdd = view.findViewById(R.id.addNewTransaction);
+        //Check for android version and request a permission from the user
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && getContext().checkSelfPermission(Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, PERMISSIONS_REQUEST_READ_CONTACTS);
+            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overiden method
+        } else {
+            // Android version is lesser than 6.0 or the permission is already granted.
+            getContactList();
+        }
 
         //set the spinner for transactionType from the xml.
         setTransactionTypeSpinner(view);
         //set the spinner for transactionMethod from the xml.
         setTransactionMethodSpinner(view);
-        //set thee spinner for transactionIcon from the xml.
+        //set the spinner for transactionIcon from the xml.
         setTransactionCategorySpinner(view);
+        //set the spinner for transactionFriend
+        setFriendListSpinner(view);
+        //set the spinner for transactionMethodForFriend
+        setMethodForFriendSpinner(view);
+
 
         setRecurringTransactionsSpinner(view);
 
@@ -99,6 +134,28 @@ public class AddTransactionFragment extends Fragment {
                     recurringTransactionWrapper.setVisibility(View.VISIBLE);
                 } else {
                     recurringTransactionWrapper.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        addFriendSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
+                if (isChecked) {
+                    addFriendWrapper.setVisibility(View.VISIBLE);
+                    methodForFriendWrapper.setVisibility(View.VISIBLE);
+                    //set the spinner for transactionFriend
+                    setFriendListSpinner(view);
+                    if (contactArray == null) {
+                        dropdownTransactionFriend.setText("There are no contacts available on your phone");
+                        dropdownTransactionFriend.setClickable(false);
+                        dropdownTransactionFriend.setEnabled(false);
+                    }
+                } else {
+                    addFriendWrapper.setVisibility(View.GONE);
+                    methodForFriendWrapper.setVisibility(View.GONE);
+                    dropdownTransactionFriend.setText("");
+                    dropdownTransactionMethodForFriend.setText("");
                 }
             }
         });
@@ -287,7 +344,7 @@ public class AddTransactionFragment extends Fragment {
 
         //set the spinners adapter to the previously created one.
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
-                .setTitle("Select the transaction category")
+                .setTitle("Select the recurring type")
                 .setItems(dropdownItems, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
@@ -317,6 +374,144 @@ public class AddTransactionFragment extends Fragment {
             }
         });
         dropdownRecurringTransaction.setInputType(0);
+    }
+
+    /**
+     * This method set the spinner of select a friend.
+     * @param view the transaction add layout
+     */
+    private void setFriendListSpinner(final View view) {
+        //get the list of friend contact
+        //Check to see if the contact list is empty or not
+        dropdownTransactionFriend = view.findViewById(R.id.spinnerTransactionFriend);
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select friend from contact list")
+                .setItems(contactArray, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dropdownTransactionFriend.setText(contactArray[which]);
+                    }
+                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(final DialogInterface dialog) {
+                        if (dropdownTransactionFriend.getText().toString().equals("")) {
+                            dropdownTransactionFriend.setText("No contact selected");
+                        }
+                    }
+                });
+
+        dropdownTransactionFriend.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdownTransactionFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialogBuilder.show();
+            }
+        });
+        dropdownTransactionFriend.setInputType(0);
+    }
+
+    /**
+     * This method set the spinner of method for friend.
+     * @param view transaction add layout
+     */
+    private void setMethodForFriendSpinner(final View view) {
+        //get the list of friend contact
+        String[] dropdownItems = {"Borrow", "Lend"};
+
+        dropdownTransactionMethodForFriend = view.findViewById(R.id.spinnerTransactionMethodForFriend);
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the method for friend")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dropdownTransactionMethodForFriend.setText(dropdownItems[which]);
+                    }
+                });
+
+        dropdownTransactionMethodForFriend.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdownTransactionMethodForFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialogBuilder.show();
+            }
+        });
+        dropdownTransactionMethodForFriend.setInputType(0);
+    }
+
+    /**
+     * This method get the request permission result.
+     * @param requestCode int the request code.
+     * @param permissions String[] the permission.
+     * @param grantResults int[] the results.
+     */
+    public void onRequestPermissionsResult(final int requestCode,
+                                           final String[] permissions, final int[] grantResults) {
+        if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted
+                getContactList();
+            } else {
+                Toast.makeText(getContext(), "Until you grant the permission, we cannot display the names",
+                        Toast.LENGTH_SHORT).show();
+                dropdownTransactionFriend.setText("No contact selected");
+            }
+        }
+    }
+
+    /**
+     * This method is to take get the contact list of the android.
+     */
+    private void getContactList() {
+        List<String> contacts = new ArrayList<>();
+        ContentResolver cr = getContext().getContentResolver();
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null);
+
+        if (cur != null && cur.getCount()  > 0) {
+            while (cur != null && cur.moveToNext()) {
+                String id = cur.getString(
+                        cur.getColumnIndex(ContactsContract.Contacts._ID));
+                String name = cur.getString(cur.getColumnIndex(
+                        ContactsContract.Contacts.DISPLAY_NAME));
+
+                if (cur.getInt(cur.getColumnIndex(
+                        ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
+                    Cursor pCur = cr.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            new String[]{id}, null);
+                    while (pCur.moveToNext()) {
+                        String phoneNo = pCur.getString(pCur.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String contact = name + ", Phone number: " + phoneNo;
+                        contacts.add(contact);
+                    }
+                    pCur.close();
+                    this.contactArray = new String[contacts.size()];
+                    this.contactArray = contacts.toArray(contactArray);
+                }
+            }
+        }
+        if (cur != null) {
+            cur.close();
+        }
     }
 
     /**
@@ -499,11 +694,15 @@ public class AddTransactionFragment extends Fragment {
 
         float transactionAmount = Float.parseFloat(tiedtTransactionAmount.getText().toString());
         String transactionNote  = tiedtTransactionNote.getText().toString().trim() + "";
+        String transactionMethodForFriend = dropdownTransactionMethodForFriend.getText().toString();
+        String friend = dropdownTransactionFriend.getText().toString();
         Transaction newTransaction = new Transaction((float) transactionAmount,
                 transactionType,
                 Integer.toString(categoryId),
                 DateUtils.getStartOfDayInMS(transactionDate),
                 transactionNote,
+                friend,
+                transactionMethodForFriend,
                 transactionMethod
         );
 
