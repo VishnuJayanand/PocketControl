@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
@@ -77,12 +78,30 @@ public class AddAccountFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Method to focus on the view that have the wrong input.
+     * @param view the view
+     */
+    public void requestFocus(final View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
     private boolean validateAccountName() {
         String[] accountNames = accountViewModel.getAccountNames();
         boolean isNameTaken = false;
 
         if (accountNameEditText.getText().toString().isEmpty()) {
             accountNameInputLayout.setError("Account name cannot be empty.");
+            return false;
+        } else {
+            accountNameInputLayout.setError(null);
+        }
+
+        if (!accountNameEditText.getText().toString().trim().matches(".*[a-zA-Z]+.*")) {
+            accountNameInputLayout.setError("Account name should have at least one character.");
+            requestFocus(accountNameEditText);
             return false;
         } else {
             accountNameInputLayout.setError(null);
@@ -96,6 +115,7 @@ public class AddAccountFragment extends Fragment {
 
         if (isNameTaken) {
             accountNameInputLayout.setError("Account name already taken.");
+            requestFocus(accountNameEditText);
             return false;
         } else {
             accountNameInputLayout.setError(null);

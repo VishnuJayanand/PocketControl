@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment {
 
     private Animation topAnimation;
     private TextView textViewAmount, textViewNetBalance, selectedAccountTitle;
+    private TextView accountIncomeText, accountExpenseText, accountBalanceText;
     private CardView selectedAccountColor;
     private List<Account> accountList;
     private Button addAccountButton;
@@ -50,6 +51,7 @@ public class HomeFragment extends Fragment {
     private String[] accountNames;
     private MaterialAlertDialogBuilder dialogBuilder;
     private SharedPreferencesUtils sharedPreferencesUtils;
+    private TransactionViewModel transactionViewModel;
 
     @Nullable
     @Override
@@ -69,6 +71,9 @@ public class HomeFragment extends Fragment {
         textViewAmount = view.findViewById(R.id.homeScreenTop);
         textViewNetBalance = view.findViewById(R.id.homeScreenNetBalanceText);
         addAccountButton = view.findViewById(R.id.addAccountButton);
+        accountIncomeText = view.findViewById(R.id.accountIncomeText);
+        accountExpenseText = view.findViewById(R.id.accountExpenseText);
+        accountBalanceText = view.findViewById(R.id.accountBalanceText);
 
         topAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.top_animation);
         textViewAmount.setAnimation(topAnimation);
@@ -88,7 +93,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {
             @Override
             public void onChanged(final List<Transaction> transactions) {
@@ -112,6 +117,7 @@ public class HomeFragment extends Fragment {
         });
 
         transactionViewModel.setCategoryFilter(false, "-1");
+        calculateAccountBalances();
 
         addAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +143,19 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    private void calculateAccountBalances() {
+        float income, expense, balance;
+
+        income = transactionViewModel.getTotalIncomeByAccountId();
+        expense = transactionViewModel.getTotalExpenseByAccountId();
+
+        balance = income - expense;
+
+        accountIncomeText.setText(CurrencyUtils.formatAmount(income));
+        accountExpenseText.setText(CurrencyUtils.formatAmount(expense));
+        accountBalanceText.setText(CurrencyUtils.formatAmount(balance));
+    }
+
     private void buildSelectAccountDialog(String[] names) {
         dialogBuilder = new MaterialAlertDialogBuilder(getContext()).setTitle("Select your account:").setItems(names, new DialogInterface.OnClickListener() {
             @Override
@@ -147,6 +166,7 @@ public class HomeFragment extends Fragment {
                 sharedPreferencesUtils.setCurrentAccountId(String.valueOf(selectedAccount.getId()));
 
                 updateSelectedAccountInformation();
+                calculateAccountBalances();
             }
         });
     }
