@@ -89,6 +89,11 @@ public class AccountRepository {
         return accountDao.getAccountNames(currentUserId);
     }
 
+    /**
+     * Insert new account to the selected user.
+     * @param account account to be saved.
+     * @return account id.
+     */
     public long insert(final Account account) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
 

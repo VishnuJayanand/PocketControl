@@ -1,10 +1,8 @@
 package com.droidlabs.pocketcontrol.ui.home;
 
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +20,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.account.Account;
-import com.droidlabs.pocketcontrol.db.transaction.Transaction;
-import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.ui.signin.UserViewModel;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
@@ -79,7 +72,7 @@ public class HomeFragment extends Fragment {
         textViewAmount.setAnimation(topAnimation);
         textViewNetBalance.setAnimation(topAnimation);
 
-        AccountViewModel accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
+        accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         accountViewModel.getAccounts().observe(getViewLifecycleOwner(), new Observer<List<Account>>() {
             @Override
             public void onChanged(final List<Account> accounts) {
@@ -94,34 +87,13 @@ public class HomeFragment extends Fragment {
         });
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
-        transactionViewModel.getTransactions().observe(getViewLifecycleOwner(), new Observer<List<Transaction>>() {
-            @Override
-            public void onChanged(final List<Transaction> transactions) {
-                float totalExpense = 0f;
-                float totalIncome = 0f;
-
-                if (!transactions.isEmpty()) {
-                    for (Transaction transaction: transactions) {
-                        if (transaction.getType().equals(1)) {
-                            totalExpense += transaction.getAmount();
-                        } else {
-                            totalIncome += transaction.getAmount();
-                        }
-                    }
-                }
-
-                float totalAmount =  totalIncome - totalExpense;
-
-                textViewAmount.setText(CurrencyUtils.formatAmount(totalAmount));
-            }
-        });
 
         transactionViewModel.setCategoryFilter(false, "-1");
         calculateAccountBalances();
 
         addAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 Fragment fragment = new AddAccountFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -133,7 +105,7 @@ public class HomeFragment extends Fragment {
 
         switchAccount.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 dialogBuilder.show();
             }
         });
@@ -143,37 +115,51 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Calculate balances.
+     */
     private void calculateAccountBalances() {
-        float income, expense, balance;
+        float accountIncome, accountExpense, accountBalance, totalBalance;
 
-        income = transactionViewModel.getTotalIncomeByAccountId();
-        expense = transactionViewModel.getTotalExpenseByAccountId();
+        accountIncome = transactionViewModel.getTotalIncomeByAccountId();
+        accountExpense = transactionViewModel.getTotalExpenseByAccountId();
+        accountBalance = accountIncome - accountExpense;
+        totalBalance = transactionViewModel.getTotalIncomeByUserId() - transactionViewModel.getTotalExpenseByUserId();
 
-        balance = income - expense;
+        accountIncomeText.setText(CurrencyUtils.formatAmount(accountIncome));
+        accountExpenseText.setText(CurrencyUtils.formatAmount(accountExpense));
+        accountBalanceText.setText(CurrencyUtils.formatAmount(accountBalance));
 
-        accountIncomeText.setText(CurrencyUtils.formatAmount(income));
-        accountExpenseText.setText(CurrencyUtils.formatAmount(expense));
-        accountBalanceText.setText(CurrencyUtils.formatAmount(balance));
+        textViewAmount.setText(CurrencyUtils.formatAmount(totalBalance));
     }
 
-    private void buildSelectAccountDialog(String[] names) {
-        dialogBuilder = new MaterialAlertDialogBuilder(getContext()).setTitle("Select your account:").setItems(names, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Account selectedAccount = accountViewModel.getAccountByName(names[which]);
+    /**
+     * Populate account dialog.
+     * @param names account names.
+     */
+    private void buildSelectAccountDialog(final String[] names) {
+        dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select your account:")
+                .setItems(names, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        Account selectedAccount = accountViewModel.getAccountByName(names[which]);
 
-                userViewModel.updateUserSelectedAccount(String.valueOf(selectedAccount.getId()));
-                sharedPreferencesUtils.setCurrentAccountId(String.valueOf(selectedAccount.getId()));
+                        userViewModel.updateUserSelectedAccount(String.valueOf(selectedAccount.getId()));
+                        sharedPreferencesUtils.setCurrentAccountId(String.valueOf(selectedAccount.getId()));
 
-                updateSelectedAccountInformation();
-                calculateAccountBalances();
-            }
-        });
+                        updateSelectedAccountInformation();
+                        calculateAccountBalances();
+                    }
+                });
     }
 
+    /**
+     * Update selected account info.
+     */
     private void updateSelectedAccountInformation() {
-        Log.v("SELECTED ACCOUNT", sharedPreferencesUtils.getCurrentAccountIdKey());
-        Account selectedAcc = accountViewModel.getAccountById(Integer.parseInt(sharedPreferencesUtils.getCurrentAccountIdKey()));
+        Account selectedAcc = accountViewModel
+                .getAccountById(Integer.parseInt(sharedPreferencesUtils.getCurrentAccountIdKey()));
 
         String accountColor = selectedAcc.getColor();
 

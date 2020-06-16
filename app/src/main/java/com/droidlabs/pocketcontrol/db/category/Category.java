@@ -127,11 +127,19 @@ public class Category {
         return ownerId;
     }
 
+    /**
+     * Get category account.
+     * @return account id.
+     */
     @Nullable
     public String getAccount() {
         return account;
     }
 
+    /**
+     * Get flag whether category is public.
+     * @return flag.
+     */
     @Nullable
     public Boolean getPublic() {
         return isPublic;
@@ -169,11 +177,19 @@ public class Category {
         this.ownerId = mOwnerId;
     }
 
-    public void setAccount(@Nullable String mAccount) {
+    /**
+     * Set category account.
+     * @param mAccount account id.
+     */
+    public void setAccount(final @Nullable String mAccount) {
         this.account = mAccount;
     }
 
-    public void setPublic(@Nullable Boolean aPublic) {
+    /**
+     * Set whether category will be public.
+     * @param aPublic boolean flag.
+     */
+    public void setPublic(final @Nullable Boolean aPublic) {
         isPublic = aPublic;
     }
 

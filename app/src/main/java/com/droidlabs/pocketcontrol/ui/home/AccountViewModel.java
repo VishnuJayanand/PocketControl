@@ -32,18 +32,37 @@ public class AccountViewModel extends AndroidViewModel {
         return accountRepository.getAllAccounts();
     }
 
-    public Account getAccountById(int accId) {
+    /**
+     * Get account by id.
+     * @param accId id.
+     * @return account.
+     */
+    public Account getAccountById(final int accId) {
         return accountRepository.getAccountById(accId);
     }
 
-    public Account getAccountByName(String accName) {
+    /**
+     * Get account by name.
+     * @param accName name.
+     * @return account.
+     */
+    public Account getAccountByName(final String accName) {
         return accountRepository.getAccountByName(accName);
     }
 
+    /**
+     * Get list of account names.
+     * @return account names.
+     */
     public String[] getAccountNames() {
         return accountRepository.getAccountNames();
     }
 
+    /**
+     * Insert account.
+     * @param account account to be saved.
+     * @return account id.
+     */
     public long insert(final Account account) {
         return accountRepository.insert(account);
     }

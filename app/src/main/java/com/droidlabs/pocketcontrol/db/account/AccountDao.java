@@ -13,6 +13,7 @@ public interface AccountDao {
     /**
      * Insert new account into the database.
      * @param account project to be saved.
+     * @return account id.
      */
     @Insert(onConflict = OnConflictStrategy.ABORT)
     long insert(Account account);
@@ -34,6 +35,7 @@ public interface AccountDao {
     /**
      * Get account by id.
      * @param accountId id.
+     * @param ownerId owner id.
      * @return account.
      */
     @Query("SELECT * FROM accounts WHERE id=:accountId AND owner_id=:ownerId")
@@ -42,11 +44,17 @@ public interface AccountDao {
     /**
      * Get account by name.
      * @param accountName name.
+     * @param ownerId owner id.
      * @return account.
      */
     @Query("SELECT * FROM accounts WHERE name=:accountName AND owner_id=:ownerId")
     Account getAccountByName(String accountName, String ownerId);
 
+    /**
+     * Get account names.
+     * @param ownerId owner id.
+     * @return array of names.
+     */
     @Query("SELECT name FROM accounts WHERE owner_id=:ownerId")
     String[] getAccountNames(String ownerId);
 }

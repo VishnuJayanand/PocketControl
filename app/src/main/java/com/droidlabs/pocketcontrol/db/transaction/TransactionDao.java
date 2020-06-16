@@ -28,9 +28,13 @@ public interface TransactionDao {
     /**
      * Retrieve all transactions from the database.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return all transactions.
      */
-    @Query("SELECT * FROM transactions WHERE owner_id=:ownerId AND account=:accountId ORDER BY date DESC")
+    @Query("SELECT * FROM transactions "
+            + "WHERE owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "ORDER BY date DESC")
     LiveData<List<Transaction>> getAllTransactions(String ownerId, String accountId);
 
     /**
@@ -46,66 +50,115 @@ public interface TransactionDao {
      * Retrieve all transactions from a specified category.
      * @param categoryId category id.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of transactions with matching categoryId
      */
-    @Query("SELECT * FROM transactions WHERE category=:categoryId AND owner_id=:ownerId AND account=:accountId ORDER BY date DESC")
+    @Query("SELECT * FROM transactions "
+            + "WHERE category=:categoryId "
+            + "AND owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "ORDER BY date DESC")
     LiveData<List<Transaction>> getTransactionsByCategoryId(String categoryId, String ownerId, String accountId);
 
     /**
      * Retrieve all transactions from a specified category.
      * @param categoryId category id.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of transactions with matching categoryId
      */
-    @Query("SELECT * FROM transactions WHERE category=:categoryId AND owner_id=:ownerId AND account=:accountId ORDER BY date DESC")
+    @Query("SELECT * FROM transactions "
+            + "WHERE category=:categoryId "
+            + "AND owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "ORDER BY date DESC")
     List<Transaction> getAmountByCategoryId(String categoryId, String ownerId, String accountId);
 
     /**
      * Retrieve sum of transaction income amount for a specified category.
      * @param categoryId category id.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return sum of transaction income amount with matching categoryId
      */
-    @Query("SELECT SUM(amount) FROM transactions WHERE category=:categoryId AND owner_id=:ownerId AND account=:accountId AND type = 2")
+    @Query("SELECT SUM(amount) FROM transactions "
+            + "WHERE category=:categoryId "
+            + "AND owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "AND type = 2")
     float getTotalIncomeByCategoryId(String categoryId, String ownerId, String accountId);
 
     /**
      * Retrieve sum of transaction expense amount for a specified category.
      * @param categoryId category id.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return sum of transaction expense amount with matching categoryId
      */
-    @Query("SELECT SUM(amount) FROM transactions WHERE category=:categoryId AND owner_id=:ownerId AND account=:accountId AND type = 1")
+    @Query("SELECT SUM(amount) FROM transactions "
+            + "WHERE category=:categoryId "
+            + "AND owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "AND type = 1")
     float getTotalIExpenseByCategoryId(String categoryId, String ownerId, String accountId);
+
+    /**
+     * Retrieve sum of transaction income amount for a specified category.
+     * @param ownerId owner id.
+     * @param accountId account id.
+     * @return sum of transaction income amount with matching categoryId
+     */
+    @Query("SELECT SUM(amount) FROM transactions "
+            + "WHERE owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "AND type = 2")
+    float getTotalIncomeByAccountId(String ownerId, String accountId);
+
+    /**
+     * Retrieve sum of transaction expense amount for a specified category.
+     * @param ownerId owner id.
+     * @param accountId account id.
+     * @return sum of transaction expense amount with matching categoryId
+     */
+    @Query("SELECT SUM(amount) FROM transactions "
+            + "WHERE owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "AND type = 1")
+    float getTotalIExpenseByAccountId(String ownerId, String accountId);
 
     /**
      * Retrieve sum of transaction income amount for a specified category.
      * @param ownerId owner id.
      * @return sum of transaction income amount with matching categoryId
      */
-    @Query("SELECT SUM(amount) FROM transactions WHERE owner_id=:ownerId AND account=:accountId AND type = 2")
-    float getTotalIncomeByAccountId(String ownerId, String accountId);
+    @Query("SELECT SUM(amount) FROM transactions WHERE owner_id=:ownerId AND type = 2")
+    float getTotalIncomeByUserId(String ownerId);
 
     /**
      * Retrieve sum of transaction expense amount for a specified category.
      * @param ownerId owner id.
      * @return sum of transaction expense amount with matching categoryId
      */
-    @Query("SELECT SUM(amount) FROM transactions WHERE owner_id=:ownerId AND account=:accountId AND type = 1")
-    float getTotalIExpenseByAccountId(String ownerId, String accountId);
+    @Query("SELECT SUM(amount) FROM transactions WHERE owner_id=:ownerId AND type = 1")
+    float getTotalIExpenseByUserId(String ownerId);
 
     /**
      * Retrieve all transactions within a specified date range.
      * @param lowerBound lower date bound.
      * @param upperBound upper date bound.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of transactions within date range.
      */
     @Query("SELECT * FROM transactions WHERE "
-            + "owner_id=:ownerId AND account=:accoundId "
+            + "owner_id=:ownerId AND account=:accountId "
             + "AND date BETWEEN :lowerBound AND :upperBound "
             + "ORDER BY date DESC")
-    LiveData<List<Transaction>> filterTransactionsByDate(long lowerBound, long upperBound, String ownerId, String accoundId);
+    LiveData<List<Transaction>> filterTransactionsByDate(
+            long lowerBound,
+            long upperBound,
+            String ownerId,
+            String accountId);
 
     /**
      * Retrieve all transactions from a specified category and within a specified date range.
@@ -113,17 +166,21 @@ public interface TransactionDao {
      * @param lowerBound lower date bound.
      * @param upperBound upper date bound.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of transactions matching the filter.
      */
     @Query("SELECT * FROM transactions "
-            + "WHERE category=:categoryId AND owner_id=:ownerId AND account=:accoundId AND date BETWEEN :lowerBound AND :upperBound "
+            + "WHERE category=:categoryId "
+            + "AND owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "AND date BETWEEN :lowerBound AND :upperBound "
             + "ORDER BY date DESC")
     LiveData<List<Transaction>> filterTransactionsByCategoryAndDate(
             String categoryId,
             long lowerBound,
             long upperBound,
             String ownerId,
-            String accoundId
+            String accountId
     );
 
     /**
@@ -131,6 +188,7 @@ public interface TransactionDao {
      * @param lowerBoundAmount lower amount bound.
      * @param upperBoundAmount upper amount bound.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of transactions matching the filter.
      */
     @Query("SELECT * FROM transactions WHERE "
@@ -153,11 +211,16 @@ public interface TransactionDao {
      * @param lowerBoundAmount lower amount bound.
      * @param upperBoundAmount upper amount bound.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of transactions matching the filter.
      */
-    @Query("SELECT * FROM transactions WHERE category=:categoryId AND owner_id=:ownerId AND account=:accountId AND "
-            + "(date BETWEEN :lowerBound AND :upperBound) AND "
-            + "(amount >= :lowerBoundAmount AND amount <= :upperBoundAmount) ORDER BY date DESC")
+    @Query("SELECT * FROM transactions "
+            + "WHERE category=:categoryId "
+            + "AND owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "AND (date BETWEEN :lowerBound AND :upperBound) "
+            + "AND (amount >= :lowerBoundAmount AND amount <= :upperBoundAmount) "
+            + "ORDER BY date DESC")
     LiveData<List<Transaction>> filterTransactionsByCategoryAndDateAndAmount(
             String categoryId,
             long lowerBound,
@@ -175,13 +238,24 @@ public interface TransactionDao {
      * @param lowerBoundAmount lower amount bound.
      * @param upperBoundAmount upper amount bound.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of transactions matching the filter.
      */
-    @Query("SELECT * FROM transactions WHERE owner_id=:ownerId AND account=:accountId AND amount >= :lowerBoundAmount AND "
-            + "amount <= :upperBoundAmount AND (date BETWEEN :lowerBound AND :upperBound)"
+    @Query("SELECT * FROM transactions "
+            + "WHERE owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "AND amount >= :lowerBoundAmount "
+            + "AND amount <= :upperBoundAmount "
+            + "AND (date BETWEEN :lowerBound AND :upperBound) "
             + "ORDER BY date DESC")
     LiveData<List<Transaction>> filterTransactionsByAmountAndDate(
-            long lowerBound, long upperBound, float lowerBoundAmount, float upperBoundAmount, String ownerId, String accountId);
+            long lowerBound,
+            long upperBound,
+            float lowerBoundAmount,
+            float upperBoundAmount,
+            String ownerId,
+            String accountId
+    );
 
     /**
      * Retrieve all transactions from a specified category within a specified amount range.
@@ -189,13 +263,17 @@ public interface TransactionDao {
      * @param lowerBoundAmount lower amount bound.
      * @param upperBoundAmount upper amount bound.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of transactions matching the filter.
      */
-    @Query("SELECT * FROM transactions WHERE category=:categoryId AND owner_id=:ownerId AND account=:accoundId AND "
-            + "(amount >= :lowerBoundAmount AND amount <= :upperBoundAmount)"
+    @Query("SELECT * FROM transactions "
+            + "WHERE category=:categoryId "
+            + "AND owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "AND (amount >= :lowerBoundAmount AND amount <= :upperBoundAmount) "
             + "ORDER BY date DESC")
     LiveData<List<Transaction>> filterTransactionsByAmountAndCategory(
-            String categoryId, float lowerBoundAmount, float upperBoundAmount, String ownerId, String accoundId);
+            String categoryId, float lowerBoundAmount, float upperBoundAmount, String ownerId, String accountId);
 
     /**
      * Update transaction recurring params.

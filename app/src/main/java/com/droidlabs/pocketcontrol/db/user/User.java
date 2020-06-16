@@ -100,6 +100,10 @@ public class User {
         return password;
     }
 
+    /**
+     * Get user's selected account.
+     * @return account id.
+     */
     @Nullable
     public String getSelectedAccount() {
         return selectedAccount;
@@ -153,7 +157,11 @@ public class User {
         this.password = pwd;
     }
 
-    public void setSelectedAccount(@Nullable String selectedAccount) {
-        this.selectedAccount = selectedAccount;
+    /**
+     * Set user's selected account.
+     * @param selectedAcc account id.
+     */
+    public void setSelectedAccount(final @Nullable String selectedAcc) {
+        this.selectedAccount = selectedAcc;
     }
 }

@@ -3,12 +3,10 @@ package com.droidlabs.pocketcontrol.ui.home;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -21,14 +19,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.account.Account;
-import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.ui.signin.UserViewModel;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.Arrays;
 
 public class AddAccountFragment extends Fragment {
 
@@ -37,14 +32,34 @@ public class AddAccountFragment extends Fragment {
     private TextInputLayout accountNameInputLayout;
     private TextInputEditText accountNameEditText;
     private CardView selectAccountColor;
-    private String[] colorsStr = {"Blue", "Dark blue", "Green", "Dark green", "Orange", "Dark orange", "Purple", "Dark purple"};
+    private String[] colorsStr = {
+            "Blue",
+            "Dark blue",
+            "Green",
+            "Dark green",
+            "Orange",
+            "Dark orange",
+            "Purple",
+            "Dark purple"
+    };
     private String selectedAccountColor;
     private MaterialAlertDialogBuilder dialogBuilder;
     private SharedPreferencesUtils sharedPreferencesUtils;
 
+    /**
+     * On create view.
+     * @param inflater inflated.
+     * @param container container.
+     * @param savedInstanceState saved state.
+     * @return view.
+     */
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(
+            final @NonNull LayoutInflater inflater,
+            final @Nullable ViewGroup container,
+            final @Nullable Bundle savedInstanceState
+    ) {
         View view = inflater.inflate(R.layout.account_add, container, false);
 
         Button addNewAccount = view.findViewById(R.id.addNewAccount);
@@ -58,19 +73,19 @@ public class AddAccountFragment extends Fragment {
 
         initializeColorDialog();
 
-        selectedAccountColor = getResources().getString(0+R.color.projectColorBlue);
+        selectedAccountColor = getResources().getString(0 + R.color.projectColorBlue);
         selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
 
         selectAccountColor.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 dialogBuilder.show();
             }
         });
 
         addNewAccount.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 createAccount();
             }
         });
@@ -88,6 +103,10 @@ public class AddAccountFragment extends Fragment {
         }
     }
 
+    /**
+     * Validate account name.
+     * @return whether account name is valid.
+     */
     private boolean validateAccountName() {
         String[] accountNames = accountViewModel.getAccountNames();
         boolean isNameTaken = false;
@@ -124,6 +143,9 @@ public class AddAccountFragment extends Fragment {
         return true;
     }
 
+    /**
+     * Create account.
+     */
     private void createAccount() {
         if (!validateAccountName()) {
             return;
@@ -147,47 +169,50 @@ public class AddAccountFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Populate color dialog.
+     */
     private void initializeColorDialog() {
         dialogBuilder = new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Select the account color:")
                 .setItems(colorsStr, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(final DialogInterface dialog, final int which) {
                 switch (colorsStr[which]) {
                     case "Blue":
-                        selectedAccountColor = getResources().getString(0+R.color.projectColorBlue);
+                        selectedAccountColor = getResources().getString(0 + R.color.projectColorBlue);
                         selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Dark blue":
-                        selectedAccountColor = getResources().getString(0+R.color.projectColorDarkBlue);
+                        selectedAccountColor = getResources().getString(0 + R.color.projectColorDarkBlue);
                         selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Green":
-                        selectedAccountColor = getResources().getString(0+R.color.projectColorGreen);
+                        selectedAccountColor = getResources().getString(0 + R.color.projectColorGreen);
                         selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Dark green":
-                        selectedAccountColor = getResources().getString(0+R.color.projectColorDarkGreen);
+                        selectedAccountColor = getResources().getString(0 + R.color.projectColorDarkGreen);
                         selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Orange":
-                        selectedAccountColor = getResources().getString(0+R.color.projectColorOrange);
+                        selectedAccountColor = getResources().getString(0 + R.color.projectColorOrange);
                         selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Dark orange":
-                        selectedAccountColor = getResources().getString(0+R.color.projectColorDarkOrange);
+                        selectedAccountColor = getResources().getString(0 + R.color.projectColorDarkOrange);
                         selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Purple":
-                        selectedAccountColor = getResources().getString(0+R.color.projectColorPurple);
+                        selectedAccountColor = getResources().getString(0 + R.color.projectColorPurple);
                         selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Dark purple":
-                        selectedAccountColor = getResources().getString(0+R.color.projectColorDarkPurple);
+                        selectedAccountColor = getResources().getString(0 + R.color.projectColorDarkPurple);
                         selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     default:
-                        selectedAccountColor = getResources().getString(0+R.color.projectColorBlue);
+                        selectedAccountColor = getResources().getString(0 + R.color.projectColorBlue);
                         selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                 }

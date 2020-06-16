@@ -24,6 +24,7 @@ public interface BudgetDao {
     /**
      * Retrieve all budgets.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of budgets saved on db.
      */
     @Query("SELECT * FROM budgets WHERE owner_id=:ownerId AND account=:accountId")
@@ -32,6 +33,7 @@ public interface BudgetDao {
     /**
      * Retrieve all budgets.
      * @param category is the category.
+     * @param accountId account id.
      * @param ownerId owner id.
      * @return list of budgets saved on db.
      */

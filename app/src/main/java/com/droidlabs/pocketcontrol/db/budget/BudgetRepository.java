@@ -3,7 +3,6 @@ package com.droidlabs.pocketcontrol.db.budget;
 import android.app.Application;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
-import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.db.user.UserDao;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 

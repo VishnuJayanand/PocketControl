@@ -5,8 +5,6 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
-import com.droidlabs.pocketcontrol.db.user.User;
-import com.droidlabs.pocketcontrol.db.user.UserDao;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
@@ -134,6 +132,34 @@ public class TransactionRepository {
         return transactionDao.getTotalIExpenseByAccountId(currentUserId, currentAccountId);
     }
 
+    /**
+     * Get sum of transaction income amount by categoryID.
+     * @return sum of transaction income amount with matching categoryId
+     */
+    public Float getTotalIncomeByUserId() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTotalIncomeByUserId(currentUserId);
+    }
+
+    /**
+     * Get sum of transaction expense amount by categoryID.
+     * @return sum of transaction expense amount with matching categoryId
+     */
+    public Float getTotalIExpenseByUserId() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTotalIExpenseByUserId(currentUserId);
+    }
+
 
     /**
      * Get transactions by date range.
@@ -225,7 +251,15 @@ public class TransactionRepository {
             return null;
         }
 
-        return transactionDao.filterTransactionsByCategoryAndDateAndAmount(catId, lb, ub, lba, uba, currentUserId, currentAccountId);
+        return transactionDao.filterTransactionsByCategoryAndDateAndAmount(
+                catId,
+                lb,
+                ub,
+                lba,
+                uba,
+                currentUserId,
+                currentAccountId
+        );
     }
 
     /**

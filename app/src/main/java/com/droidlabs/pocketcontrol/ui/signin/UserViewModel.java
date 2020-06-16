@@ -81,7 +81,11 @@ public class UserViewModel extends AndroidViewModel {
         return user;
     };
 
-    public void updateUserSelectedAccount(String selectedAccount) {
+    /**
+     * Update user selected account on DB.
+     * @param selectedAccount account id.
+     */
+    public void updateUserSelectedAccount(final String selectedAccount) {
         repository.updateUserSelectedAccount(selectedAccount);
     }
 }

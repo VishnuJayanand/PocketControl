@@ -115,12 +115,36 @@ public class TransactionViewModel extends AndroidViewModel {
         return totalExpenses - totalIncome;
     }
 
+    /**
+     * Get total income by account id.
+     * @return total income.
+     */
     public Float getTotalIncomeByAccountId() {
         return repository.getTotalIncomeByAccountId();
     }
 
+    /**
+     * Get total expense by account id.
+     * @return total expense.
+     */
     public Float getTotalExpenseByAccountId() {
         return repository.getTotalIExpenseByAccountId();
+    }
+
+    /**
+     * Get total income by user id.
+     * @return total income.
+     */
+    public Float getTotalIncomeByUserId() {
+        return repository.getTotalIncomeByUserId();
+    }
+
+    /**
+     * Get total expense by user id.
+     * @return total expense.
+     */
+    public Float getTotalExpenseByUserId() {
+        return repository.getTotalIExpenseByUserId();
     }
 
     /**

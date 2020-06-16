@@ -168,6 +168,10 @@ public class Budget {
         return ownerId;
     }
 
+    /**
+     * Get budget's account id.
+     * @return account id.
+     */
     @Nullable
     public String getAccount() {
         return account;
@@ -221,7 +225,11 @@ public class Budget {
         this.ownerId = mOwnerId;
     }
 
-    public void setAccount(@Nullable String mAccount) {
+    /**
+     * Set budget's account.
+     * @param mAccount account id.
+     */
+    public void setAccount(final @Nullable String mAccount) {
         this.account = mAccount;
     }
 }

@@ -28,6 +28,7 @@ public interface CategoryDao {
     /**
      * Get all categories from the database.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of categories.
      */
     @Query("SELECT * FROM categories WHERE owner_id=:ownerId AND (account=:accountId OR is_public = 1)")
@@ -54,6 +55,7 @@ public interface CategoryDao {
     /**
      * Get all categories name from the database.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of categories name.
      */
     @Query("SELECT name FROM categories WHERE owner_id=:ownerId AND (account=:accountId OR is_public = 1)")
