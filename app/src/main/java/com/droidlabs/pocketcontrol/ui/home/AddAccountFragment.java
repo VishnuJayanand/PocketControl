@@ -78,15 +78,24 @@ public class AddAccountFragment extends Fragment {
     }
 
     private boolean validateAccountName() {
+        String[] accountNames = accountViewModel.getAccountNames();
+        boolean isNameTaken = false;
+
         if (accountNameEditText.getText().toString().isEmpty()) {
-            accountNameInputLayout.setError("Account name cannot be empty");
+            accountNameInputLayout.setError("Account name cannot be empty.");
             return false;
         } else {
             accountNameInputLayout.setError(null);
         }
 
-        if (accountNameEditText.getText().toString().equals("hi")) {
-            accountNameInputLayout.setError("Account name already exists");
+        for (String s : accountNames) {
+            if (s.equalsIgnoreCase(accountNameEditText.getText().toString())) {
+                isNameTaken = true;
+            }
+        }
+
+        if (isNameTaken) {
+            accountNameInputLayout.setError("Account name already taken.");
             return false;
         } else {
             accountNameInputLayout.setError(null);
