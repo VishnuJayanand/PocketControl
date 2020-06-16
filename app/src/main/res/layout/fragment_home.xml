@@ -70,22 +70,68 @@
             android:id="@+id/accountsWrapper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="20dp"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/switchAccountButton"
-                style="@style/baseSmallButton"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="0"
-                android:text="Switch account" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/selectedAccountTitle"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/selectedAccountColor"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="15dp"
+                    app:cardCornerRadius="8dp" />
+
+                <TextView
+                    android:id="@+id/selectedAccountTitle"
+                    style="@style/font_family_normal_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="TextView"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/switchAccountButton"
+                    style="@style/baseSmallButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:text="Switch account" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0"
-                android:text="TextView" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Account's incomes" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Account's expenses" />
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Account's balance" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/addAccountButton"

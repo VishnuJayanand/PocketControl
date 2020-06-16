@@ -79,6 +79,22 @@ public interface TransactionDao {
     float getTotalIExpenseByCategoryId(String categoryId, String ownerId, String accountId);
 
     /**
+     * Retrieve sum of transaction income amount for a specified category.
+     * @param ownerId owner id.
+     * @return sum of transaction income amount with matching categoryId
+     */
+    @Query("SELECT SUM(amount) FROM transactions WHERE owner_id=:ownerId AND account=:accountId AND type = 2")
+    float getTotalIncomeByAccountId(String ownerId, String accountId);
+
+    /**
+     * Retrieve sum of transaction expense amount for a specified category.
+     * @param ownerId owner id.
+     * @return sum of transaction expense amount with matching categoryId
+     */
+    @Query("SELECT SUM(amount) FROM transactions WHERE owner_id=:ownerId AND account=:accountId AND type = 1")
+    float getTotalIExpenseByAccountId(String ownerId, String accountId);
+
+    /**
      * Retrieve all transactions within a specified date range.
      * @param lowerBound lower date bound.
      * @param upperBound upper date bound.

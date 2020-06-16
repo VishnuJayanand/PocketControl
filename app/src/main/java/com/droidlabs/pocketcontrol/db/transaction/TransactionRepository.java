@@ -104,6 +104,36 @@ public class TransactionRepository {
         return transactionDao.getTotalIExpenseByCategoryId(categoryId, currentUserId, currentAccountId);
     }
 
+    /**
+     * Get sum of transaction income amount by categoryID.
+     * @return sum of transaction income amount with matching categoryId
+     */
+    public Float getTotalIncomeByAccountId() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTotalIncomeByAccountId(currentUserId, currentAccountId);
+    }
+
+    /**
+     * Get sum of transaction expense amount by categoryID.
+     * @return sum of transaction expense amount with matching categoryId
+     */
+    public Float getTotalIExpenseByAccountId() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTotalIExpenseByAccountId(currentUserId, currentAccountId);
+    }
+
 
     /**
      * Get transactions by date range.

@@ -1,6 +1,8 @@
 package com.droidlabs.pocketcontrol.ui.home;
 
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -39,6 +42,7 @@ public class HomeFragment extends Fragment {
 
     private Animation topAnimation;
     private TextView textViewAmount, textViewNetBalance, selectedAccountTitle;
+    private CardView selectedAccountColor;
     private List<Account> accountList;
     private Button addAccountButton;
     private UserViewModel userViewModel;
@@ -55,6 +59,7 @@ public class HomeFragment extends Fragment {
 
         LinearLayout accountsWrapper = view.findViewById(R.id.accountsWrapper);
         Button switchAccount = accountsWrapper.findViewById(R.id.switchAccountButton);
+        selectedAccountColor = view.findViewById(R.id.selectedAccountColor);
 
         sharedPreferencesUtils = new SharedPreferencesUtils(getActivity().getApplication());
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
@@ -127,7 +132,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        updateSelectedAccountText();
+        updateSelectedAccountInformation();
 
         return view;
     }
@@ -141,14 +146,24 @@ public class HomeFragment extends Fragment {
                 userViewModel.updateUserSelectedAccount(String.valueOf(selectedAccount.getId()));
                 sharedPreferencesUtils.setCurrentAccountId(String.valueOf(selectedAccount.getId()));
 
-                selectedAccountTitle.setText(selectedAccount.getName());
+                updateSelectedAccountInformation();
             }
         });
     }
 
-    private void updateSelectedAccountText() {
+    private void updateSelectedAccountInformation() {
         Log.v("SELECTED ACCOUNT", sharedPreferencesUtils.getCurrentAccountIdKey());
         Account selectedAcc = accountViewModel.getAccountById(Integer.parseInt(sharedPreferencesUtils.getCurrentAccountIdKey()));
+
+        String accountColor = selectedAcc.getColor();
+
         selectedAccountTitle.setText(selectedAcc.getName());
+
+        if (accountColor != null) {
+            selectedAccountColor.setCardBackgroundColor(Color.parseColor(accountColor));
+        } else {
+            selectedAccountColor.setCardBackgroundColor(getResources().getColor(R.color.projectColorDefault, null));
+        }
+
     }
 }

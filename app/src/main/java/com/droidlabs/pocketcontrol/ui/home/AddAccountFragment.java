@@ -1,6 +1,7 @@
 package com.droidlabs.pocketcontrol.ui.home;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,7 +37,7 @@ public class AddAccountFragment extends Fragment {
     private TextInputEditText accountNameEditText;
     private CardView selectAccountColor;
     private String[] colorsStr = {"Blue", "Dark blue", "Green", "Dark green", "Orange", "Dark orange", "Purple", "Dark purple"};
-    private int selectedAccountColor;
+    private String selectedAccountColor;
     private MaterialAlertDialogBuilder dialogBuilder;
     private SharedPreferencesUtils sharedPreferencesUtils;
 
@@ -56,8 +57,8 @@ public class AddAccountFragment extends Fragment {
 
         initializeColorDialog();
 
-        selectedAccountColor = getResources().getColor(R.color.projectColorBlue, null);
-        selectAccountColor.setCardBackgroundColor(selectedAccountColor);
+        selectedAccountColor = getResources().getString(0+R.color.projectColorBlue);
+        selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
 
         selectAccountColor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,40 +126,40 @@ public class AddAccountFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch (colorsStr[which]) {
                     case "Blue":
-                        selectedAccountColor = getResources().getColor(R.color.projectColorBlue, null);
-                        selectAccountColor.setCardBackgroundColor(selectedAccountColor);
+                        selectedAccountColor = getResources().getString(0+R.color.projectColorBlue);
+                        selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Dark blue":
-                        selectedAccountColor = getResources().getColor(R.color.projectColorDarkBlue, null);
-                        selectAccountColor.setCardBackgroundColor(selectedAccountColor);
+                        selectedAccountColor = getResources().getString(0+R.color.projectColorDarkBlue);
+                        selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Green":
-                        selectedAccountColor = getResources().getColor(R.color.projectColorGreen, null);
-                        selectAccountColor.setCardBackgroundColor(selectedAccountColor);
+                        selectedAccountColor = getResources().getString(0+R.color.projectColorGreen);
+                        selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Dark green":
-                        selectedAccountColor = getResources().getColor(R.color.projectColorDarkGreen, null);
-                        selectAccountColor.setCardBackgroundColor(selectedAccountColor);
+                        selectedAccountColor = getResources().getString(0+R.color.projectColorDarkGreen);
+                        selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Orange":
-                        selectedAccountColor = getResources().getColor(R.color.projectColorOrange, null);
-                        selectAccountColor.setCardBackgroundColor(selectedAccountColor);
+                        selectedAccountColor = getResources().getString(0+R.color.projectColorOrange);
+                        selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Dark orange":
-                        selectedAccountColor = getResources().getColor(R.color.projectColorDarkOrange, null);
-                        selectAccountColor.setCardBackgroundColor(selectedAccountColor);
+                        selectedAccountColor = getResources().getString(0+R.color.projectColorDarkOrange);
+                        selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Purple":
-                        selectedAccountColor = getResources().getColor(R.color.projectColorPurple, null);
-                        selectAccountColor.setCardBackgroundColor(selectedAccountColor);
+                        selectedAccountColor = getResources().getString(0+R.color.projectColorPurple);
+                        selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     case "Dark purple":
-                        selectedAccountColor = getResources().getColor(R.color.projectColorDarkPurple, null);
-                        selectAccountColor.setCardBackgroundColor(selectedAccountColor);
+                        selectedAccountColor = getResources().getString(0+R.color.projectColorDarkPurple);
+                        selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                     default:
-                        selectedAccountColor = getResources().getColor(R.color.projectColorBlue, null);
-                        selectAccountColor.setCardBackgroundColor(selectedAccountColor);
+                        selectedAccountColor = getResources().getString(0+R.color.projectColorBlue);
+                        selectAccountColor.setCardBackgroundColor(Color.parseColor(selectedAccountColor));
                         break;
                 }
             }
