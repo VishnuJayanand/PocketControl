@@ -30,7 +30,7 @@ import static androidx.room.ForeignKey.CASCADE;
                     onDelete = CASCADE
             ),
     },
-    indices = {@Index("owner_id")}
+    indices = {@Index("owner_id"), @Index("account")}
 )
 public class Category {
 
@@ -40,10 +40,13 @@ public class Category {
     @ColumnInfo(name = "name")
     private String name;
 
-    // Foreign keys
     @ColumnInfo(name = "icon")
     @Nullable
     private int icon;
+
+    @ColumnInfo(name = "is_public")
+    @Nullable
+    private Boolean isPublic;
 
     // Foreign keys
     @ColumnInfo(name = "owner_id")
@@ -129,6 +132,11 @@ public class Category {
         return account;
     }
 
+    @Nullable
+    public Boolean getPublic() {
+        return isPublic;
+    }
+
     /**
      * Category id setter.
      * @param categoryId category id.
@@ -161,6 +169,14 @@ public class Category {
         this.ownerId = mOwnerId;
     }
 
+    public void setAccount(@Nullable String mAccount) {
+        this.account = mAccount;
+    }
+
+    public void setPublic(@Nullable Boolean aPublic) {
+        isPublic = aPublic;
+    }
+
     /**
      * Override toString class method to return category name.
      * @return category name
@@ -169,9 +185,5 @@ public class Category {
     @Override
     public String toString() {
         return getName();
-    }
-
-    public void setAccount(@Nullable String mAccount) {
-        this.account = mAccount;
     }
 }

@@ -319,6 +319,13 @@ public class SignInActivity extends AppCompatActivity {
         Category study = new Category("Study", R.drawable.study);
         Category rent = new Category("Rent", R.drawable.rent);
 
+        health.setPublic(true);
+        transport.setPublic(true);
+        shopping.setPublic(true);
+        food.setPublic(true);
+        study.setPublic(true);
+        rent.setPublic(true);
+
         categoryViewModel.insert(health);
         categoryViewModel.insert(transport);
         categoryViewModel.insert(shopping);

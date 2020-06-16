@@ -3,6 +3,8 @@ package com.droidlabs.pocketcontrol.db.category;
 import android.app.Application;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.user.User;
+import com.droidlabs.pocketcontrol.db.user.UserDao;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
 public class CategoryRepository {
 
     private CategoryDao categoryDao;
+    private UserDao userDao;
     private SharedPreferencesUtils sharedPreferencesUtils;
 
     /**
@@ -20,6 +23,7 @@ public class CategoryRepository {
         PocketControlDB db = PocketControlDB.getDatabase(application);
         sharedPreferencesUtils = new SharedPreferencesUtils(application);
         categoryDao = db.categoryDao();
+        userDao = db.userDao();
     }
 
     /**
@@ -28,12 +32,13 @@ public class CategoryRepository {
      */
     public List<Category> getAllCategories() {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return categoryDao.getAllCategories(currentUserId);
+        return categoryDao.getAllCategories(currentUserId, currentAccountId);
     }
 
     /**
@@ -42,12 +47,15 @@ public class CategoryRepository {
      */
     public void insert(final Category category) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        User currentUser = userDao.getUserById(Integer.parseInt(currentUserId));
+        String currentAccountId = currentUser.getSelectedAccount();
 
         if (currentUserId.equals("")) {
             return;
         }
 
         category.setOwnerId(currentUserId);
+        category.setAccount(currentAccountId);
 
         PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
             categoryDao.insert(category);
@@ -90,12 +98,13 @@ public class CategoryRepository {
      */
     public String[] getCategoriesName() {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return categoryDao.getCategoriesName(currentUserId);
+        return categoryDao.getCategoriesName(currentUserId, currentAccountId);
     }
 
 }

@@ -3,6 +3,8 @@ package com.droidlabs.pocketcontrol.db.budget;
 import android.app.Application;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.user.User;
+import com.droidlabs.pocketcontrol.db.user.UserDao;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
 public class BudgetRepository {
 
     private BudgetDao budgetDao;
+    private UserDao userDao;
     private SharedPreferencesUtils sharedPreferencesUtils;
 
     /**
@@ -23,6 +26,7 @@ public class BudgetRepository {
         PocketControlDB db = PocketControlDB.getDatabase(application);
         sharedPreferencesUtils = new SharedPreferencesUtils(application);
         budgetDao = db.budgetDao();
+        userDao = db.userDao();
     }
 
     /**
@@ -31,12 +35,13 @@ public class BudgetRepository {
      */
     public List<Budget> getAllBudgets() {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return budgetDao.getAllBudgets(currentUserId);
+        return budgetDao.getAllBudgets(currentUserId, currentAccountId);
     }
 
     /**
@@ -45,12 +50,14 @@ public class BudgetRepository {
      */
     public void insert(final Budget budget) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return;
         }
 
         budget.setOwnerId(currentUserId);
+        budget.setAccount(currentAccountId);
 
         PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
             budgetDao.insert(budget);
@@ -64,11 +71,12 @@ public class BudgetRepository {
      */
     public Budget getBudgetForCategory(final String category) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return budgetDao.getBudgetForCategory(category, currentUserId);
+        return budgetDao.getBudgetForCategory(category, currentUserId, currentAccountId);
     }
 }

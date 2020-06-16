@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.user.User;
+import com.droidlabs.pocketcontrol.db.user.UserDao;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
@@ -30,12 +32,13 @@ public class TransactionRepository {
      */
     public LiveData<List<Transaction>> getAllTransactions() {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return transactionDao.getAllTransactions(currentUserId);
+        return transactionDao.getAllTransactions(currentUserId, currentAccountId);
     }
 
     /**
@@ -60,12 +63,13 @@ public class TransactionRepository {
      */
     public LiveData<List<Transaction>> filterTransactionsByCategoryId(final String categoryId) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return transactionDao.getTransactionsByCategoryId(categoryId, currentUserId);
+        return transactionDao.getTransactionsByCategoryId(categoryId, currentUserId, currentAccountId);
     }
 
     /**
@@ -75,12 +79,13 @@ public class TransactionRepository {
      */
     public Float getTotalIncomeByCategoryId(final String categoryId) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return transactionDao.getTotalIncomeByCategoryId(categoryId, currentUserId);
+        return transactionDao.getTotalIncomeByCategoryId(categoryId, currentUserId, currentAccountId);
     }
 
     /**
@@ -90,12 +95,13 @@ public class TransactionRepository {
      */
     public Float getTotalIExpenseByCategoryId(final String categoryId) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return transactionDao.getTotalIExpenseByCategoryId(categoryId, currentUserId);
+        return transactionDao.getTotalIExpenseByCategoryId(categoryId, currentUserId, currentAccountId);
     }
 
 
@@ -107,12 +113,13 @@ public class TransactionRepository {
      */
     public LiveData<List<Transaction>> filterTransactionsByDate(final long lb, final long ub) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return transactionDao.filterTransactionsByDate(lb, ub, currentUserId);
+        return transactionDao.filterTransactionsByDate(lb, ub, currentUserId, currentAccountId);
     }
 
     /**
@@ -122,12 +129,13 @@ public class TransactionRepository {
      */
     public List<Transaction> getAmountByCategoryId(final String categoryId) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return transactionDao.getAmountByCategoryId(categoryId, currentUserId);
+        return transactionDao.getAmountByCategoryId(categoryId, currentUserId, currentAccountId);
     }
 
     /**
@@ -138,12 +146,13 @@ public class TransactionRepository {
      */
     public LiveData<List<Transaction>> filterTransactionsByAmount(final float lba, final float uba) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return transactionDao.filterTransactionsByAmount(lba, uba, currentUserId);
+        return transactionDao.filterTransactionsByAmount(lba, uba, currentUserId, currentAccountId);
     }
 
     /**
@@ -159,12 +168,13 @@ public class TransactionRepository {
             final long ub
     ) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return transactionDao.filterTransactionsByCategoryAndDate(catId, lb, ub, currentUserId);
+        return transactionDao.filterTransactionsByCategoryAndDate(catId, lb, ub, currentUserId, currentAccountId);
     }
 
     /**
@@ -179,12 +189,13 @@ public class TransactionRepository {
     public LiveData<List<Transaction>> filterTransactionsByCategoryAndDateAndAmount(
             final String catId, final long lb, final long ub, final float lba, final float uba) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return transactionDao.filterTransactionsByCategoryAndDateAndAmount(catId, lb, ub, lba, uba, currentUserId);
+        return transactionDao.filterTransactionsByCategoryAndDateAndAmount(catId, lb, ub, lba, uba, currentUserId, currentAccountId);
     }
 
     /**
@@ -198,12 +209,13 @@ public class TransactionRepository {
     public LiveData<List<Transaction>> filterTransactionsByAmountAndDate(
             final long lb, final long ub, final float lba, final float uba) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return transactionDao.filterTransactionsByAmountAndDate(lb, ub, lba, uba, currentUserId);
+        return transactionDao.filterTransactionsByAmountAndDate(lb, ub, lba, uba, currentUserId, currentAccountId);
     }
 
     /**
@@ -216,12 +228,13 @@ public class TransactionRepository {
     public LiveData<List<Transaction>> filterTransactionsByAmountAndCategory(
             final String catId, final float lba, final float uba) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return transactionDao.filterTransactionsByAmountAndCategory(catId, lba, uba, currentUserId);
+        return transactionDao.filterTransactionsByAmountAndCategory(catId, lba, uba, currentUserId, currentAccountId);
     }
 
     /**
@@ -231,12 +244,14 @@ public class TransactionRepository {
      */
     public Long insert(final Transaction transaction) {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
 
         if (currentUserId.equals("")) {
             return null;
         }
 
         transaction.setOwnerId(currentUserId);
+        transaction.setAccount(currentAccountId);
 
         return transactionDao.insert(transaction);
     }

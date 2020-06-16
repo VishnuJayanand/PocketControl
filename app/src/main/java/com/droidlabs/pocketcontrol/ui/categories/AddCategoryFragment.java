@@ -2,11 +2,13 @@ package com.droidlabs.pocketcontrol.ui.categories;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -26,6 +28,7 @@ public class AddCategoryFragment extends Fragment {
     private TextInputEditText tiedtCategoryName;
     private TextInputLayout tilCategoryName;
     private TextInputEditText dropdown;
+    private CheckBox isCategoryPublicCheckbox;
     private CategoryViewModel categoryViewModel;
 
     @Nullable
@@ -37,6 +40,8 @@ public class AddCategoryFragment extends Fragment {
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         tilCategoryName = view.findViewById(R.id.til_categoryName);
         tiedtCategoryName = view.findViewById(R.id.tiedt_categoryName);
+        isCategoryPublicCheckbox = view.findViewById(R.id.isCategoryPublicCheckbox);
+
         Button btnAdd = view.findViewById(R.id.addNewCategory);
 
         //Set spinner
@@ -149,6 +154,12 @@ public class AddCategoryFragment extends Fragment {
         int resID = this.getResources().getIdentifier(categoryIcon, "drawable", getContext().getPackageName());
         String categoryName = tiedtCategoryName.getText().toString().trim() + "";
         Category newCategory = new Category(categoryName, resID);
+
+        if (isCategoryPublicCheckbox.isChecked()) {
+            newCategory.setPublic(true);
+        } else {
+            newCategory.setPublic(false);
+        }
 
         //Insert new Category in to the database
         categoryViewModel.insert(newCategory);
