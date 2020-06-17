@@ -55,4 +55,26 @@
 
     <!-- Shared Preferences strings -->
     <string name="shared_preferences_file_key">com.droidlabs.pocketcontrol.sharedpreferences</string>
+
+    <!-- Strings for On Boarding Screen -->
+
+    <!--Titles-->
+    <string name="first_slide_title">Add your transactions</string>
+    <string name="second_slide_title">Create your own categories</string>
+    <string name="third_slide_title">Manage multiple accounts</string>
+    <string name="fourth_slide_title">Monitor your expense</string>
+
+    <!--Descriptions-->
+    <string name="intro_app">Pocket control helps you monitor your expenses \n Sign in and we will guide you through the appication.  </string>
+
+
+    <string name="first_slide_desc">Money control helps you to add your everday transactions. </string>
+    <string name="second_slide_desc">Create your own custom categories with unique icons to assign your transcations.</string>
+    <string name="third_slide_desc">Have separate accounts for monitoring your home, buisness and personal transactions.</string>
+    <string name="fourth_slide_desc">Set a budget and monitor your overall transactions.  </string>
+
+    <!--Buttons-->
+    <string name="skip_btn">Skip</string>
+    <string name="next_btn">Next</string>
+    <string name="let_get_started">Lets Get Started</string>
 </resources>

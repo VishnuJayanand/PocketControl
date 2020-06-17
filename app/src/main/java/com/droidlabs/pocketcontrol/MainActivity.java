@@ -1,30 +1,29 @@
 package com.droidlabs.pocketcontrol;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Handler;
 import android.util.Log;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.recurrent.Recurrent;
 import com.droidlabs.pocketcontrol.db.recurrent.RecurrentDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.ui.intro.AppIntro;
 import com.droidlabs.pocketcontrol.ui.signin.SignInActivity;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
-
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView appImage, teamImage;
     private static final int TIMER = 4000;
     private TransactionViewModel transactionViewModel;
-
+    private SharedPreferencesUtils sharedPreferencesUtils;
     public static final String EXTRA_MESSAGE = "com.droidlabs.pocketcontrol.SIGNIN";
 
     /**
@@ -53,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen);
 
+        sharedPreferencesUtils = new SharedPreferencesUtils(getApplication());
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
         //Animation
@@ -69,9 +69,20 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getApplication(), SignInActivity.class);
-                startActivity(intent);
-                finish();
+                //Checking if the app is running for the 1st time
+                boolean isFirstTime = sharedPreferencesUtils.getFirstTime();
+
+                if (isFirstTime) {
+                    sharedPreferencesUtils.setFirstTime(false);
+
+                    Intent intent = new Intent(getApplication(), AppIntro.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(getApplication(), SignInActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         }, TIMER);
 

@@ -1,9 +1,5 @@
 package com.droidlabs.pocketcontrol.ui.signin;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.category.Category;
@@ -23,6 +23,7 @@ import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.ui.home.AccountViewModel;
 import com.droidlabs.pocketcontrol.ui.home.HomeActivity;
+import com.droidlabs.pocketcontrol.ui.intro.OnBoarding;
 import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -230,8 +231,20 @@ public class SignInActivity extends AppCompatActivity {
             sharedPreferencesUtils.setCurrentUserId(String.valueOf(user.getId()));
             sharedPreferencesUtils.setCurrentAccountId(user.getSelectedAccount());
 
-            Intent intent = new Intent(getApplication(), HomeActivity.class);
-            startActivity(intent);
+            //Checking if the app is running for the 1st time
+            boolean isFirstTime = sharedPreferencesUtils.getFirstTimeSet();
+
+            if (isFirstTime) {
+                sharedPreferencesUtils.setFirstTimeSet(false);
+
+                Intent intent = new Intent(getApplication(), OnBoarding.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Intent intent = new Intent(getApplication(), HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
         } else {
             enterAccessTokenInputGroup.setError("Access token is not valid.");
         }
