@@ -216,7 +216,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
                 if (categoryFilterEnabled) {
                     transactionViewModel.setCategoryFilter(true, categoryFilter.getId().toString());
                 } else {
-                    transactionViewModel.setCategoryFilter(false, categoryFilter.getId().toString());
+                    transactionViewModel.setCategoryFilter(false, "-1");
                 }
 
                 if (dateFilterEnabled) {

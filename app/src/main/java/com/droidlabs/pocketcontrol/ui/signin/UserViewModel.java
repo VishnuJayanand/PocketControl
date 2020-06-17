@@ -14,6 +14,7 @@ import java.util.List;
 public class UserViewModel extends AndroidViewModel {
 
     private UserRepository repository;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     /**
      * View model constructor.
@@ -22,6 +23,7 @@ public class UserViewModel extends AndroidViewModel {
     public UserViewModel(final Application application) {
         super(application);
         this.repository = new UserRepository(application);
+        sharedPreferencesUtils = new SharedPreferencesUtils(application);
     }
 
     /**
@@ -46,7 +48,7 @@ public class UserViewModel extends AndroidViewModel {
      * @param userId id.
      * @return user.
      */
-    public User getUserById(final long userId) {
+    public User getUserById(final int userId) {
         User user = repository.getUserById(userId);
 
         // TODO: add validation, user should be authenticated
@@ -72,18 +74,18 @@ public class UserViewModel extends AndroidViewModel {
      * @return user.
      */
     public User getCurrentUser() {
-        SharedPreferencesUtils sharedPreferencesUtils = new SharedPreferencesUtils(getApplication());
-
-        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
-
-        if (currentUserId.equals("")) {
-            return null;
-        }
-
-        User user = repository.getUserById(Long.parseLong(currentUserId));
+        User user = repository.getCurrentUser();
 
         // TODO: add validation, user should be authenticated
 
         return user;
     };
+
+    /**
+     * Update user selected account on DB.
+     * @param selectedAccount account id.
+     */
+    public void updateUserSelectedAccount(final String selectedAccount) {
+        repository.updateUserSelectedAccount(selectedAccount);
+    }
 }

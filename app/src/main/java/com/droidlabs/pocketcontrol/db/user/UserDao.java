@@ -38,7 +38,7 @@ public interface UserDao {
      * @return user.
      */
     @Query("SELECT * FROM users WHERE id=:userId")
-    User getUserById(Long userId);
+    User getUserById(int userId);
 
     /**
      * Retrieve a specific user from the database.
@@ -47,4 +47,17 @@ public interface UserDao {
      */
     @Query("SELECT * FROM users WHERE email=:userEmail")
     User getUserByEmail(String userEmail);
+
+    /**
+     * Update user selected account.
+     * @param userId id.
+     * @param selectedAccount new selected account.
+     */
+    @Query("UPDATE users SET "
+            + "selected_account=:selectedAccount "
+            + "WHERE id=:userId")
+    void updateUserSelectedAccount(
+            int userId,
+            String selectedAccount
+    );
 }

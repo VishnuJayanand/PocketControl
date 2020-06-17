@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
@@ -25,6 +27,7 @@ public class AddCategoryFragment extends Fragment {
     private TextInputEditText tiedtCategoryName;
     private TextInputLayout tilCategoryName;
     private TextInputEditText dropdown;
+    private CheckBox isCategoryPublicCheckbox;
     private CategoryViewModel categoryViewModel;
 
     @Nullable
@@ -32,10 +35,14 @@ public class AddCategoryFragment extends Fragment {
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.category_add, container, false);
-        categoryViewModel = new CategoryViewModel(getActivity().getApplication());
+
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         tilCategoryName = view.findViewById(R.id.til_categoryName);
         tiedtCategoryName = view.findViewById(R.id.tiedt_categoryName);
+        isCategoryPublicCheckbox = view.findViewById(R.id.isCategoryPublicCheckbox);
+
         Button btnAdd = view.findViewById(R.id.addNewCategory);
+
         //Set spinner
         setCategoryIconSpinner(view);
 
@@ -146,6 +153,12 @@ public class AddCategoryFragment extends Fragment {
         int resID = this.getResources().getIdentifier(categoryIcon, "drawable", getContext().getPackageName());
         String categoryName = tiedtCategoryName.getText().toString().trim() + "";
         Category newCategory = new Category(categoryName, resID);
+
+        if (isCategoryPublicCheckbox.isChecked()) {
+            newCategory.setPublic(true);
+        } else {
+            newCategory.setPublic(false);
+        }
 
         //Insert new Category in to the database
         categoryViewModel.insert(newCategory);

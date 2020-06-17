@@ -28,10 +28,11 @@ public interface CategoryDao {
     /**
      * Get all categories from the database.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of categories.
      */
-    @Query("SELECT * FROM categories WHERE owner_id=:ownerId")
-    List<Category> getAllCategories(String ownerId);
+    @Query("SELECT * FROM categories WHERE owner_id=:ownerId AND (account=:accountId OR is_public = 1)")
+    List<Category> getAllCategories(String ownerId, String accountId);
 
     /**
      * Get single category.
@@ -54,8 +55,9 @@ public interface CategoryDao {
     /**
      * Get all categories name from the database.
      * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of categories name.
      */
-    @Query("SELECT name FROM categories WHERE owner_id=:ownerId")
-    String[] getCategoriesName(String ownerId);
+    @Query("SELECT name FROM categories WHERE owner_id=:ownerId AND (account=:accountId OR is_public = 1)")
+    String[] getCategoriesName(String ownerId, String accountId);
 }

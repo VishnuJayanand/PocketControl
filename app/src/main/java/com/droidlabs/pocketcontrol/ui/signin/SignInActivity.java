@@ -16,10 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidlabs.pocketcontrol.R;
+import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.defaults.Defaults;
 import com.droidlabs.pocketcontrol.db.user.User;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.home.AccountViewModel;
 import com.droidlabs.pocketcontrol.ui.home.HomeActivity;
 import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
@@ -55,8 +57,11 @@ public class SignInActivity extends AppCompatActivity {
     private TextInputLayout repeatAccessTokenInputGroup;
     private TextInputEditText repeatAccessTokenInputText;
     private SharedPreferencesUtils sharedPreferencesUtils;
+
     private CategoryViewModel categoryViewModel;
     private DefaultsViewModel defaultsViewModel;
+    private AccountViewModel accountViewModel;
+
     private MaterialAlertDialogBuilder switchUserDialog;
     private User user;
 
@@ -71,6 +76,7 @@ public class SignInActivity extends AppCompatActivity {
         sharedPreferencesUtils = new SharedPreferencesUtils(getApplication());
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
+        accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
 
         setContentView(R.layout.activity_sign_in_screen);
 
@@ -210,6 +216,7 @@ public class SignInActivity extends AppCompatActivity {
 
         createDefaultUserCategories();
         createDefaultUserDefaults();
+        createDefaultUserAccount();
     }
 
     /**
@@ -218,7 +225,11 @@ public class SignInActivity extends AppCompatActivity {
     private void signIn() {
         if (accessTokenValueText.getText().toString().equals(user.getAccessPin())) {
             enterAccessTokenInputGroup.setError(null);
+
             sharedPreferencesUtils.setIsSignedIn(true);
+            sharedPreferencesUtils.setCurrentUserId(String.valueOf(user.getId()));
+            sharedPreferencesUtils.setCurrentAccountId(user.getSelectedAccount());
+
             Intent intent = new Intent(getApplication(), HomeActivity.class);
             startActivity(intent);
         } else {
@@ -253,7 +264,7 @@ public class SignInActivity extends AppCompatActivity {
      * Set user locally and in the text.
      */
     private void setUser() {
-        user = userViewModel.getUserById(Long.parseLong(sharedPreferencesUtils.getCurrentUserId()));
+        user = userViewModel.getCurrentUser();
         currentUser.setText(user.getEmail());
     }
 
@@ -307,6 +318,13 @@ public class SignInActivity extends AppCompatActivity {
         Category study = new Category("Study", R.drawable.study);
         Category rent = new Category("Rent", R.drawable.rent);
 
+        health.setPublic(true);
+        transport.setPublic(true);
+        shopping.setPublic(true);
+        food.setPublic(true);
+        study.setPublic(true);
+        rent.setPublic(true);
+
         categoryViewModel.insert(health);
         categoryViewModel.insert(transport);
         categoryViewModel.insert(shopping);
@@ -322,5 +340,19 @@ public class SignInActivity extends AppCompatActivity {
     private void createDefaultUserDefaults() {
         Defaults defaultValue = new Defaults("Currency", "EUR");
         defaultsViewModel.insert(defaultValue);
+    }
+
+    /**
+     * Create default user account.
+     */
+    private void createDefaultUserAccount() {
+        Account defaultAccount = new Account();
+
+        defaultAccount.setName("Default account");
+
+        Long newAccountId = accountViewModel.insert(defaultAccount);
+
+        userViewModel.updateUserSelectedAccount(String.valueOf(newAccountId));
+        sharedPreferencesUtils.setCurrentAccountId(String.valueOf(newAccountId));
     }
 }

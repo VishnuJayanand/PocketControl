@@ -31,11 +31,7 @@ public class Account {
 
     @ColumnInfo(name = "color")
     @Nullable
-    private Integer color;
-
-    @ColumnInfo(name = "is_public", defaultValue = "0")
-    @Nullable
-    private Boolean isPublic;
+    private String color;
 
     // Foreign keys
     @ColumnInfo(name = "owner_id")
@@ -68,7 +64,7 @@ public class Account {
      * @return color.
      */
     @Nullable
-    public Integer getColor() {
+    public String getColor() {
         return color;
     }
 
@@ -79,15 +75,6 @@ public class Account {
     @Nullable
     public String getOwnerId() {
         return ownerId;
-    }
-
-    /**
-     * Get account is public.
-     * @return boolean.
-     */
-    @Nullable
-    public Boolean getIsPublic() {
-        return isPublic;
     }
 
     /**
@@ -110,7 +97,7 @@ public class Account {
      * Set account color.
      * @param mColor color.
      */
-    public void setColor(final @Nullable Integer mColor) {
+    public void setColor(final @Nullable String mColor) {
         this.color = mColor;
     }
 
@@ -120,13 +107,5 @@ public class Account {
      */
     public void setOwnerId(final @Nullable String mOwnerId) {
         this.ownerId = mOwnerId;
-    }
-
-    /**
-     * Set account is public.
-     * @param mPublic boolean.
-     */
-    public void setPublic(final @Nullable Boolean mPublic) {
-        this.isPublic = mPublic;
     }
 }
