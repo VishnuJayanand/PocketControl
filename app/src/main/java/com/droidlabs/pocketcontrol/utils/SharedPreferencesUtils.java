@@ -12,6 +12,8 @@ public final class SharedPreferencesUtils {
     private static final String CURRENT_USER_ID_KEY = "currentUserId";
     private static final String CURRENT_ACCOUNT_ID_KEY = "currentAccountId";
     private static final String IS_SIGNED_IN_KEY = "isUserSignedIn";
+    private static final String FIRST_TIME_SET = "isApplicationFirstTime2";
+    private static final String FIRST_TIME = "isApplicationFirstTime1";
 
     /**
      * Constructor.
@@ -79,5 +81,43 @@ public final class SharedPreferencesUtils {
      */
     public boolean getIsSignedIn() {
         return sharedPreferences.getBoolean(IS_SIGNED_IN_KEY, false);
+    }
+
+    /**
+     * Set boolean for checking if its 1st time.
+     * @param firstTime user id.
+     * @return current instance of SharedPreferencesUtils.
+     */
+    public SharedPreferencesUtils setFirstTimeSet(final Boolean firstTime) {
+        sharedPreferences.edit().putBoolean(FIRST_TIME_SET, firstTime).commit();
+
+        return this;
+    }
+
+    /**
+     * Get if application is running for the 1st time.
+     * @return boolean.
+     */
+    public Boolean getFirstTimeSet() {
+        return sharedPreferences.getBoolean(FIRST_TIME_SET, true);
+    }
+
+    /**
+     * Set boolean for checking if its 1st time.
+     * @param firstTime user id.
+     * @return current instance of SharedPreferencesUtils.
+     */
+    public SharedPreferencesUtils setFirstTime(final Boolean firstTime) {
+        sharedPreferences.edit().putBoolean(FIRST_TIME, firstTime).commit();
+
+        return this;
+    }
+
+    /**
+     * Get if application is running for the 1st time.
+     * @return boolean.
+     */
+    public Boolean getFirstTime() {
+        return sharedPreferences.getBoolean(FIRST_TIME, true);
     }
 }

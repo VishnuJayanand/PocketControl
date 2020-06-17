@@ -10,6 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.home.HomeActivity"></activity>
+        <activity android:name=".ui.intro.AppIntro"></activity>
+        <activity android:name=".ui.intro.OnBoarding"></activity>
         <activity
             android:name=".ui.signin.SignInActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
