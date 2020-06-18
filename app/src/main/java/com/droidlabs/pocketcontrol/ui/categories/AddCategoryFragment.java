@@ -21,14 +21,18 @@ import com.droidlabs.pocketcontrol.db.category.Category;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AddCategoryFragment extends Fragment {
     private TextInputEditText tiedtCategoryName;
     private TextInputLayout tilCategoryName;
-    private TextInputEditText dropdown;
     private CheckBox isCategoryPublicCheckbox;
     private CategoryViewModel categoryViewModel;
+    private String categoryIconImage;
+    private TextInputEditText dropdown;
 
     @Nullable
     @Override
@@ -60,17 +64,26 @@ public class AddCategoryFragment extends Fragment {
      * @param view the transaction add layout
      */
     private void setCategoryIconSpinner(final View view) {
-        //get the spinner from the xml.
         dropdown = view.findViewById(R.id.newCategoryIcon);
         //create a list of items for the spinner.
-        String[] dropdownItems = new String[]{"Food", "Study", "Health", "Rent", "Shopping", "Transport"};
+        String[] dropdownItems = getAllIconsFromDrawable();
+        CategoryIconAdapter iconAdapter = new CategoryIconAdapter(getContext(), dropdownItems);
+        iconAdapter.setListOfIcons(dropdownItems);
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
-                .setTitle("Select the payment method")
-                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                .setAdapter(iconAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
-                        dropdown.setText(dropdownItems[which]);
-
+                        String icon = dropdownItems[which];
+                        categoryIconImage = icon;
+                        dropdown.setText(icon);
+                    }
+                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(final DialogInterface dialog) {
+                        if (dropdown.getText() == null) {
+                            categoryIconImage = "general";
+                            dropdown.setText("general");
+                        }
                     }
                 });
 
@@ -89,7 +102,30 @@ public class AddCategoryFragment extends Fragment {
                 dialogBuilder.show();
             }
         });
-        dropdown.setInputType(0);
+
+}
+
+    /**
+     * This method is to retrieve all the category Icons from drawable folder.
+     * @return String[] category icons
+     */
+    public String[] getAllIconsFromDrawable() {
+        Field[] idFields = R.drawable.class.getFields();
+        List<String> listIconArray = new ArrayList<>();
+        for (int i = 0; i < idFields.length; i++) {
+            try {
+                if (idFields[i].getName().contains("category_icons_")) {
+                    listIconArray.add(idFields[i].getName().split("category_icons_")[1]);
+                }
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        String[] stringIconArray = new String[listIconArray.size()];
+        stringIconArray = listIconArray.toArray(stringIconArray);
+        return stringIconArray;
+
     }
 
     /**
@@ -149,7 +185,7 @@ public class AddCategoryFragment extends Fragment {
             return;
         }
 
-        String categoryIcon = dropdown.getText().toString().toLowerCase();
+        String categoryIcon = "category_icons_" + categoryIconImage;
         int resID = this.getResources().getIdentifier(categoryIcon, "drawable", getContext().getPackageName());
         String categoryName = tiedtCategoryName.getText().toString().trim() + "";
         Category newCategory = new Category(categoryName, resID);
