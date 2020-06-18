@@ -65,7 +65,8 @@
     <string name="fourth_slide_title">Monitor your expense</string>
 
     <!--Descriptions-->
-    <string name="intro_app">Pocket control helps you monitor your expenses \n Sign in and we will guide you through the appication.  </string>
+    <string name="intro_app_first_sentence">Pocket control helps you monitor your expenses.</string>
+    <string name="intro_app_second_sentence">Sign in and we will guide you through the application!</string>
 
 
     <string name="first_slide_desc">Money control helps you to add your everday transactions. </string>

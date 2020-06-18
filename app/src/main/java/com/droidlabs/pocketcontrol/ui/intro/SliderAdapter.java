@@ -5,10 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.droidlabs.pocketcontrol.R;
@@ -30,10 +30,10 @@ public class SliderAdapter extends PagerAdapter {
     }
 
     private int[] images = {
-            R.drawable.app_logo_text,
-            R.drawable.app_logo_text,
-            R.drawable.app_logo_text,
-            R.drawable.app_logo_text
+            R.drawable.ic_add_transactions_icon,
+            R.drawable.ic_add_categories_icon,
+            R.drawable.ic_multiple_accounts_icon,
+            R.drawable.ic_monitor_expense_icon
     };
 
     private int[] headings = {
@@ -65,7 +65,7 @@ public class SliderAdapter extends PagerAdapter {
      */
     @Override
     public boolean isViewFromObject(final View view, final Object object) {
-        return view == (ConstraintLayout) object;
+        return view == (ScrollView) object;
     }
 
     /**
@@ -100,6 +100,6 @@ public class SliderAdapter extends PagerAdapter {
      */
     @Override
     public void destroyItem(final ViewGroup container, final int position, final Object object) {
-        container.removeView((ConstraintLayout) object);
+        container.removeView((ScrollView) object);
     }
 }
