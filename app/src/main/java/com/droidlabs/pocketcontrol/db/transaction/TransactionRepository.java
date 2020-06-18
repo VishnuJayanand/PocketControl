@@ -348,4 +348,20 @@ public class TransactionRepository {
         );
     }
 
+    /**
+     * Update transaction recurring fields.
+     * @param transactionId id.
+     */
+    public void deleteTransaction(final int transactionId) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+
+        if (currentUserId.equals("")) {
+            return;
+        }
+
+        transactionDao.deleteTransaction(
+                transactionId, currentUserId, currentAccountId
+        );
+    }
 }
