@@ -109,7 +109,6 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             holder.deleteTransactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show();
                     Integer transactionId = current.getId();
                     transactionViewModel.deleteTransaction(transactionId);
                     Toast.makeText(context, "Transaction Deleted!", Toast.LENGTH_SHORT).show();
