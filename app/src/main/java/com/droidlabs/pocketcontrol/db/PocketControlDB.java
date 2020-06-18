@@ -190,21 +190,21 @@ public abstract class PocketControlDB extends RoomDatabase {
         Category health = new Category(1, "Health", R.drawable.health);
         Category transport = new Category(2, "Transport", R.drawable.transport);
         Category shopping = new Category(3, "Shopping", R.drawable.shopping);
-        Category food = new Category(4, "Food", R.drawable.food);
+        Category categoryIcons_food = new Category(4, "Food", R.drawable.categoryIcons_food);
         Category study = new Category(5, "Study", R.drawable.study);
         Category rent = new Category(6, "Rent", R.drawable.rent);
 
         health.setOwnerId(String.valueOf(userId));
         transport.setOwnerId(String.valueOf(userId));
         shopping.setOwnerId(String.valueOf(userId));
-        food.setOwnerId(String.valueOf(userId));
+        categoryIcons_food.setOwnerId(String.valueOf(userId));
         study.setOwnerId(String.valueOf(userId));
         rent.setOwnerId(String.valueOf(userId));
 
         long healthCatId = categoryDao.insert(health);
         long transportCatId = categoryDao.insert(transport);
         long shoppingCatId = categoryDao.insert(shopping);
-        long foodId = categoryDao.insert(food);
+        long foodId = categoryDao.insert(categoryIcons_food);
         long studyCatId = categoryDao.insert(study);
         long rentCatId = categoryDao.insert(rent);
 

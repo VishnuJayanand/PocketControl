@@ -324,12 +324,19 @@ public class SignInActivity extends AppCompatActivity {
      * Create user's default categories.
      */
     private void createDefaultUserCategories() {
-        Category health = new Category("Health", R.drawable.health);
-        Category transport = new Category("Transport", R.drawable.transport);
-        Category shopping = new Category("Shopping", R.drawable.shopping);
-        Category food = new Category("Food", R.drawable.food);
-        Category study = new Category("Study", R.drawable.study);
-        Category rent = new Category("Rent", R.drawable.rent);
+        Category health = new Category("Health", R.drawable.category_icons_health);
+        Category transport = new Category("Transport", R.drawable.category_icons_transport);
+        Category shopping = new Category("Shopping", R.drawable.category_icons_shopping);
+        Category food = new Category("Food", R.drawable.category_icons_food);
+        Category study = new Category("Study", R.drawable.category_icons_study);
+        Category rent = new Category("Rent", R.drawable.category_icons_rent);
+
+        health.setPublic(true);
+        transport.setPublic(true);
+        shopping.setPublic(true);
+        food.setPublic(true);
+        study.setPublic(true);
+        rent.setPublic(true);
 
         health.setPublic(true);
         transport.setPublic(true);
