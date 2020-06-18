@@ -187,6 +187,18 @@ public class TransactionViewModel extends AndroidViewModel {
     }
 
     /**
+     * Update transaction recurring fields.
+     * @param transactionId id.
+     */
+    public void deleteTransaction(
+            final int transactionId
+    ) {
+        repository.deleteTransaction(
+                transactionId
+        );
+    }
+
+    /**
      * Setter for category filter.
      * @param filterEnabled whether filter is enabled.
      * @param categoryId category ID to filter.

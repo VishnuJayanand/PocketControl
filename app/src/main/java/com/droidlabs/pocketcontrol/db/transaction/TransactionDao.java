@@ -295,4 +295,18 @@ public interface TransactionDao {
             Integer recurringIntervalDays,
             String ownerId
     );
+
+    /**
+     * Update transaction recurring params.
+     * @param transactionId transaction id.
+     * @param ownerId owner ID
+     * @param accountId account ID
+     */
+    @Query("DELETE from transactions WHERE id=:transactionId AND owner_id=:ownerId AND "
+            + "account=:accountId")
+    void deleteTransaction(
+            int transactionId,
+            String ownerId,
+            String accountId
+    );
 }
