@@ -2,11 +2,12 @@ package com.droidlabs.pocketcontrol.ui.intro;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,8 +19,7 @@ import com.droidlabs.pocketcontrol.ui.signin.SignInActivity;
  */
 public class AppIntro extends AppCompatActivity {
 
-    private static final int TIMER = 4000;
-    private TextView textView;
+    private LinearLayout appIntro;
     private Animation animation;
 
     /**
@@ -33,16 +33,18 @@ public class AppIntro extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         animation = AnimationUtils.loadAnimation(AppIntro.this, R.anim.bottom_animation);
 
-        textView = findViewById(R.id.appIntro);
-        textView.setAnimation(animation);
+        appIntro = findViewById(R.id.appInto);
+        appIntro.setAnimation(animation);
 
-        new Handler().postDelayed(new Runnable() {
+        Button appIntroButton = findViewById(R.id.appIntroButton);
+
+        appIntroButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(final View v) {
                 Intent intent = new Intent(getApplication(), SignInActivity.class);
                 startActivity(intent);
                 finish();
             }
-        }, TIMER);
+        });
     }
 }
