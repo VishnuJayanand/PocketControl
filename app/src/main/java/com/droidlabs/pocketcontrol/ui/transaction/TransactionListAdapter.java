@@ -2,6 +2,7 @@ package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.Calendar;
 import java.util.List;
@@ -109,9 +111,27 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             holder.deleteTransactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    Integer transactionId = current.getId();
-                    transactionViewModel.deleteTransaction(transactionId);
-                    Toast.makeText(context, "Transaction Deleted!", Toast.LENGTH_SHORT).show();
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+                    builder.setTitle("Delete Transaction?");
+                    builder.setMessage("Are you sure you want to delete the transaction?");
+                    builder.setBackground(context.getDrawable(
+                            (R.drawable.alert_dialogue_box)));
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            Integer transactionId = current.getId();
+                            transactionViewModel.deleteTransaction(transactionId);
+                            Toast.makeText(context, "Transaction Deleted!", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    builder.show();
                 }
 
             });
