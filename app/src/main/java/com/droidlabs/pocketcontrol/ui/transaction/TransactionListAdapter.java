@@ -298,6 +298,14 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             newTransaction.setCategory(oldTransaction.getCategory());
         }
 
+        if (oldTransaction.getFriend() != null) {
+            newTransaction.setFriend(oldTransaction.getFriend());
+        }
+
+        if (oldTransaction.getMethodForFriend() != null) {
+            newTransaction.setMethodForFriend(oldTransaction.getMethodForFriend());
+        }
+
         return newTransaction;
     }
 }
