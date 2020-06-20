@@ -77,26 +77,27 @@ public class DetailTransactionFragment extends Fragment {
             transactionCategoryTitle.setText(category1.getName());
             transactionCategoryImage.setImageResource(category1.getIcon());
         }
-
-        if (!methodForFriend.equals("")) {
-            friendWrapper.setVisibility(View.VISIBLE);
-            if (methodForFriend.equals("Borrow")) {
-                methodForFriend = methodForFriend + " From ";
-            } else {
-                System.out.println(methodForFriend);
-                methodForFriend = methodForFriend + " To ";
-            }
-            if (friend.contains(",")) {
-                String friendName = friend.split(",")[0];
-                String phoneNumber = friend.split(":")[1];
-                transactionFriend.setText(friendName);
-                transactionFriendPhoneNumber.setText(phoneNumber);
-            } else if (friend.equals("") || friend.equals("There are no contacts available on your phone")) {
-                transactionFriend.setText("No contact selected");
-                transactionFriendPhoneNumber.setText("");
-            } else {
-                transactionFriend.setText(friend);
-                transactionFriendPhoneNumber.setText("");
+        if (methodForFriend != null) {
+            if (!methodForFriend.equals("")) {
+                friendWrapper.setVisibility(View.VISIBLE);
+                if (methodForFriend.equals("Borrow")) {
+                    methodForFriend = methodForFriend + " From ";
+                } else {
+                    System.out.println(methodForFriend);
+                    methodForFriend = methodForFriend + " To ";
+                }
+                if (friend.contains(",")) {
+                    String friendName = friend.split(",")[0];
+                    String phoneNumber = friend.split(":")[1];
+                    transactionFriend.setText(friendName);
+                    transactionFriendPhoneNumber.setText(phoneNumber);
+                } else if (friend.equals("") || friend.equals("There are no contacts available on your phone")) {
+                    transactionFriend.setText("No contact selected");
+                    transactionFriendPhoneNumber.setText("");
+                } else {
+                    transactionFriend.setText(friend);
+                    transactionFriendPhoneNumber.setText("");
+                }
             }
         }
         //Edit the friend string
