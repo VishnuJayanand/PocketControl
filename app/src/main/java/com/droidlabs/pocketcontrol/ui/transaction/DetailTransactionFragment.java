@@ -37,6 +37,7 @@ public class DetailTransactionFragment extends Fragment {
         String category = bundle.getString("transactionCategory");
         String friend = bundle.getString("transactionFriend");
         String methodForFriend = bundle.getString("transactionMethodForFriend");
+        int method = bundle.getInt("transactionMethod");
 
         TextView transactionDate = view.findViewById(R.id.transactionDate);
         TextView transactionAmount = view.findViewById(R.id.transactionAmount);
@@ -64,6 +65,12 @@ public class DetailTransactionFragment extends Fragment {
             amountToString = "+ " + amountToString;
         }
 
+        //transaction method
+        if (method == 1) {
+            transactionMethod.setText("Cash");
+        } else {
+            transactionMethod.setText("Card");
+        }
         //get Category Title and Image
         if (category != null) {
             Category category1 = categoryViewModel.getSingleCategory(Integer.parseInt(category));
