@@ -3,6 +3,7 @@ package com.droidlabs.pocketcontrol.ui.transaction;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
@@ -139,7 +144,16 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             holder.updateTransactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show();
+                    Bundle result = new Bundle();
+                    result.putString("BundleKey", current.getId().toString());
+
+                    Fragment fragment = new UpdateTransaction();
+                    FragmentManager manager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentBudget = manager.beginTransaction();
+                    fragment.setArguments(result);
+                    fragmentBudget.replace(R.id.fragment_container, fragment);
+                    fragmentBudget.addToBackStack(null);
+                    fragmentBudget.commit();
                 }
             });
 
