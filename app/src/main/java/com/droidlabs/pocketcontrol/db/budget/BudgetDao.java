@@ -31,6 +31,16 @@ public interface BudgetDao {
     List<Budget> getAllBudgets(String ownerId, String accountId);
 
     /**
+     * Delete budget.
+     * @param budgetId budget id.
+     * @param ownerId owner id.
+     * @param accountId account id.
+     */
+    @Query("DELETE FROM budgets WHERE id=:budgetId AND owner_id=:ownerId AND "
+            + "account=:accountId")
+    void deleteBudget(int budgetId, String ownerId, String accountId);
+
+    /**
      * Retrieve all budgets.
      * @param category is the category.
      * @param accountId account id.

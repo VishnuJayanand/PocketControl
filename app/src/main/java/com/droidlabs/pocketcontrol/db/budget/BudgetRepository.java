@@ -80,6 +80,21 @@ public class BudgetRepository {
     }
 
     /**
+     * delete a budget from DB.
+     * @param budgetId budget to be saved.
+     */
+    public void deleteBudget(final int budgetId) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+
+        if (currentUserId.equals("")) {
+            return;
+        }
+
+        budgetDao.deleteBudget(budgetId, currentUserId, currentAccountId);
+    }
+
+    /**
      * Convert budgets.
      * @param conversionRate conversion rate.
      */
