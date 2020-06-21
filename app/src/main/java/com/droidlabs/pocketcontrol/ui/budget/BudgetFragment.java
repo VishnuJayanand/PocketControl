@@ -7,16 +7,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
-import com.droidlabs.pocketcontrol.R;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
+import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 
 import java.util.List;
 
@@ -25,6 +28,7 @@ public class BudgetFragment extends Fragment {
     private BudgetViewModel budgetViewModel;
     private CategoryViewModel categoryViewModel;
     private DefaultsViewModel defaultsViewModel;
+    private TransactionViewModel transactionViewModel;
     private List<Budget> allBudgets;
     private ArrayAdapter<String> nameAdapter;
 
@@ -37,6 +41,7 @@ public class BudgetFragment extends Fragment {
         budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
+        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
         ListView listView = (ListView) view.findViewById(R.id.budget_list);
         LinearLayout emptyTransactions = view.findViewById(R.id.emptyPageViewWrapper);
@@ -52,7 +57,9 @@ public class BudgetFragment extends Fragment {
                     R.layout.budget_layout,
                     allBudgets,
                     categoryViewModel,
-                    defaultsViewModel
+                    defaultsViewModel,
+                    budgetViewModel,
+                    transactionViewModel
             );
             listView = (ListView) view.findViewById(R.id.budget_list);
             listView.setAdapter(adapter);

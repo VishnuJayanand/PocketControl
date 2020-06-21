@@ -174,10 +174,10 @@ public abstract class PocketControlDB extends RoomDatabase {
 
         PaymentMode card = new PaymentMode("Credit Card");
         PaymentMode cash = new PaymentMode("Cash");
-        // PaymentMode wallet = new PaymentMode("Digital Wallet");
+         PaymentMode wallet = new PaymentMode("Digital Wallet");
         paymentModeDao.insert(card);
         paymentModeDao.insert(cash);
-        // paymentModeDao.insert(wallet);
+         paymentModeDao.insert(wallet);
 
         /*
         BudgetDao budgetDao = dbInstance.budgetDao();

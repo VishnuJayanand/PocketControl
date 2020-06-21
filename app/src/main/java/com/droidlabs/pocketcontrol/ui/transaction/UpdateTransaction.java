@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +23,18 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
+import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.droidlabs.pocketcontrol.utils.FormatterUtils;
@@ -105,6 +110,12 @@ public class UpdateTransaction extends Fragment {
 
         Button btnAdd = view.findViewById(R.id.addNewTransaction);
         btnAdd.setText("Update");
+
+        Button btnAdd25 = view.findViewById(R.id.addAmount25);
+        Button btnAdd50 = view.findViewById(R.id.addAmount50);
+        Button btnAdd75 = view.findViewById(R.id.addAmount75);
+        Button btnAdd100 = view.findViewById(R.id.addAmount100);
+
         //Check for android version and request a permission from the user
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && getContext().checkSelfPermission(Manifest.permission.READ_CONTACTS)
@@ -182,6 +193,50 @@ public class UpdateTransaction extends Fragment {
             }
         });
 
+        btnAdd25.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                tiedtTransactionAmount.setText(
+                        FormatterUtils.roundToTwoDecimals(
+                                Float.parseFloat(btnAdd25.getText().toString())
+                        )
+                );
+            }
+        });
+
+        btnAdd50.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                tiedtTransactionAmount.setText(
+                        FormatterUtils.roundToTwoDecimals(
+                                Float.parseFloat(btnAdd50.getText().toString())
+                        )
+                );
+            }
+        });
+
+        btnAdd75.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                tiedtTransactionAmount.setText(
+                        FormatterUtils.roundToTwoDecimals(
+                                Float.parseFloat(btnAdd75.getText().toString())
+                        )
+                );
+            }
+        });
+
+        btnAdd100.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                tiedtTransactionAmount.setText(
+                        FormatterUtils.roundToTwoDecimals(
+                                Float.parseFloat(btnAdd100.getText().toString())
+                        )
+                );
+            }
+        });
+
         final Calendar myCalendar = Calendar.getInstance();
         editText = view.findViewById(R.id.transactionDate);
 
@@ -237,13 +292,10 @@ public class UpdateTransaction extends Fragment {
     private void setTransactionTypeSpinner(final View view) {
 
         dropdownTransactionType = view.findViewById(R.id.spinnerTransactionType);
-        if (updateTransaction.getType() == 1) {
-            dropdownTransactionType.setText("Expense");
-        } else {
-            dropdownTransactionType.setText("Income");
-        }
 
         String[] dropdownItems = new String[]{"Expense", "Income"};
+        dropdownTransactionType.setText(dropdownItems[updateTransaction.getType() - 1]);
+
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Select the transaction type")
                 .setItems(dropdownItems, new DialogInterface.OnClickListener() {
@@ -273,19 +325,59 @@ public class UpdateTransaction extends Fragment {
     }
 
     /**
+     * This method to check the budget of the selected Transaction Category.
+     * @param transactionCategory the transaction category
+     * @param categoryId the transaction category id
+     */
+    private void checkBudget(final String transactionCategory, final int categoryId) {
+
+        String message = "";
+        BudgetViewModel budgetViewModel;
+        String sCatId = String.valueOf(categoryId);
+        budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
+        Budget budget = budgetViewModel.getBudgetForCategory(sCatId);
+
+        if (budget != null) {
+            Float budgetAmount = budget.getMaxAmount();
+            Float totalAmount = transactionViewModel.getTotalIAmountByCategoryId(sCatId);
+
+            if (budgetAmount - totalAmount <= 50) {
+                message = "Low Budget: Monitor your expenses for " +  transactionCategory;
+            }
+            if (budgetAmount - totalAmount == 0) {
+                message = "Budget limit is full for " + transactionCategory;
+            }
+            if (budgetAmount - totalAmount < 0) {
+                message = "Budget limit exceeded for " + transactionCategory;
+            }
+        }
+
+        if (!message.isEmpty()) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                    getContext()
+            )
+                    .setSmallIcon(R.drawable.ic_message)
+                    .setContentTitle("New Notification")
+                    .setContentText(message)
+                    .setAutoCancel(true);
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+            notificationManager.notify(001, builder.build());
+        }
+
+    }
+
+    /**
      * This method to set the spinner of Transaction Method.
      * @param view the transaction add layout
      */
     private void setTransactionMethodSpinner(final View view) {
 
         dropdownTransactionMethod = view.findViewById(R.id.spinnerTransactionMethod);
-        if (updateTransaction.getMethod() == 1) {
-            dropdownTransactionMethod.setText("Cash");
-        } else {
-            dropdownTransactionMethod.setText("Card");
-        }
 
-        String[] dropdownItems = new String[]{"Cash", "Card"};
+        String[] dropdownItems = new String[]{"Cash", "Credit Card", "Digital Wallet"};
+
+        dropdownTransactionMethod.setText(dropdownItems[updateTransaction.getMethod() - 1]);
 
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Select the payment method")
@@ -590,11 +682,14 @@ public class UpdateTransaction extends Fragment {
      * Method to convert transactionType.
      */
     private void convertTransactionMethod() {
-        String text = dropdownTransactionMethod.getText().toString();
+        String text = dropdownTransactionMethod.getText().toString().trim();
+        Log.d("String Text", "Value:" + text);
         if (text.equals("Cash")) {
             transactionMethod = 1;
-        } else {
+        } else if (text.equals("Credit Card")) {
             transactionMethod = 2;
+        } else {
+            transactionMethod = 3;
         }
     }
 
@@ -643,6 +738,8 @@ public class UpdateTransaction extends Fragment {
         transactionViewModel.deleteTransaction(updateTransaction.getId());
         transactionViewModel.insert(newTransaction);
 
+        checkBudget(transactionCategory, categoryId);
+
         Fragment fragment = new TransactionFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -650,7 +747,7 @@ public class UpdateTransaction extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
-        String total = "Added new transaction";
+        String total = "Transaction updated";
         Toast.makeText(getContext(), total, Toast.LENGTH_LONG).show();
     }
 

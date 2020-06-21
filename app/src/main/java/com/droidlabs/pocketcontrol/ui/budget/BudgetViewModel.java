@@ -39,6 +39,15 @@ public class BudgetViewModel extends AndroidViewModel {
     }
 
     /**
+     * delete a budget in the database.
+     * @param budgetId transaction to be added.
+     */
+    public void deleteBudget(final int budgetId) {
+
+        repository.deleteBudget(budgetId);
+    }
+
+    /**
      * Fetch the budget for the selected category.
      * @param category transaction to be added.
      * @return Budget.
