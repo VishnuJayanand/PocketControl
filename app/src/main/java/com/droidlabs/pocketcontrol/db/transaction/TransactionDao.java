@@ -38,6 +38,16 @@ public interface TransactionDao {
     LiveData<List<Transaction>> getAllTransactions(String ownerId, String accountId);
 
     /**
+     * Retrieve all transactions from the database.
+     * @param ownerId owner id.
+     * @return all transactions.
+     */
+    @Query("SELECT * FROM transactions "
+            + "WHERE owner_id=:ownerId "
+            + "ORDER BY date DESC")
+    LiveData<List<Transaction>> getAllTransactionsFromUser(String ownerId);
+
+    /**
      * Get transaction by id.
      * @param transactionId id.
      * @param ownerId owner id.
@@ -295,6 +305,17 @@ public interface TransactionDao {
             Integer recurringIntervalDays,
             String ownerId
     );
+
+    /**
+     * Update transaction amounts default currency.
+     * @param conversionRate conversion rate.
+     * @param ownerId owner id.
+     */
+    @Query("UPDATE transactions SET "
+            + "amount=:conversionRate * amount "
+            + "WHERE owner_id=:ownerId;"
+    )
+    void updateTransactionAmountsDefaultCurrency(float conversionRate, String ownerId);
 
     /**
      * Update transaction recurring params.

@@ -46,4 +46,30 @@ public class DefaultsViewModel extends AndroidViewModel {
     public String getDefaultValue(final String name) {
         return  defaultsRepository.getDefaultValue(name);
     }
+
+    /**
+     * Get symbol from currency code.
+     * @param currency code
+     * @return currency symbol
+     */
+    public String getCurrencySymbol(final String currency) {
+        return defaultsRepository.getCurrencySymbol(currency);
+    }
+
+    /**
+     * Get single default value.
+     * deletes all values
+     */
+    public void deleteAll() {
+        defaultsRepository.deleteAll();
+    }
+
+    /**
+     * Update default value on DB.
+     * @param defaultName default name.
+     * @param newDefaultValue default value.
+     */
+    public void updateDefaultValue(final String defaultName, final String newDefaultValue) {
+        defaultsRepository.updateDefaultValue(defaultName, newDefaultValue);
+    }
 }

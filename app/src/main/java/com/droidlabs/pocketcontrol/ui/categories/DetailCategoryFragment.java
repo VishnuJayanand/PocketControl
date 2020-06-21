@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.ui.transaction.DetailTransactionFragment;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionListAdapter;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
@@ -46,12 +47,15 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
 
         TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        DefaultsViewModel defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
+
         //Create the adapter for Transaction
         final TransactionListAdapter adapter = new TransactionListAdapter(
                 getActivity(),
                 this,
                 transactionViewModel,
-                categoryViewModel
+                categoryViewModel,
+                defaultsViewModel
         );
         RecyclerView recyclerView = view.findViewById(R.id.transactionListView);
         LinearLayout emptyListImage = view.findViewById(R.id.emptyPageViewWrapper);

@@ -78,4 +78,18 @@ public class BudgetRepository {
 
         return budgetDao.getBudgetForCategory(category, currentUserId, currentAccountId);
     }
+
+    /**
+     * Convert budgets.
+     * @param conversionRate conversion rate.
+     */
+    public void updateBudgetAmountsDefaultCurrency(final float conversionRate) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return;
+        }
+
+        budgetDao.updateBudgetAmountsDefaultCurrency(conversionRate, currentUserId);
+    }
 }

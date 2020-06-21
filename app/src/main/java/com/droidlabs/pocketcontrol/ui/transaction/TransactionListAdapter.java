@@ -25,8 +25,10 @@ import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.currency.CurrencyDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -40,6 +42,8 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
     private final LayoutInflater layoutInflater;
     private final CategoryViewModel categoryViewModel;
     private final TransactionViewModel transactionViewModel;
+    private CurrencyDao currencyDao;
+    private final DefaultsViewModel defaultsViewModel;
     private final OnTransactionNoteListener mOnNoteListener;
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
 
@@ -49,17 +53,20 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
      * @param onNoteListener the onNotelistener
      * @param transactionVM the view model for creating new transactions
      * @param categoryVM  category viewmodel.
+     * @param defaultVM default viewmodel.
      */
     public TransactionListAdapter(
             final @NonNull Context context,
             final OnTransactionNoteListener onNoteListener,
             final TransactionViewModel transactionVM,
-            final CategoryViewModel categoryVM
+            final CategoryViewModel categoryVM,
+            final DefaultsViewModel defaultVM
     ) {
         layoutInflater = LayoutInflater.from(context);
         categoryViewModel = categoryVM;
         transactionViewModel = transactionVM;
         mOnNoteListener = onNoteListener;
+        defaultsViewModel = defaultVM;
     }
 
     @NonNull
@@ -67,6 +74,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
     public TransactionViewHolder onCreateViewHolder(final @NonNull ViewGroup parent, final int viewType) {
         View itemView = layoutInflater.inflate(R.layout.transaction_listitem, parent, false);
         return new TransactionViewHolder(itemView, mOnNoteListener);
+
     }
 
     /**
@@ -88,7 +96,12 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             Boolean recurring = current.getFlagIconRecurring();
 
             // turn float to string
-            String amountToString = CurrencyUtils.formatAmount(amount, "€");
+            String stringCurrencyCode = defaultsViewModel.getDefaultValue("Currency");
+            String stringCurrency = defaultsViewModel.getCurrencySymbol(stringCurrencyCode);
+            //String currencySymbol = currencyDao.getCurrencySymbol(stringCurrency);
+            //Log.d("ADebugTag", "Value: " + stringCurrency);
+            //Log.d("ADebugTag", "Value: " + currencySymbol);
+            String amountToString = CurrencyUtils.formatAmount(amount, stringCurrency);
 
             if (recurring != null && recurring) {
                 holder.recurringTransactionWrapper.setVisibility(View.VISIBLE);

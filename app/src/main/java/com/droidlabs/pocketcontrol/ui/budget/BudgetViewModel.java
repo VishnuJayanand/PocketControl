@@ -46,4 +46,12 @@ public class BudgetViewModel extends AndroidViewModel {
     public Budget getBudgetForCategory(final String category) {
         return repository.getBudgetForCategory(category);
     }
+
+    /**
+     * Update budget amounts.
+     * @param conversionRate conversion rate.
+     */
+    public void updateBudgetAmountsDefaultCurrency(final float conversionRate) {
+        repository.updateBudgetAmountsDefaultCurrency(conversionRate);
+    }
 }

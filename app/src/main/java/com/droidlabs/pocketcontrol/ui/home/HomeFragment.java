@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.account.Account;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.ui.signin.UserViewModel;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
@@ -45,12 +46,16 @@ public class HomeFragment extends Fragment {
     private MaterialAlertDialogBuilder dialogBuilder;
     private SharedPreferencesUtils sharedPreferencesUtils;
     private TransactionViewModel transactionViewModel;
+    private DefaultsViewModel defaultsViewModel;
+    private String stringCurrency;
 
     @Nullable
     @Override
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.fragment_home, container, false);
+
+        defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
 
         LinearLayout accountsWrapper = view.findViewById(R.id.accountsWrapper);
         Button switchAccount = accountsWrapper.findViewById(R.id.switchAccountButton);
@@ -63,6 +68,7 @@ public class HomeFragment extends Fragment {
         selectedAccountTitle = view.findViewById(R.id.selectedAccountTitle);
         textViewAmount = view.findViewById(R.id.homeScreenTop);
         textViewNetBalance = view.findViewById(R.id.homeScreenNetBalanceText);
+
         addAccountButton = view.findViewById(R.id.addAccountButton);
         accountIncomeText = view.findViewById(R.id.accountIncomeText);
         accountExpenseText = view.findViewById(R.id.accountExpenseText);
@@ -71,6 +77,9 @@ public class HomeFragment extends Fragment {
         topAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.top_animation);
         textViewAmount.setAnimation(topAnimation);
         textViewNetBalance.setAnimation(topAnimation);
+
+        String stringCurrencyCode = defaultsViewModel.getDefaultValue("Currency");
+        stringCurrency = defaultsViewModel.getCurrencySymbol(stringCurrencyCode);
 
         accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         accountViewModel.getAccounts().observe(getViewLifecycleOwner(), new Observer<List<Account>>() {
@@ -126,11 +135,11 @@ public class HomeFragment extends Fragment {
         accountBalance = accountIncome - accountExpense;
         totalBalance = transactionViewModel.getTotalIncomeByUserId() - transactionViewModel.getTotalExpenseByUserId();
 
-        accountIncomeText.setText(CurrencyUtils.formatAmount(accountIncome));
-        accountExpenseText.setText(CurrencyUtils.formatAmount(accountExpense));
-        accountBalanceText.setText(CurrencyUtils.formatAmount(accountBalance));
+        accountIncomeText.setText(CurrencyUtils.formatAmount(accountIncome, stringCurrency));
+        accountExpenseText.setText(CurrencyUtils.formatAmount(accountExpense, stringCurrency));
+        accountBalanceText.setText(CurrencyUtils.formatAmount(accountBalance, stringCurrency));
 
-        textViewAmount.setText(CurrencyUtils.formatAmount(totalBalance));
+        textViewAmount.setText(CurrencyUtils.formatAmount(totalBalance, stringCurrency));
     }
 
     /**

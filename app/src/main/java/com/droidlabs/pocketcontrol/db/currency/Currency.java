@@ -23,6 +23,10 @@ public class Currency {
     @Nullable
     private Float toDefaultRate;
 
+    @ColumnInfo(name = "symbol", defaultValue = "0")
+    @Nullable
+    private String symbol;
+
     /**
      * Empty currency constructor.
      */
@@ -31,10 +35,12 @@ public class Currency {
     /**
      * Currency constructor.
      * @param letterCode three-letter code.
+     * @param currencySymbol symbol for the currency.
      */
     @Ignore
-    public Currency(final String letterCode) {
+    public Currency(final String letterCode, final String currencySymbol) {
         this.threeLetterCode = letterCode;
+        this.symbol = currencySymbol;
     }
 
     /**
@@ -67,6 +73,14 @@ public class Currency {
      */
     public int getId() {
         return id;
+    }
+
+    /**
+     * symbol getter.
+     * @return symbol.
+     */
+    public String getSymbol() {
+        return symbol;
     }
 
     /**
@@ -115,6 +129,14 @@ public class Currency {
      */
     public void setThreeLetterCode(final String letterCode) {
         this.threeLetterCode = letterCode;
+    }
+
+    /**
+     * currency symbol setter.
+     * @param currencySymbol three-letter code of the currency.
+     */
+    public void setSymbol(final String currencySymbol) {
+        this.symbol = currencySymbol;
     }
 
     /**

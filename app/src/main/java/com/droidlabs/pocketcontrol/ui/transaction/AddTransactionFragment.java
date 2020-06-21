@@ -31,11 +31,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
+
+import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
+
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
+
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.droidlabs.pocketcontrol.utils.FormatterUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -67,6 +73,8 @@ public class AddTransactionFragment extends Fragment {
     private Long transactionDate;
     private TransactionViewModel transactionViewModel;
     private CategoryViewModel categoryViewModel;
+    private DefaultsViewModel defaultsViewModel;
+
     private Switch recurringSwitch;
     private Switch addFriendSwitch;
     private LinearLayout recurringTransactionWrapper;
@@ -78,11 +86,16 @@ public class AddTransactionFragment extends Fragment {
     private String[] contactArray;
     private View currentView;
 
+    private PaymentModeDao paymentModeDao;
+
     @Nullable
     @Override
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.transaction_add, container, false);
+
+        paymentModeDao = PocketControlDB.getDatabase(getContext()).paymentModeDao();
+
         tiedtTransactionAmount = view.findViewById(R.id.tiedt_transactionAmount);
         tiedtTransactionNote = view.findViewById(R.id.tiedt_transactionNote);
         tilTransactionAmount = view.findViewById(R.id.til_transactionAmount);
@@ -100,8 +113,14 @@ public class AddTransactionFragment extends Fragment {
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
 
         Button btnAdd = view.findViewById(R.id.addNewTransaction);
+        Button btnAdd25 = view.findViewById(R.id.addAmount25);
+        Button btnAdd50 = view.findViewById(R.id.addAmount50);
+        Button btnAdd75 = view.findViewById(R.id.addAmount75);
+        Button btnAdd100 = view.findViewById(R.id.addAmount100);
+
         //Check for android version and request a permission from the user
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && getContext().checkSelfPermission(Manifest.permission.READ_CONTACTS)
@@ -183,8 +202,57 @@ public class AddTransactionFragment extends Fragment {
             }
         });
 
+        btnAdd25.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                tiedtTransactionAmount.setText(
+                        FormatterUtils.roundToTwoDecimals(
+                                Float.parseFloat(btnAdd25.getText().toString())
+                        )
+                );
+            }
+        });
+
+        btnAdd50.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                tiedtTransactionAmount.setText(
+                        FormatterUtils.roundToTwoDecimals(
+                                Float.parseFloat(btnAdd50.getText().toString())
+                        )
+                );
+            }
+        });
+
+        btnAdd75.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                tiedtTransactionAmount.setText(
+                        FormatterUtils.roundToTwoDecimals(
+                                Float.parseFloat(btnAdd75.getText().toString())
+                        )
+                );
+            }
+        });
+
+        btnAdd100.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                tiedtTransactionAmount.setText(
+                        FormatterUtils.roundToTwoDecimals(
+                                Float.parseFloat(btnAdd100.getText().toString())
+                        )
+                );
+            }
+        });
+
         final Calendar myCalendar = Calendar.getInstance();
+
+        //Set Default Date
         editText = view.findViewById(R.id.transactionDate);
+        editText.setText(DateUtils.formatDate(DateUtils.getStartOfCurrentDay().getTimeInMillis()));
+        transactionDate = DateUtils.getStartOfCurrentDay().getTimeInMillis();
+
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(final DatePicker view, final int year, final int monthOfYear,
@@ -213,7 +281,7 @@ public class AddTransactionFragment extends Fragment {
 
     /**
      * Method to update the transaction date with the selected date.
-     * @param editTextLayout editText transaction date
+     * @param editTextLayout transactionDateText transaction date
      * @param myCalendar calendar the calendar to choose date
      */
     private void updateTransactionDateLabel(final EditText editTextLayout, final Calendar myCalendar) {
@@ -224,6 +292,19 @@ public class AddTransactionFragment extends Fragment {
         editTextLayout.setText(sdf.format(transactionDate));
     }
 
+/*    *//**
+     * This method to get the current date.
+     * @return formattedDate
+     *//*
+    public String getCurrentDate() {
+        Calendar c = Calendar.getInstance();
+        System.out.println("Current time => " + c.getTime());
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        String formattedDate = df.format(c.getTimeInMillis());
+
+        return formattedDate;
+    }*/
     /**
      * This method to set the spinner of Transaction Type.
      * @param view the transaction add layout
@@ -232,15 +313,17 @@ public class AddTransactionFragment extends Fragment {
 
         dropdownTransactionType = view.findViewById(R.id.spinnerTransactionType);
         String[] dropdownItems = new String[]{"Expense", "Income"};
-        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
-            .setTitle("Select the transaction type")
-            .setItems(dropdownItems, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(final DialogInterface dialog, final int which) {
-                    dropdownTransactionType.setText(dropdownItems[which]);
 
-                }
-            });
+        dropdownTransactionType.setText("Expense");
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the transaction type")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dropdownTransactionType.setText(dropdownItems[which]);
+
+                    }
+                });
 
         dropdownTransactionType.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -267,7 +350,11 @@ public class AddTransactionFragment extends Fragment {
     private void setTransactionMethodSpinner(final View view) {
 
         dropdownTransactionMethod = view.findViewById(R.id.spinnerTransactionMethod);
-        String[] dropdownItems = new String[]{"Cash", "Card"};
+        String[] dropdownItems = new String[]{"Cash", "Credit Card", "Digital Wallet"};
+
+        //set payment mode spinner value
+        String defaultPaymentMode = defaultsViewModel.getDefaultValue("Payment Mode");
+        dropdownTransactionMethod.setText(defaultPaymentMode);
 
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Select the payment method")
@@ -305,6 +392,10 @@ public class AddTransactionFragment extends Fragment {
 
         dropdownTransactionCategory = view.findViewById(R.id.spinnerTransactionCategory);
         String[] dropdownItems = categoryViewModel.getCategoriesName();
+
+        //set payment mode spinner value
+        String defaultCategory = defaultsViewModel.getDefaultValue("Category");
+        dropdownTransactionCategory.setText(defaultCategory);
 
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Select the transaction category")
@@ -630,11 +721,14 @@ public class AddTransactionFragment extends Fragment {
      * Method to convert transactionType.
      */
     private void convertTransactionMethod() {
-        String text = dropdownTransactionMethod.getText().toString();
+        String text = dropdownTransactionMethod.getText().toString().trim();
+        Log.d("String Text", "Value:" + text);
         if (text.equals("Cash")) {
             transactionMethod = 1;
-        } else {
+        } else if (text.equals("Credit Card")) {
             transactionMethod = 2;
+        } else {
+            transactionMethod = 3;
         }
     }
 
@@ -691,6 +785,9 @@ public class AddTransactionFragment extends Fragment {
         String transactionCategory = dropdownTransactionCategory.getText().toString();
         Category selectedCategory = categoryViewModel.getSingleCategory(transactionCategory);
         int categoryId = selectedCategory.getId();
+
+        //String transactionMethod = dropdownTransactionMethod.getText().toString();
+        Log.d("String Text", "Value:" + transactionMethod);
 
         float transactionAmount = Float.parseFloat(tiedtTransactionAmount.getText().toString());
         String transactionNote  = tiedtTransactionNote.getText().toString().trim() + "";
