@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 
 import java.util.List;
 
@@ -44,12 +45,14 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
 
         TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        DefaultsViewModel defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
 
         transactionListAdapter = new TransactionListAdapter(
                 getActivity(),
                 this,
                 transactionViewModel,
-                categoryViewModel
+                categoryViewModel,
+                defaultsViewModel
         );
 
         recyclerView.setAdapter(transactionListAdapter);
@@ -115,6 +118,7 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         bundle.putString("transactionFriend", transaction.getFriend());
         bundle.putString("transactionMethodForFriend", transaction.getMethodForFriend());
         bundle.putInt("transactionMethod", transaction.getMethod());
+
         //Move to transaction detail fragment
         Fragment fragment = new DetailTransactionFragment();
         fragment.setArguments(bundle);

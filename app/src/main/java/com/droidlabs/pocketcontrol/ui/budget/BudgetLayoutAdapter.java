@@ -11,6 +11,7 @@ import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
 
     private CategoryViewModel categoryViewModel;
+    private DefaultsViewModel defaultsViewModel;
     private LayoutInflater mInflater;
     private List<Budget> arrayList;
     private int mViewResourceId;
@@ -29,18 +31,21 @@ public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
      * @param textViewResourceId textViewResourceId
      * @param adapArrayList list of budget.
      * @param categoryVM category viewmodel.
+     * @param defaultVM default viewmodel.
      */
     public BudgetLayoutAdapter(
             final Context context,
             final int textViewResourceId,
             final List<Budget> adapArrayList,
-            final CategoryViewModel categoryVM
+            final CategoryViewModel categoryVM,
+            final DefaultsViewModel defaultVM
     ) {
         super(context, textViewResourceId, adapArrayList);
         this.arrayList = adapArrayList;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mViewResourceId = textViewResourceId;
         categoryViewModel = categoryVM;
+        defaultsViewModel = defaultVM;
     }
 
     /**
@@ -64,7 +69,9 @@ public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
                 budgetname.setText(category.getName());
             }
             if (budgetvalue != null) {
-                budgetvalue.setText(CurrencyUtils.formatAmount(budget.getMaxAmount()));
+                String stringCurrencyCode = defaultsViewModel.getDefaultValue("Currency");
+                String stringCurrency = defaultsViewModel.getCurrencySymbol(stringCurrencyCode);
+                budgetvalue.setText(CurrencyUtils.formatAmount(budget.getMaxAmount(), stringCurrency));
             }
         }
 

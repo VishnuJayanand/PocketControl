@@ -35,4 +35,12 @@ public interface CurrencyDao {
      */
     @Query("SELECT three_letter_code FROM currencies")
     String[] getAllCurrencyCodes();
+
+    /**
+     * Retrieve the currency symbol.
+     * @return symbol of currency code.
+     * @param code three letter code of currency.
+     */
+    @Query("SELECT symbol FROM currencies WHERE three_letter_code=:code")
+    String getCurrencySymbol(String code);
 }

@@ -39,4 +39,16 @@ public interface BudgetDao {
      */
     @Query("SELECT * FROM budgets WHERE category=:category AND owner_id=:ownerId AND account=:accountId")
     Budget getBudgetForCategory(String category, String ownerId, String accountId);
+
+    /**
+     * Update budget amounts default currency.
+     * @param conversionRate conversion rate.
+     * @param ownerId owner id.
+     */
+    @Query("UPDATE budgets SET "
+            + "max_amount=:conversionRate * max_amount "
+            + "WHERE owner_id=:ownerId;"
+    )
+    void updateBudgetAmountsDefaultCurrency(float conversionRate, String ownerId);
+
 }

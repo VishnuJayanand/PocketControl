@@ -7,137 +7,226 @@
     android:layout_height="match_parent"
     android:background="#ffffff">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="20dp">
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_transactionAmount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tiedt_transactionAmount"
-            style="@style/font_family_normal_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Transaction Amount"
-            android:inputType="numberDecimal">
-
-        </com.google.android.material.textfield.TextInputEditText>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
     <LinearLayout
-        android:id="@+id/til_transactionDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/font_family_normal_text"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/transaction_date"
-                android:textSize="18sp" />
-
-            <Switch
-                android:id="@+id/recurringSwitch"
-                style="@style/font_family_normal_text"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical|end"
-                android:paddingStart="15dp"
-                android:showText="false"
-                android:switchPadding="7dp"
-                android:text="Recurring"
-                android:textAlignment="inherit"
-                android:textAllCaps="false"
-                android:textIsSelectable="false"
-                android:textSize="12sp"
-                android:theme="@style/recurring_switch" />
-        </LinearLayout>
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/transactionDateLayout"
+            android:id="@+id/til_transactionAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/transactionDate"
+                android:id="@+id/tiedt_transactionAmount"
                 style="@style/font_family_normal_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="false" />
+                android:hint="Transaction Amount"
+                android:inputType="numberDecimal">
+
+            </com.google.android.material.textfield.TextInputEditText>
 
         </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:weightSum="3">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_transactionNote"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+            <Button
+                android:id="@+id/addAmount25"
+                style="@style/basePrimaryRoundedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="15sp"
+                android:backgroundTint="#7eacc4"
+                android:gravity="center"
+                android:paddingStart="25sp"
+                android:paddingTop="10sp"
+                android:paddingEnd="25sp"
+                android:paddingBottom="10sp"
+                android:text="25"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="12dp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tiedt_transactionNote"
-            style="@style/font_family_normal_text"
+            <Button
+                android:id="@+id/addAmount50"
+                style="@style/basePrimaryRoundedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="15sp"
+                android:backgroundTint="#7eacc4"
+                android:gravity="center"
+                android:paddingStart="25sp"
+                android:paddingTop="10sp"
+                android:paddingEnd="25sp"
+                android:paddingBottom="10sp"
+                android:text="50"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="12dp" />
+
+            <Button
+                android:id="@+id/addAmount75"
+                style="@style/basePrimaryRoundedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="15sp"
+                android:backgroundTint="#7eacc4"
+                android:gravity="center"
+                android:paddingStart="25sp"
+                android:paddingTop="10sp"
+                android:paddingEnd="25sp"
+                android:paddingBottom="10sp"
+                android:text="75"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="12dp" />
+
+            <Button
+                android:id="@+id/addAmount100"
+                style="@style/basePrimaryRoundedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:autoSizeMaxTextSize="15sp"
+                android:backgroundTint="#7eacc4"
+                android:gravity="center"
+                android:paddingStart="25sp"
+                android:paddingTop="10sp"
+                android:paddingEnd="25sp"
+                android:paddingBottom="10sp"
+                android:text="100"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/til_transactionDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Transaction Note">
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
 
-        </com.google.android.material.textfield.TextInputEditText>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-    </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    style="@style/font_family_normal_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/transaction_date"
+                    android:textSize="18sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+                <Switch
+                    android:id="@+id/recurringSwitch"
+                    style="@style/font_family_normal_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|end"
+                    android:paddingStart="15dp"
+                    android:showText="false"
+                    android:switchPadding="7dp"
+                    android:text="Recurring"
+                    android:textAlignment="inherit"
+                    android:textAllCaps="false"
+                    android:textIsSelectable="false"
+                    android:textSize="12sp"
+                    android:theme="@style/recurring_switch" />
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/transactionDateLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/transactionDate"
+                    style="@style/font_family_normal_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="fill_parent"
+            android:id="@+id/til_transactionNote"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:hint="@string/newTransactionHintTransactionType">
+            android:layout_marginTop="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/spinnerTransactionType"
-                android:minHeight="50dp"
+                android:id="@+id/tiedt_transactionNote"
+                style="@style/font_family_normal_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:hint="Transaction Note">
+
+            </com.google.android.material.textfield.TextInputEditText>
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="1"
-            android:hint="@string/newTransactionHintPaymentMethod">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/spinnerTransactionMethod"
-                android:minHeight="50dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:hint="@string/newTransactionHintTransactionType">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/spinnerTransactionType"
+                    android:minHeight="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-    </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:hint="@string/newTransactionHintPaymentMethod">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/spinnerTransactionMethod"
+                    android:minHeight="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -174,20 +263,26 @@
                 android:theme="@style/recurring_switch" />
         </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilCategory"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/spinnerTransactionCategory"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="50dp" />
+                android:hint="@string/newTransactionHintCategory">
 
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/spinnerTransactionCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp" />
 
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
 
     <LinearLayout
@@ -246,87 +341,88 @@
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/recurringTransactionWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
+            android:id="@+id/recurringTransactionWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/newTransactionHintRecurringInterval">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/spinnerRecurringInterval"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="50dp" />
+                android:hint="@string/newTransactionHintRecurringInterval">
 
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/spinnerRecurringInterval"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp" />
 
-    <LinearLayout
-        android:id="@+id/customDaysIntervalWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal"
-        android:visibility="gone">
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView5"
-            style="@style/font_family_normal_text"
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:paddingTop="7sp"
-            android:text="Custom interval:"
-            android:textSize="17sp" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_customRecurringDaysInterval"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:id="@+id/customDaysIntervalWrapper"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/customRecurringDaysInterval"
+            <TextView
+                android:id="@+id/textView5"
                 style="@style/font_family_normal_text"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingTop="7sp"
+                android:text="Custom interval:"
+                android:textSize="17sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_customRecurringDaysInterval"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="3sp"
-                android:layout_marginEnd="3sp"
-                android:layout_weight="0"
-                android:hint="days"
-                android:inputType="number"
-                android:textSize="17sp">
+                android:layout_weight="0">
 
-            </com.google.android.material.textfield.TextInputEditText>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/customRecurringDaysInterval"
+                    style="@style/font_family_normal_text"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3sp"
+                    android:layout_marginEnd="3sp"
+                    android:layout_weight="0"
+                    android:hint="days"
+                    android:inputType="number"
+                    android:textSize="17sp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                </com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/addNewTransaction"
+            style="@style/basePrimaryRoundedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:paddingStart="50sp"
+            android:paddingTop="10sp"
+            android:paddingEnd="50sp"
+            android:paddingBottom="10sp"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/addNewTransaction"
-        style="@style/basePrimaryRoundedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        android:paddingStart="50sp"
-        android:paddingTop="10sp"
-        android:paddingEnd="50sp"
-        android:paddingBottom="10sp"
-        android:text="Save"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp" />
-
-</LinearLayout>
-
+    </LinearLayout>
 </ScrollView>

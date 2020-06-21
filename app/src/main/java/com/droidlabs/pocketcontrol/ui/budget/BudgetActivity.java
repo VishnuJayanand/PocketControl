@@ -23,6 +23,7 @@ import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.utils.FormatterUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
@@ -39,6 +40,8 @@ public class BudgetActivity extends Fragment {
     private Spinner budgetCategory;
     private CategoryViewModel categoryViewModel;
     private BudgetViewModel budgetViewModel;
+    private DefaultsViewModel defaultsViewModel;
+
     private PocketControlDB db = PocketControlDB.getDatabase(getContext());
     private Budget budget;
     private String name, svalue;
@@ -53,6 +56,7 @@ public class BudgetActivity extends Fragment {
 
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
+        defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
 
         tiedtBudgetAmount = view.findViewById(R.id.budgetAmount);
         tilAmount = view.findViewById(R.id.tileAmount);
@@ -108,6 +112,10 @@ public class BudgetActivity extends Fragment {
 
         dropdownBudgetCategory = view.findViewById(R.id.spinnerBudgetCategory);
         String[] dropdownItems = categoryViewModel.getCategoriesName();
+
+        //set currency spinner value
+        String stringCategory = defaultsViewModel.getDefaultValue("Category");
+        dropdownBudgetCategory.setText(stringCategory);
 
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Select the budget category")

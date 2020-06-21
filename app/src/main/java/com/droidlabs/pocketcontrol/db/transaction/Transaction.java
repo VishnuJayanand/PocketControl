@@ -85,7 +85,7 @@ public class Transaction {
 
     // 1 - Cash, 2 - Card
     @ColumnInfo(name = "method", defaultValue = "1")
-    private int method;
+    private Integer method;
 
     @ColumnInfo(name = "date")
     private Long date;

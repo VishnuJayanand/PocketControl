@@ -16,11 +16,14 @@ import androidx.lifecycle.ViewModelProvider;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 
 public class DetailTransactionFragment extends Fragment {
     private CategoryViewModel categoryViewModel;
+    private DefaultsViewModel defaultsViewModel;
+
     @Nullable
     @Override
     public final View onCreateView(
@@ -28,6 +31,7 @@ public class DetailTransactionFragment extends Fragment {
         View view = inf.inflate(R.layout.transaction_detail, container, false);
 
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
 
         Bundle bundle = this.getArguments();
         Long date = bundle.getLong("transactionDate");
@@ -52,7 +56,9 @@ public class DetailTransactionFragment extends Fragment {
         LinearLayout friendWrapper = view.findViewById(R.id.friendWrapper);
 
         // turn float to string
-        String amountToString = CurrencyUtils.formatAmount(amount, "€");
+        String stringCurrencyCode = defaultsViewModel.getDefaultValue("Currency");
+        String stringCurrency = defaultsViewModel.getCurrencySymbol(stringCurrencyCode);
+        String amountToString = CurrencyUtils.formatAmount(amount, stringCurrency);
         // transaction Type
         String typeAsString = "";
         if (type == 1) {
@@ -65,12 +71,16 @@ public class DetailTransactionFragment extends Fragment {
             amountToString = "+ " + amountToString;
         }
 
-        //transaction method
+        // transaction Method
+        String methodAsString = "";
         if (method == 1) {
             transactionMethod.setText("Cash");
-        } else {
-            transactionMethod.setText("Card");
+        } else if (method == 2) {
+            transactionMethod.setText("Credit Card");
+        } else if (method == 3) {
+            transactionMethod.setText("Digital Wallet");
         }
+
         //get Category Title and Image
         if (category != null) {
             Category category1 = categoryViewModel.getSingleCategory(Integer.parseInt(category));
@@ -102,12 +112,12 @@ public class DetailTransactionFragment extends Fragment {
         }
         //Edit the friend string
 
-
         transactionDate.setText(DateUtils.formatDate(date));
         transactionAmount.setText(amountToString);
         transactionType.setText(typeAsString);
         transactionNote.setText(note);
         transactionMethodForFriend.setText(methodForFriend);
+
         return view;
     }
 }

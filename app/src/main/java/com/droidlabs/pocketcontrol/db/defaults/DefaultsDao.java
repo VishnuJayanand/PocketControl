@@ -19,9 +19,10 @@ public interface DefaultsDao {
 
     /**
      * Delete all defaults.
+     * @param ownerId owner ID
      */
-    @Query("DELETE FROM defaults")
-    void deleteAll();
+    @Query("DELETE FROM defaults WHERE owner_id=:ownerId")
+    void deleteAll(String ownerId);
 
     /**
      * Retrieve all defaults values.
@@ -39,4 +40,28 @@ public interface DefaultsDao {
      */
     @Query("SELECT default_value FROM defaults WHERE default_entity=:name AND owner_id=:ownerId")
     String getDefaultValue(String name, String ownerId);
+
+    /**
+     * Retrieve all defaults category.
+     * string of defaults.
+     */
+    @Query("DELETE FROM defaults")
+    void deleteAll();
+
+    /**
+     * Retrieve default currency symbol.
+     * @param currency three letter currency code
+     * @return string of currency symbol
+     */
+    @Query("SELECT symbol from currencies WHERE three_letter_code=:currency")
+    String getCurrencySymbol(String currency);
+
+    /**
+     * Update default value.
+     * @param defaultName default name.
+     * @param newDefaultValue new value.
+     * @param ownerId owner id.
+     */
+    @Query("UPDATE defaults SET default_value=:newDefaultValue WHERE default_entity=:defaultName AND owner_id=:ownerId")
+    void updateDefaultValue(String defaultName, String newDefaultValue, String ownerId);
 }

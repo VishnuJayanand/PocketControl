@@ -155,11 +155,29 @@ public abstract class PocketControlDB extends RoomDatabase {
         CurrencyDao currencyDao = dbInstance.currencyDao();
         PaymentModeDao paymentModeDao = dbInstance.paymentModeDao();
 
-        Currency currency = new Currency("EUR");
-        currencyDao.insert(currency);
+        Currency euro = new Currency("EUR", "€");
+        Currency uDollar = new Currency("USD", "$");
+        Currency yen = new Currency("JPY", "¥");
+        Currency pound = new Currency("GBP", "£");
+        Currency rupee = new Currency("INR", "₹");
+        Currency ruble = new Currency("RUB", "₽");
+        Currency renminbi = new Currency("CNY", "¥");
+        Currency won = new Currency("KRW", "₩");
+        currencyDao.insert(euro);
+        currencyDao.insert(uDollar);
+        currencyDao.insert(yen);
+        currencyDao.insert(pound);
+        currencyDao.insert(rupee);
+        currencyDao.insert(ruble);
+        currencyDao.insert(renminbi);
+        currencyDao.insert(won);
 
-        PaymentMode paymentMode = new PaymentMode("Credit card");
-        paymentModeDao.insert(paymentMode);
+        PaymentMode card = new PaymentMode("Credit Card");
+        PaymentMode cash = new PaymentMode("Cash");
+        // PaymentMode wallet = new PaymentMode("Digital Wallet");
+        paymentModeDao.insert(card);
+        paymentModeDao.insert(cash);
+        // paymentModeDao.insert(wallet);
 
         /*
         BudgetDao budgetDao = dbInstance.budgetDao();
@@ -197,7 +215,15 @@ public abstract class PocketControlDB extends RoomDatabase {
         health.setOwnerId(String.valueOf(userId));
         transport.setOwnerId(String.valueOf(userId));
         shopping.setOwnerId(String.valueOf(userId));
+<<<<<<< HEAD
+<<<<<<< HEAD
+        food.setOwnerId(String.valueOf(userId));
+=======
         categoryIcons_food.setOwnerId(String.valueOf(userId));
+>>>>>>> develop
+=======
+        categoryIcons_food.setOwnerId(String.valueOf(userId));
+>>>>>>> develop
         study.setOwnerId(String.valueOf(userId));
         rent.setOwnerId(String.valueOf(userId));
 
@@ -212,6 +238,8 @@ public abstract class PocketControlDB extends RoomDatabase {
         account1.setName("Account 1");
         account1.setColor(R.color.projectColorBlue);
         account1.setOwnerId(String.valueOf(userId));
+<<<<<<< HEAD
+<<<<<<< HEAD
 
         Account account2 = new Account();
         account2.setName("Account 2");
@@ -222,6 +250,29 @@ public abstract class PocketControlDB extends RoomDatabase {
         account3.setName("Account 3");
         account3.setOwnerId(String.valueOf(userId));
 
+=======
+
+        Account account2 = new Account();
+        account2.setName("Account 2");
+        account2.setColor(R.color.projectColorPurple);
+        account2.setOwnerId(String.valueOf(userId));
+
+=======
+
+        Account account2 = new Account();
+        account2.setName("Account 2");
+        account2.setColor(R.color.projectColorPurple);
+        account2.setOwnerId(String.valueOf(userId));
+
+>>>>>>> develop
+        Account account3 = new Account();
+        account3.setName("Account 3");
+        account3.setOwnerId(String.valueOf(userId));
+
+<<<<<<< HEAD
+>>>>>>> develop
+=======
+>>>>>>> develop
         accountDao.insert(account1);
         accountDao.insert(account2);
         accountDao.insert(account3);

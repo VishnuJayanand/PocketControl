@@ -1,5 +1,9 @@
 package com.droidlabs.pocketcontrol.ui.signin;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +14,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.account.Account;
@@ -358,8 +358,13 @@ public class SignInActivity extends AppCompatActivity {
      * Create user's default defaults.
      */
     private void createDefaultUserDefaults() {
-        Defaults defaultValue = new Defaults("Currency", "EUR");
-        defaultsViewModel.insert(defaultValue);
+        Defaults defaultCurrency = new Defaults("Currency", "EUR");
+        Defaults defaultPaymentMethod = new Defaults("Payment Mode", "Cash");
+        Defaults defaultCategory = new Defaults("Category", "Health");
+
+        defaultsViewModel.insert(defaultCurrency);
+        defaultsViewModel.insert(defaultPaymentMethod);
+        defaultsViewModel.insert(defaultCategory);
     }
 
     /**

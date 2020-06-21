@@ -187,6 +187,14 @@ public class TransactionViewModel extends AndroidViewModel {
     }
 
     /**
+     * Update transaction amounts.
+     * @param conversionRate conversion rate.
+     */
+    public void updateTransactionAmountsDefaultCurrency(final float conversionRate) {
+        repository.updateTransactionAmountsDefaultCurrency(conversionRate);
+    }
+
+    /**
      * Update transaction recurring fields.
      * @param transactionId id.
      */
