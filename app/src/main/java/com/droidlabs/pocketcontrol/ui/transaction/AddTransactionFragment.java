@@ -1,7 +1,11 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
+
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -24,24 +28,20 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
-
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
-
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
-
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.droidlabs.pocketcontrol.utils.FormatterUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -883,8 +883,20 @@ public class AddTransactionFragment extends Fragment {
                     .setContentText(message)
                     .setAutoCancel(true);
 
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
-            notificationManager.notify(001, builder.build());
+            NotificationManager mNotificationManager;
+            mNotificationManager =
+                    (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                String channelId = "Pocket_control";
+                NotificationChannel channel = new NotificationChannel(
+                        channelId,
+                        "Channel human readable title",
+                        NotificationManager.IMPORTANCE_HIGH);
+                mNotificationManager.createNotificationChannel(channel);
+                builder.setChannelId(channelId);
+            }
+            mNotificationManager.notify(0, builder.build());
         }
 
     }
