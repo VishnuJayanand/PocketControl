@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -31,12 +30,23 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 public class SignInActivity extends AppCompatActivity {
+
+    public static final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}"
+                    + "\\@"
+                    + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}"
+                    + "("
+                    + "\\."
+                    + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}"
+                    + ")+"
+    );
 
     private View signInContainer;
     private View signUpContainer;
@@ -180,7 +190,7 @@ public class SignInActivity extends AppCompatActivity {
      * Execute sign in and move to home screen.
      */
     private void signUp() {
-        if (!Patterns.EMAIL_ADDRESS.matcher(emailInputText.getText().toString()).matches()) {
+        if (!EMAIL_ADDRESS_PATTERN.matcher(emailInputText.getText().toString()).matches()) {
             emailInputGroup.setError("Please enter a valid email address.");
             return;
         } else {
