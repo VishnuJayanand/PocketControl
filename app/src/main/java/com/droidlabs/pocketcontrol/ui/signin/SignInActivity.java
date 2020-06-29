@@ -30,7 +30,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -38,15 +37,14 @@ import java.util.regex.Pattern;
  */
 public class SignInActivity extends AppCompatActivity {
 
-    public static final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
+    public static final String EMAIL_ADDRESS_PATTERN =
             "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}"
                     + "\\@"
                     + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}"
                     + "("
                     + "\\."
                     + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}"
-                    + ")+"
-    );
+                    + ")+";
 
     private View signInContainer;
     private View signUpContainer;
@@ -190,7 +188,7 @@ public class SignInActivity extends AppCompatActivity {
      * Execute sign in and move to home screen.
      */
     private void signUp() {
-        if (!EMAIL_ADDRESS_PATTERN.matcher(emailInputText.getText().toString()).matches()) {
+        if (!emailInputText.getText().toString().matches(EMAIL_ADDRESS_PATTERN)) {
             emailInputGroup.setError("Please enter a valid email address.");
             return;
         } else {
