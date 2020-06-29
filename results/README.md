@@ -49,6 +49,7 @@ For each weekly report, there is one grade. The grade relates to mainly content 
 
 1. ![Team Presentation Blog Results](./team_blog.png)
 2. ![Basic Prototype Blog Results](./basic_prototype_blog.png)
+3. ![Advanced Prototype Blog Results](./adv_prototype_blog.png)
 
 ## Weekly Report Grades
 
