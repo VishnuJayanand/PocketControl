@@ -35,6 +35,13 @@ public interface CategoryDao {
     List<Category> getAllCategories(String ownerId, String accountId);
 
     /**
+     * Get categories for export csv.
+     * @param ownerId owner id.
+     * @return list of categories.
+     */
+    @Query("SELECT * FROM categories WHERE owner_id=:ownerId ORDER BY id ASC")
+    List<Category> getCategoriesForExport(String ownerId);
+    /**
      * Get single category.
      * @param id category ID.
      * @param ownerId owner id.

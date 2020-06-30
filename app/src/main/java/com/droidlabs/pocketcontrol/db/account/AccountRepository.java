@@ -40,6 +40,20 @@ public class AccountRepository {
     }
 
     /**
+     * Get accounts for export csv.
+     * @return list of user accounts.
+     */
+    public List<Account> getAccountsForExport() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return accountDao.getAccountsForExport(currentUserId);
+    }
+
+    /**
      * Get account by id.
      * @param accountId id.
      * @return account.

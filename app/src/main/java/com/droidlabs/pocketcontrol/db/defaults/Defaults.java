@@ -117,4 +117,14 @@ public class Defaults {
     public void setOwnerId(final @Nullable String mOwnerId) {
         this.ownerId = mOwnerId;
     }
+
+    /**
+     * Parses class info to export csv format.
+     * @return formatted string.
+     */
+    public String toExportString() {
+        return this.defaultId
+                + ", " + this.defaultEntity
+                + ", " + this.defaultValue;
+    }
 }

@@ -44,6 +44,20 @@ public class BudgetRepository {
     }
 
     /**
+     * Get budgets for export csv.
+     * @return list of user budgets.
+     */
+    public List<Budget> getBudgetsForExport() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return budgetDao.getBudgetsForExport(currentUserId);
+    }
+
+    /**
      * Save a new budget to the db.
      * @param budget budget to be saved.
      */

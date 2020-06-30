@@ -40,6 +40,20 @@ public class TransactionRepository {
     }
 
     /**
+     * Get transactions for export csv.
+     * @return list of user transactions.
+     */
+    public List<Transaction> getTransactionsForExport() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTransactionsForExport(currentUserId);
+    }
+
+    /**
      * Get transaction by id.
      * @param transactionId id.
      * @return transaction.

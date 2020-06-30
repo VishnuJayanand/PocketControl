@@ -38,6 +38,16 @@ public interface TransactionDao {
     LiveData<List<Transaction>> getAllTransactions(String ownerId, String accountId);
 
     /**
+     * Get transactions for export csv.
+     * @param ownerId owner id.
+     * @return list of transactions.
+     */
+    @Query("SELECT * FROM transactions "
+            + "WHERE owner_id=:ownerId "
+            + "ORDER BY id ASC")
+    List<Transaction> getTransactionsForExport(String ownerId);
+
+    /**
      * Retrieve all transactions from the database.
      * @param ownerId owner id.
      * @return all transactions.

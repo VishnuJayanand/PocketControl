@@ -103,6 +103,14 @@ public class TransactionViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get transactions for export csv.
+     * @return list of user transactions.
+     */
+    public List<Transaction> getTransactionsForExport() {
+        return repository.getTransactionsForExport();
+    }
+
+    /**
      * Get all transactions.
      * @param catId category id
      * @return LiveData of transaction list.

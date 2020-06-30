@@ -42,6 +42,20 @@ public class CategoryRepository {
     }
 
     /**
+     * Get categories for export csv.
+     * @return list of user categories.
+     */
+    public List<Category> getCategoriesForExport() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return categoryDao.getCategoriesForExport(currentUserId);
+    }
+
+    /**
      * Insert a new category.
      * @param category category to be saved.
      */

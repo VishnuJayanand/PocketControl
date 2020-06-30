@@ -31,6 +31,14 @@ public interface BudgetDao {
     List<Budget> getAllBudgets(String ownerId, String accountId);
 
     /**
+     * Get budgets for export csv.
+     * @param ownerId owner id.
+     * @return list of budgets.
+     */
+    @Query("SELECT * FROM budgets WHERE owner_id=:ownerId ORDER BY id ASC")
+    List<Budget> getBudgetsForExport(String ownerId);
+
+    /**
      * Delete budget.
      * @param budgetId budget id.
      * @param ownerId owner id.

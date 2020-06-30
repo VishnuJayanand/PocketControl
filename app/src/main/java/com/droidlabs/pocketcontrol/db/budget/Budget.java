@@ -232,4 +232,17 @@ public class Budget {
     public void setAccount(final @Nullable String mAccount) {
         this.account = mAccount;
     }
+
+    /**
+     * Parses class info to export csv format.
+     * @return formatted string.
+     */
+    public String toExportString() {
+        return this.id
+                + ", " + this.maxAmount
+                + ", " + this.description
+                + ", " + this.isGlobal
+                + ", " + this.category
+                + ", " + this.account;
+    }
 }

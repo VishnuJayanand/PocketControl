@@ -50,7 +50,7 @@ public class Transaction {
     @ColumnInfo(name = "amount")
     private Float amount;
 
-    @ColumnInfo(name = "text_node", defaultValue = "")
+    @ColumnInfo(name = "text_note", defaultValue = "")
     @Nullable
     private String textNote;
 
@@ -59,7 +59,7 @@ public class Transaction {
     private String friend;
 
     // 1 - borrow, 2 - lend
-    @ColumnInfo(name = "methodForFriend", defaultValue = "")
+    @ColumnInfo(name = "method_for_friend", defaultValue = "")
     @Nullable
     private String methodForFriend;
 
@@ -446,4 +446,25 @@ public class Transaction {
      */
     public void setMethod(final Integer paymentMethod) {
         this.method = paymentMethod; }
+
+    /**
+     * Parses class info to export csv format.
+     * @return formatted string.
+     */
+    public String toExportString() {
+        return this.id
+                + ", " + this.amount
+                + ", " + this.date
+                + ", " + this.textNote
+                + ", " + this.category
+                + ", " + this.method
+                + ", " + this.type
+                + ", " + this.isRecurring
+                + ", " + this.recurringIntervalType
+                + ", " + this.recurringIntervalDays
+                + ", " + this.flagIconRecurring
+                + ", " + this.friend
+                + ", " + this.methodForFriend
+                + ", " + this.account;
+    }
 }

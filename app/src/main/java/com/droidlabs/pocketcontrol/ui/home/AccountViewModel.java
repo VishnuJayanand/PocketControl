@@ -33,6 +33,14 @@ public class AccountViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get accounts for export csv.
+     * @return list of user accounts.
+     */
+    public List<Account> getAccountsForExport() {
+        return accountRepository.getAccountsForExport();
+    }
+
+    /**
      * Get account by id.
      * @param accId id.
      * @return account.

@@ -31,6 +31,14 @@ public class BudgetViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get budgets for export csv.
+     * @return list of user budgets.
+     */
+    public List<Budget> getBudgetsForExport() {
+        return repository.getBudgetsForExport();
+    }
+
+    /**
      * Insert a new budget in the database.
      * @param budget transaction to be added.
      */

@@ -36,6 +36,20 @@ public class DefaultsRepository {
     }
 
     /**
+     * Get defaults for export csv.
+     * @return list of user defaults.
+     */
+    public List<Defaults> getDefaultsForExport() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return defaultsDao.getDefaultsForExport(currentUserId);
+    }
+
+    /**
      * Get default value.
      * @param name default name.
      * @return default value.
