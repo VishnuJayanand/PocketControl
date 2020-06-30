@@ -39,6 +39,14 @@ public class DefaultsViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get defaults for export csv.
+     * @return list of user defaults.
+     */
+    public List<Defaults> getDefaultsForExport() {
+        return defaultsRepository.getDefaultsForExport();
+    }
+
+    /**
      * Get single default value.
      * @param name default name.
      * @return default value.

@@ -31,6 +31,14 @@ public class CategoryViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get categories for export csv.
+     * @return list of user categories.
+     */
+    public List<Category> getCategoriesForExport() {
+        return repository.getCategoriesForExport();
+    }
+
+    /**
      * Get all categories.
      * @return return all transactions from the database.
      */

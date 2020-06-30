@@ -202,4 +202,16 @@ public class Category {
     public String toString() {
         return getName();
     }
+
+    /**
+     * Parses class info to export csv format.
+     * @return formatted string.
+     */
+    public String toExportString() {
+        return this.id
+                + ", " + this.name
+                + ", " + this.icon
+                + ", " + this.isPublic
+                + ", " + this.account;
+    }
 }

@@ -33,6 +33,14 @@ public interface DefaultsDao {
     List<Defaults> getAllDefaults(String ownerId);
 
     /**
+     * Get defaults for export csv.
+     * @param ownerId owner id.
+     * @return list of defaults.
+     */
+    @Query("SELECT * FROM defaults WHERE owner_id=:ownerId ORDER BY defaultId ASC")
+    List<Defaults> getDefaultsForExport(String ownerId);
+
+    /**
      * Retrieve all defaults category.
      * @param name entity name.
      * @param ownerId owner id.

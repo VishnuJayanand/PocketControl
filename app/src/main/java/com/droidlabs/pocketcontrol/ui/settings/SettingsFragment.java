@@ -3,11 +3,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,16 +30,25 @@ import com.android.volley.toolbox.Volley;
 import com.droidlabs.pocketcontrol.R;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.account.Account;
+import com.droidlabs.pocketcontrol.db.budget.Budget;
+import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.currency.CurrencyDao;
 
+import com.droidlabs.pocketcontrol.db.defaults.Defaults;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
+import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
+import com.droidlabs.pocketcontrol.ui.home.AccountViewModel;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.utils.FormatterUtils;
@@ -49,7 +58,6 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 public class SettingsFragment extends Fragment {
 
@@ -62,10 +70,11 @@ public class SettingsFragment extends Fragment {
     private TextInputEditText defaultPayment;
     private LinearLayout networkStatusWrapper;
 
+    private AccountViewModel accountViewModel;
+    private BudgetViewModel budgetViewModel;
     private CategoryViewModel categoryViewModel;
     private DefaultsViewModel defaultsViewModel;
     private TransactionViewModel transactionViewModel;
-    private BudgetViewModel budgetViewModel;
 
     private CurrencyDao currencyDao;
     private PaymentModeDao paymentModeDao;
@@ -73,20 +82,24 @@ public class SettingsFragment extends Fragment {
     private Float exchangeRate;
     private Activity activity;
 
-    private ConnectivityManager.NetworkCallback networkCallback;
-
-
     @Nullable
     @Override
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View v = inf.inflate(R.layout.fragment_settings, container, false);
-        Button button = (Button) v.findViewById(R.id.button);
-        // button.setOnClickListener(this::export);
+        Button exportButton = (Button) v.findViewById(R.id.button);
+
+        exportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                exportDatabase();
+            }
+        });
 
         requestQueue = Volley.newRequestQueue(getContext());
         activity = getActivity();
 
+        accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
@@ -159,51 +172,191 @@ public class SettingsFragment extends Fragment {
      * Creating adapter for Settings.
      */
 
-    public void export() {
+    private void exportDatabase() {
+        final int bufferSize = 2048;
+        int length;
+
         //defining the data
+        StringBuilder accountData = new StringBuilder();
+        StringBuilder budgetData = new StringBuilder();
+        StringBuilder categoryData = new StringBuilder();
+        StringBuilder defaultsData = new StringBuilder();
         StringBuilder transactionData = new StringBuilder();
-        transactionData.append("id, amount, text_node, is_recurring, flag_icon_recurring,"
-                + "recurring_interval_Type, recurring_interval_days, type, method, date, category, "
-                + "account, owner_id");
-        Cursor res = (Cursor) transactionViewModel.getTransactions();
-        ArrayList<String> listItem = new ArrayList<>();
-        if (res.getCount() == 0) {
-            Toast.makeText(getContext(), "Looks like you have no data to export", Toast.LENGTH_SHORT).show();
+
+        accountData.append("id, "
+                + "name, "
+                + "color"
+                + "\n"
+        );
+
+        budgetData.append("id, "
+                + "max_amount, "
+                + "description, "
+                + "is_global, "
+                + "category, "
+                + "account"
+                + "\n"
+        );
+
+        categoryData.append("id, "
+                + "name, "
+                + "icon, "
+                + "is_public, "
+                + "account"
+                + "\n"
+        );
+
+        defaultsData.append("id, "
+                + "default_entity, "
+                + "default_value"
+                + "\n"
+        );
+
+        transactionData.append("id, "
+                + "amount, "
+                + "date, "
+                + "text_note, "
+                + "category, "
+                + "method, "
+                + "type, "
+                + "is_recurring, "
+                + "recurring_interval_type, "
+                + "recurring_interval_days, "
+                + "flag_icon_recurring, "
+                + "friend, "
+                + "method_for_friend, "
+                + "account"
+                + "\n"
+        );
+
+        List<Account> accounts = accountViewModel.getAccountsForExport();
+        List<Budget> budgets = budgetViewModel.getBudgetsForExport();
+        List<Category> categories = categoryViewModel.getCategoriesForExport();
+        List<Defaults> defaults = defaultsViewModel.getDefaultsForExport();
+        List<Transaction> transactions = transactionViewModel.getTransactionsForExport();
+
+        if (
+                accounts.size() == 0
+                && budgets.size() == 0
+                && categories.size() == 0
+                && defaults.size() == 0
+                && transactions.size() == 0
+        ) {
+            Toast.makeText(getContext(), "Looks like you have no data to export!", Toast.LENGTH_LONG).show();
+            return;
         }
-        StringBuffer buffer = new StringBuffer();
-        while (res.moveToNext()) {
-            transactionData.append(res.getString(0) + "," + res.getString(1)
-                    + "," + res.getString(2) + ", " + res.getString(3) + ","
-                    + res.getString(4) + res.getString(5)
-                    + res.getString(6) + res.getString(7)
-                    + res.getString(8) + res.getString(9)
-                    + res.getString(10) + res.getString(11)
-                    + res.getString(12) + "\n");
+
+        for (Account account : accounts) {
+            accountData.append(account.toExportString() + "\n");
         }
+
+        for (Budget budget : budgets) {
+            budgetData.append(budget.toExportString() + "\n");
+        }
+
+        for (Category category: categories) {
+            categoryData.append(category.toExportString() + "\n");
+        }
+
+        for (Defaults default1 : defaults) {
+            defaultsData.append(default1.toExportString() + "\n");
+        }
+
+        for (Transaction transaction : transactions) {
+            transactionData.append(transaction.toExportString() + "\n");
+        }
+
+        Log.v("EXPORT", transactionData.toString());
 
         try {
             //saving the file into device
-            FileOutputStream out = getContext().openFileOutput("data.csv", Context.MODE_PRIVATE);
-            out.write((transactionData.toString()).getBytes(Charset.forName("UTF-8")));
-            out.close();
+            FileOutputStream accountOut = getContext().openFileOutput("accounts.csv", Context.MODE_PRIVATE);
+            FileOutputStream budgetOut = getContext().openFileOutput("budgets.csv", Context.MODE_PRIVATE);
+            FileOutputStream categoryOut = getContext().openFileOutput("categories.csv", Context.MODE_PRIVATE);
+            FileOutputStream defaultsOut = getContext().openFileOutput("defaults.csv", Context.MODE_PRIVATE);
+            FileOutputStream transactionOut = getContext().openFileOutput("transactions.csv", Context.MODE_PRIVATE);
+            FileOutputStream pocketControlData = getContext().openFileOutput(
+                    "pocketcontrol_data.zip",
+                    Context.MODE_PRIVATE
+            );
+
+            accountOut.write((accountData.toString()).getBytes(Charset.forName("UTF-8")));
+            budgetOut.write((budgetData.toString()).getBytes(Charset.forName("UTF-8")));
+            categoryOut.write((categoryData.toString()).getBytes(Charset.forName("UTF-8")));
+            defaultsOut.write((defaultsData.toString()).getBytes(Charset.forName("UTF-8")));
+            transactionOut.write((transactionData.toString()).getBytes(Charset.forName("UTF-8")));
+
+            accountOut.close();
+            budgetOut.close();
+            categoryOut.close();
+            defaultsOut.close();
+            transactionOut.close();
+
+            ZipOutputStream zipOutputStream = new ZipOutputStream(pocketControlData);
+
+            File accountsFile = new File(getContext().getFilesDir(), "accounts.csv");
+            File budgetsFile = new File(getContext().getFilesDir(), "budgets.csv");
+            File categoriesFile = new File(getContext().getFilesDir(), "categories.csv");
+            File defaultsFile = new File(getContext().getFilesDir(), "defaults.csv");
+            File transactionsFile = new File(getContext().getFilesDir(), "transactions.csv");
+
+            byte[] buffer = new byte[bufferSize];
+
+            zipOutputStream.putNextEntry(new ZipEntry(accountsFile.getName()));
+            FileInputStream accountsFIS = new FileInputStream(accountsFile);
+            while ((length = accountsFIS.read(buffer)) > 0) {
+                zipOutputStream.write(buffer, 0, length);
+            }
+            zipOutputStream.closeEntry();
+
+            zipOutputStream.putNextEntry(new ZipEntry(budgetsFile.getName()));
+            FileInputStream budgetsFIS = new FileInputStream(budgetsFile);
+            while ((length = budgetsFIS.read(buffer)) > 0) {
+                zipOutputStream.write(buffer, 0, length);
+            }
+            zipOutputStream.closeEntry();
+
+            zipOutputStream.putNextEntry(new ZipEntry(categoriesFile.getName()));
+            FileInputStream categoriesFIS = new FileInputStream(categoriesFile);
+            while ((length = categoriesFIS.read(buffer)) > 0) {
+                zipOutputStream.write(buffer, 0, length);
+            }
+            zipOutputStream.closeEntry();
+
+            zipOutputStream.putNextEntry(new ZipEntry(defaultsFile.getName()));
+            FileInputStream defaultsFIS = new FileInputStream(defaultsFile);
+            while ((length = defaultsFIS.read(buffer)) > 0) {
+                zipOutputStream.write(buffer, 0, length);
+            }
+            zipOutputStream.closeEntry();
+
+            zipOutputStream.putNextEntry(new ZipEntry(transactionsFile.getName()));
+            FileInputStream transactionsFIS = new FileInputStream(transactionsFile);
+            while ((length = transactionsFIS.read(buffer)) > 0) {
+                zipOutputStream.write(buffer, 0, length);
+            }
+            zipOutputStream.closeEntry();
+
+            zipOutputStream.close();
+            pocketControlData.close();
 
             //exporting
             Context context = getContext().getApplicationContext();
-            File filelocation = new File(getContext().getFilesDir(), "data.csv");
-            Uri path = FileProvider.getUriForFile(context, "com.droidlabs.pocketcontrol.fileprovider", filelocation);
+            File pocketControlFile = new File(getContext().getFilesDir(), "pocketcontrol_data.zip");
+            Uri path = FileProvider.getUriForFile(
+                    context,
+                    "com.droidlabs.pocketcontrol.fileprovider",
+                    pocketControlFile
+            );
             Intent fileIntent = new Intent(Intent.ACTION_SEND);
-            fileIntent.setType("text/csv");
-            fileIntent.putExtra(Intent.EXTRA_SUBJECT, "Data");
+            fileIntent.setType("application/zip");
+            fileIntent.putExtra(Intent.EXTRA_SUBJECT, "PocketControl Data");
             fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             fileIntent.putExtra(Intent.EXTRA_STREAM, path);
-            startActivity(Intent.createChooser(fileIntent, "Send mail"));
+            startActivity(Intent.createChooser(fileIntent, "Export data"));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 
     /**

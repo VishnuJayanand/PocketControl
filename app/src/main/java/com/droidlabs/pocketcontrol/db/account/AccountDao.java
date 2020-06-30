@@ -33,6 +33,14 @@ public interface AccountDao {
     LiveData<List<Account>> getAllAccounts(String ownerId);
 
     /**
+     * Get accounts for export csv.
+     * @param ownerId owner id.
+     * @return list of accounts.
+     */
+    @Query("SELECT * FROM accounts WHERE owner_id=:ownerId ORDER BY id ASC")
+    List<Account> getAccountsForExport(String ownerId);
+
+    /**
      * Get account by id.
      * @param accountId id.
      * @param ownerId owner id.
