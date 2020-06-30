@@ -21,13 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 
 import java.util.List;
 
 
 public class TransactionFragment extends Fragment implements TransactionListAdapter.OnTransactionNoteListener {
 
-    private TransactionViewModel transactionViewModel;
     private TransactionListAdapter transactionListAdapter;
     private FilterBottomSheetDialog filterBottomSheetDialog;
 
@@ -43,10 +43,17 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         TextView allTransactionsText = view.findViewById(R.id.allTransactionsText);
         Button expandFilterButton = view.findViewById(R.id.expandFilterButton);
 
-        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+        TransactionViewModel transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        DefaultsViewModel defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
 
-        transactionListAdapter = new TransactionListAdapter(getActivity(), this, transactionViewModel);
+        transactionListAdapter = new TransactionListAdapter(
+                getActivity(),
+                this,
+                transactionViewModel,
+                categoryViewModel,
+                defaultsViewModel
+        );
 
         recyclerView.setAdapter(transactionListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -108,8 +115,12 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         bundle.putString("transactionNote", transaction.getTextNote());
         bundle.putInt("transactionType", transaction.getType());
         bundle.putString("transactionCategory", transaction.getCategory());
+        bundle.putString("transactionFriend", transaction.getFriend());
+        bundle.putString("transactionMethodForFriend", transaction.getMethodForFriend());
+        bundle.putInt("transactionMethod", transaction.getMethod());
+
         //Move to transaction detail fragment
-        Fragment fragment = new DetailTransacionFragment();
+        Fragment fragment = new DetailTransactionFragment();
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -117,4 +128,5 @@ public class TransactionFragment extends Fragment implements TransactionListAdap
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
 }

@@ -5,21 +5,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
+
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
-import com.droidlabs.pocketcontrol.db.budget.BudgetDao;
+import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
+import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
+
 import java.util.List;
 
 public class BudgetFragment extends Fragment {
 
-    private PocketControlDB db = PocketControlDB.getDatabase(getContext());
-    private BudgetDao budgetDao;
+    private BudgetViewModel budgetViewModel;
+    private CategoryViewModel categoryViewModel;
+    private DefaultsViewModel defaultsViewModel;
+    private TransactionViewModel transactionViewModel;
     private List<Budget> allBudgets;
     private ArrayAdapter<String> nameAdapter;
 
@@ -29,30 +38,44 @@ public class BudgetFragment extends Fragment {
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.fragment_budget, container, false);
 
-        ListView listView = (ListView) view.findViewById(R.id.budget_list);
-        final TextView helpText = (TextView) view.findViewById(R.id.helpText);
+        budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
+        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
-        budgetDao = db.budgetDao();
-        allBudgets = budgetDao.getAllBudgets();
+        ListView listView = (ListView) view.findViewById(R.id.budget_list);
+        LinearLayout emptyTransactions = view.findViewById(R.id.emptyPageViewWrapper);
+
+        allBudgets = budgetViewModel.getAllBudgets();
 
         if (allBudgets.isEmpty()) {
-            helpText.setVisibility(View.VISIBLE);
-            helpText.setText("You don't have any budgets at present, please add one");
+            emptyTransactions.setVisibility(View.VISIBLE);
         } else {
-            BudgetLayoutAdapter adapter = new BudgetLayoutAdapter(getContext(), R.layout.budget_layout, allBudgets);
+            emptyTransactions.setVisibility(View.GONE);
+            BudgetLayoutAdapter adapter = new BudgetLayoutAdapter(
+                    getContext(),
+                    R.layout.budget_layout,
+                    allBudgets,
+                    categoryViewModel,
+                    defaultsViewModel,
+                    budgetViewModel,
+                    transactionViewModel
+            );
             listView = (ListView) view.findViewById(R.id.budget_list);
             listView.setAdapter(adapter);
         }
 
-        Button button = view.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        AppCompatButton  addBudget = view.findViewById(R.id.button);
+        addBudget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                BudgetActivity budgetActivity = new BudgetActivity();
-                BudgetFragment budgetFragment = new BudgetFragment();
 
-                getParentFragmentManager().beginTransaction().replace(R.id.fragment_budget, budgetFragment).commit();
-                getChildFragmentManager().beginTransaction().replace(R.id.fragment_budget, budgetActivity).commit();
+                Fragment fragment = new BudgetActivity();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentBudget = fragmentManager.beginTransaction();
+                fragmentBudget.replace(R.id.fragment_budget, fragment);
+                fragmentBudget.addToBackStack(null);
+                fragmentBudget.commit();
 
             }
         });

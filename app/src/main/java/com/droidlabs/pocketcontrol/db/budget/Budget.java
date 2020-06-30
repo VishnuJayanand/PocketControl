@@ -3,24 +3,42 @@ package com.droidlabs.pocketcontrol.db.budget;
 import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
 
+import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.user.User;
 
+import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_NULL;
+
 
 @Entity(
     tableName = "budgets",
-    foreignKeys = @ForeignKey(
-        entity = Category.class,
-        parentColumns = "id",
-        childColumns = "category",
-        onDelete = SET_NULL
-    ),
-    indices = {@Index("category")}
+    foreignKeys = {
+        @ForeignKey(
+            entity = Category.class,
+            parentColumns = "id",
+            childColumns = "category",
+            onDelete = SET_NULL
+        ),
+        @ForeignKey(
+            entity = User.class,
+            parentColumns = "id",
+            childColumns = "owner_id",
+            onDelete = CASCADE
+        ),
+            @ForeignKey(
+                    entity = Account.class,
+                    parentColumns = "id",
+                    childColumns = "account",
+                    onDelete = CASCADE
+            )
+    },
+    indices = {@Index("category"), @Index("owner_id"), @Index("account")}
 )
 public class Budget {
 
@@ -40,8 +58,15 @@ public class Budget {
 
     // Foreign keys
     @ColumnInfo(name = "category")
-    @Nullable
     private String category;
+
+    @ColumnInfo(name = "account")
+    @Nullable
+    private String account;
+
+    @ColumnInfo(name = "owner_id")
+    @Nullable
+    private String ownerId;
 
     /**
      * Empty budget constructor.
@@ -60,12 +85,25 @@ public class Budget {
     /**
      * Create a budget with amount and description.
      * @param amount maximum budget amount.
-     * @param desc budget description.
+     * @param cat budget description.
      */
     @Ignore
-    public Budget(final Float amount, final @Nullable String desc) {
+    public Budget(final Float amount, final String cat) {
+        this.maxAmount = amount;
+        this.category = cat;
+    }
+
+    /**
+     * Create a budget with amount and description.
+     * @param amount maximum budget amount.
+     * @param desc budget description.
+     * @param cat category
+     */
+    @Ignore
+    public Budget(final Float amount, final @Nullable String desc, final String cat) {
         this.maxAmount = amount;
         this.description = desc;
+        this.category = cat;
     }
 
     /**
@@ -122,6 +160,24 @@ public class Budget {
     }
 
     /**
+     * Get owner id.
+     * @return owner id.
+     */
+    @Nullable
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    /**
+     * Get budget's account id.
+     * @return account id.
+     */
+    @Nullable
+    public String getAccount() {
+        return account;
+    }
+
+    /**
      * ID setter.
      * @param budgetId budget id.
      */
@@ -159,5 +215,21 @@ public class Budget {
      */
     public void setCategory(final @Nullable String cat) {
         this.category = cat;
+    }
+
+    /**
+     * Set owner id.
+     * @param mOwnerId owner id.
+     */
+    public void setOwnerId(final @Nullable String mOwnerId) {
+        this.ownerId = mOwnerId;
+    }
+
+    /**
+     * Set budget's account.
+     * @param mAccount account id.
+     */
+    public void setAccount(final @Nullable String mAccount) {
+        this.account = mAccount;
     }
 }

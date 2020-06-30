@@ -3,13 +3,17 @@ package com.droidlabs.pocketcontrol.db.category;
 import android.app.Application;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.user.User;
+import com.droidlabs.pocketcontrol.db.user.UserDao;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
 
 public class CategoryRepository {
 
     private CategoryDao categoryDao;
-    private List<Category> allCategories;
+    private UserDao userDao;
+    private SharedPreferencesUtils sharedPreferencesUtils;
 
     /**
      * Category repository constructor.
@@ -17,8 +21,9 @@ public class CategoryRepository {
      */
     public CategoryRepository(final Application application) {
         PocketControlDB db = PocketControlDB.getDatabase(application);
+        sharedPreferencesUtils = new SharedPreferencesUtils(application);
         categoryDao = db.categoryDao();
-        allCategories = categoryDao.getAllCategories();
+        userDao = db.userDao();
     }
 
     /**
@@ -26,7 +31,14 @@ public class CategoryRepository {
      * @return list of saved categories.
      */
     public List<Category> getAllCategories() {
-        return allCategories;
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return categoryDao.getAllCategories(currentUserId, currentAccountId);
     }
 
     /**
@@ -34,6 +46,17 @@ public class CategoryRepository {
      * @param category category to be saved.
      */
     public void insert(final Category category) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        User currentUser = userDao.getUserById(Integer.parseInt(currentUserId));
+        String currentAccountId = currentUser.getSelectedAccount();
+
+        if (currentUserId.equals("")) {
+            return;
+        }
+
+        category.setOwnerId(currentUserId);
+        category.setAccount(currentAccountId);
+
         PocketControlDB.DATABASE_WRITE_EXECUTOR.execute(() -> {
             categoryDao.insert(category);
         });
@@ -42,16 +65,46 @@ public class CategoryRepository {
     /**
      * get a  category.
      * @param categoryId category id.
+     * @return Category.
      */
-    public void getSingleCategory(final int categoryId) {
-        categoryDao.getSingleCategory(categoryId);
+    public Category getSingleCategory(final int categoryId) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return categoryDao.getSingleCategory(categoryId, currentUserId);
     }
 
     /**
      * get a category.
-     * @param categoryName category id.
+     * @param categoryName category name.
+     * @return category.
      */
-    public void getSingleCategory(final String categoryName) {
-        categoryDao.getSingleCategory(categoryName);
+    public Category getSingleCategory(final String categoryName) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return categoryDao.getSingleCategory(categoryName, currentUserId);
     }
+
+    /**
+     * get a category.
+     * @return the category names
+     */
+    public String[] getCategoriesName() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return categoryDao.getCategoriesName(currentUserId, currentAccountId);
+    }
+
 }

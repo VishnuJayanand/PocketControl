@@ -1,19 +1,14 @@
 <resources>
     <string name="add_more_category_so_that_you_can_have_a_more_detailed_overview_of_your_expense">Add more category so that you can have a more detailed overview of your expense.</string>
     <string name="transaction_date">Original Transaction Date</string>
-    <string name="category_title">Category Title</string>
-    <string name="choose_category_icon">Category icon:</string>
     <string name="app_name">Pocket Control</string>
-    <string name="add_transaction">Add transaction</string>
-    <string name="add_category">Add category</string>
     <string name="hint_transaction">Transaction description...</string>
-    <string name="button_save">Save</string>
     <string name="empty_not_saved">Transaction not saved because it is empty.</string>
     <string name="choose_transaction_type">Transaction type:</string>
     <string name="fraction">%1$d/%2$d</string>
     <string name="choose_transaction_method">Payment method:</string>
     <string name="choose_recurring_interval">Recurring interval:</string>
-    <string name="home_screen_net_balance">NET BALANCE</string>
+    <string name="home_screen_net_balance">TOTAL NET BALANCE</string>
     <string name="bottom_menu_home_text">Home</string>
     <string name="bottom_menu_category_text">Categories</string>
     <string name="bottom_menu_transaction_text">Transactions</string>
@@ -21,4 +16,66 @@
     <string name="bottom_menu_settings_text">Settings</string>
     <string name="transaction_list_filter_bottom_sheet_header">Filters</string>
     <string name="transaction_list_filter_apply_filters">Apply filters</string>
+
+    <!-- Button strings -->
+    <string name="addTransaction">Add transaction</string>
+    <string name="addCategory">Add category</string>
+    <string name="buttonSave">Save</string>
+    <string name="buttonFilters">Filters</string>
+
+    <!-- Text input strings -->
+
+    <!-- Home strings -->
+
+    <!-- Accounts strings -->
+    <string name="newAccountHintName">Account Name</string>
+    <string name="newAccountSelectColorText">Select an account color:</string>
+
+    <!-- Categories strings -->
+    <string name="categoryTitle">Category Title</string>
+    <string name="newCategoryHintName">Category Name</string>
+    <string name="newCategorySelectIconText">Category icon:</string>
+    <string name="newCategoryHintIcon">Choose icon</string>
+
+    <!-- Transactions strings -->
+    <string name="newTransactionHintTransactionType">Transaction Type</string>
+    <string name="newTransactionHintPaymentMethod">Payment Method</string>
+    <string name="newTransactionHintCategory">Category</string>
+    <string name="newTransactionHintRecurringInterval">Recurring Interval</string>
+    <string name="allTransactionsHeader">All Transactions</string>
+    <string name="filterTransactionsCategory">Select Category</string>
+
+    <!-- Budgets strings -->
+
+    <!-- Settings strings -->
+
+    <!-- Sign in strings -->
+    <string name="title_activity_sign_in_screen">Sign In</string>
+    <string name="signInNoUserInDbText">There seem to be no user registered for this app! Let\'s start by registering a user?</string>
+
+    <!-- Shared Preferences strings -->
+    <string name="shared_preferences_file_key">com.droidlabs.pocketcontrol.sharedpreferences</string>
+
+    <!-- Strings for On Boarding Screen -->
+
+    <!--Titles-->
+    <string name="first_slide_title">Add your transactions</string>
+    <string name="second_slide_title">Create your own categories</string>
+    <string name="third_slide_title">Manage multiple accounts</string>
+    <string name="fourth_slide_title">Monitor your expense</string>
+
+    <!--Descriptions-->
+    <string name="intro_app_first_sentence">Pocket control helps you monitor your expenses.</string>
+    <string name="intro_app_second_sentence">Sign in and we will guide you through the application!</string>
+
+
+    <string name="first_slide_desc">Money control helps you to add your everday transactions. </string>
+    <string name="second_slide_desc">Create your own custom categories with unique icons to assign your transcations.</string>
+    <string name="third_slide_desc">Have separate accounts for monitoring your home, buisness and personal transactions.</string>
+    <string name="fourth_slide_desc">Set a budget and monitor your overall transactions.  </string>
+
+    <!--Buttons-->
+    <string name="skip_btn">Skip</string>
+    <string name="next_btn">Next</string>
+    <string name="let_get_started">Lets Get Started</string>
 </resources>

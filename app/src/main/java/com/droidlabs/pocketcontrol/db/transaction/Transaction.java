@@ -10,19 +10,36 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.account.Account;
+import com.droidlabs.pocketcontrol.db.user.User;
 
 
+import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_NULL;
 
 @Entity(
     tableName = "transactions",
-    foreignKeys = @ForeignKey(
-        entity = Category.class,
-        parentColumns = "id",
-        childColumns = "category",
-        onDelete = SET_NULL
-    ),
-    indices = {@Index("category")}
+    foreignKeys = {
+            @ForeignKey(
+                entity = Category.class,
+                parentColumns = "id",
+                childColumns = "category",
+                onDelete = SET_NULL
+            ),
+            @ForeignKey(
+                    entity = User.class,
+                    parentColumns = "id",
+                    childColumns = "owner_id",
+                    onDelete = CASCADE
+            ),
+            @ForeignKey(
+                    entity = Account.class,
+                    parentColumns = "id",
+                    childColumns = "account",
+                    onDelete = SET_NULL
+            ),
+    },
+    indices = {@Index("category"), @Index("owner_id"), @Index("account")}
 )
 public class Transaction {
 
@@ -36,6 +53,15 @@ public class Transaction {
     @ColumnInfo(name = "text_node", defaultValue = "")
     @Nullable
     private String textNote;
+
+    @ColumnInfo(name = "friend", defaultValue = "")
+    @Nullable
+    private String friend;
+
+    // 1 - borrow, 2 - lend
+    @ColumnInfo(name = "methodForFriend", defaultValue = "")
+    @Nullable
+    private String methodForFriend;
 
     @ColumnInfo(name = "is_recurring", defaultValue = "0")
     @Nullable
@@ -59,7 +85,7 @@ public class Transaction {
 
     // 1 - Cash, 2 - Card
     @ColumnInfo(name = "method", defaultValue = "1")
-    private int method;
+    private Integer method;
 
     @ColumnInfo(name = "date")
     private Long date;
@@ -69,6 +95,14 @@ public class Transaction {
     @Nullable
     private String category;
 
+    @ColumnInfo(name = "account")
+    @Nullable
+    private String account;
+
+    @ColumnInfo(name = "owner_id")
+    @Nullable
+    private String ownerId;
+
     /**
      * Transaction constructor with amount, type, category and date.
      * @param transactionAmount float transaction amount
@@ -76,6 +110,8 @@ public class Transaction {
      * @param transactionCategory String transaction String
      * @param transactionDate Date transaction date
      * @param transactionNote String transaction note
+     * @param transactionFriend String transaction friend
+     * @param transactionMethodForFriend int transaction method for friend
      * @param transactionMethod int transaction method
      */
     public Transaction(
@@ -84,6 +120,8 @@ public class Transaction {
             final @Nullable String transactionCategory,
             final Long transactionDate,
             final @Nullable String transactionNote,
+            final @Nullable String transactionFriend,
+            final @Nullable String transactionMethodForFriend,
             final Integer transactionMethod
     ) {
         this.amount = transactionAmount;
@@ -91,6 +129,8 @@ public class Transaction {
         this.category = transactionCategory;
         this.date = transactionDate;
         this.textNote = transactionNote;
+        this.friend = transactionFriend;
+        this.methodForFriend = transactionMethodForFriend;
         this.method = transactionMethod;
     }
 
@@ -234,6 +274,24 @@ public class Transaction {
     }
 
     /**
+     * Get owner id.
+     * @return owner id.
+     */
+    @Nullable
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    /**
+     * Get account id.
+     * @return account id.
+     */
+    @Nullable
+    public String getAccount() {
+        return account;
+    }
+
+    /**
      * ID setter.
      * @param transId transaction id.
      */
@@ -294,6 +352,22 @@ public class Transaction {
     }
 
     /**
+     * Set owner id.
+     * @param mOwnerId owner id.
+     */
+    public void setOwnerId(final @Nullable String mOwnerId) {
+        this.ownerId = mOwnerId;
+    }
+
+    /**
+     * Set account id.
+     * @param mAccount account id.
+     */
+    public void setAccount(final @Nullable String mAccount) {
+        this.account = mAccount;
+    }
+
+    /**
      * Type setter.
      * @param transType transaction type.
      */
@@ -331,6 +405,40 @@ public class Transaction {
      */
     public Integer getMethod() {
         return method; }
+
+    /**
+     * Friend getter.
+      * @return String transaction friend
+     */
+    @Nullable
+    public String getFriend() {
+        return friend;
+    }
+
+    /**
+     * Friend setter.
+     * @param transactionFriend string transaction friend
+     */
+    public void setFriend(final @Nullable String transactionFriend) {
+        this.friend = transactionFriend;
+    }
+
+    /**
+     * methodForFriend getter.
+     * @return String transaction method for friend
+     */
+    @Nullable
+    public String getMethodForFriend() {
+        return methodForFriend;
+    }
+
+    /**
+     * methodForFriend setter.
+     * @param transactionMethodForFriend String transaction method for friend
+     */
+    public void setMethodForFriend(final @Nullable String transactionMethodForFriend) {
+        this.methodForFriend = transactionMethodForFriend;
+    }
 
     /**
      * Method setter.

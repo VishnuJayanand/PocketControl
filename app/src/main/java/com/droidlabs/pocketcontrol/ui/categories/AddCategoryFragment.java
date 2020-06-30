@@ -1,13 +1,13 @@
 package com.droidlabs.pocketcontrol.ui.categories;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -18,23 +18,35 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class AddCategoryFragment extends Fragment {
     private TextInputEditText tiedtCategoryName;
     private TextInputLayout tilCategoryName;
-    private Spinner dropdown;
+    private CheckBox isCategoryPublicCheckbox;
+    private CategoryViewModel categoryViewModel;
+    private String categoryIconImage;
+    private TextInputEditText dropdown;
+
     @Nullable
     @Override
     public final View onCreateView(
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.category_add, container, false);
 
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         tilCategoryName = view.findViewById(R.id.til_categoryName);
         tiedtCategoryName = view.findViewById(R.id.tiedt_categoryName);
+        isCategoryPublicCheckbox = view.findViewById(R.id.isCategoryPublicCheckbox);
+
         Button btnAdd = view.findViewById(R.id.addNewCategory);
+
         //Set spinner
         setCategoryIconSpinner(view);
 
@@ -52,14 +64,68 @@ public class AddCategoryFragment extends Fragment {
      * @param view the transaction add layout
      */
     private void setCategoryIconSpinner(final View view) {
-        //get the spinner from the xml.
-        dropdown = view.findViewById(R.id.spinnerCategoryIcon);
+        dropdown = view.findViewById(R.id.newCategoryIcon);
         //create a list of items for the spinner.
-        String[] dropdownItems = new String[]{"food", "study", "health", "rent", "shopping", "transport"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, dropdownItems);
-        //set the spinners adapter to the previously created one.
-        dropdown.setAdapter(adapter);
+        String[] dropdownItems = getAllIconsFromDrawable();
+        CategoryIconAdapter iconAdapter = new CategoryIconAdapter(getContext(), dropdownItems);
+        iconAdapter.setListOfIcons(dropdownItems);
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setAdapter(iconAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        String icon = dropdownItems[which];
+                        categoryIconImage = icon;
+                        dropdown.setText(icon);
+                    }
+                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(final DialogInterface dialog) {
+                        if (dropdown.getText() == null) {
+                            categoryIconImage = "general";
+                            dropdown.setText("general");
+                        }
+                    }
+                });
+
+        dropdown.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        dropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialogBuilder.show();
+            }
+        });
+
+}
+
+    /**
+     * This method is to retrieve all the category Icons from drawable folder.
+     * @return String[] category icons
+     */
+    public String[] getAllIconsFromDrawable() {
+        Field[] idFields = R.drawable.class.getFields();
+        List<String> listIconArray = new ArrayList<>();
+        for (int i = 0; i < idFields.length; i++) {
+            try {
+                if (idFields[i].getName().contains("category_icons_")) {
+                    listIconArray.add(idFields[i].getName().split("category_icons_")[1]);
+                }
+            } catch (IllegalArgumentException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+        String[] stringIconArray = new String[listIconArray.size()];
+        stringIconArray = listIconArray.toArray(stringIconArray);
+        return stringIconArray;
+
     }
 
     /**
@@ -91,18 +157,45 @@ public class AddCategoryFragment extends Fragment {
     }
 
     /**
+     * Validate the input of category name if it's already exist or not.
+     * @return boolean if input is exist or not
+     */
+    private boolean validateIfCategoryNameIsAvailable() {
+        String[] listCategory = categoryViewModel.getCategoriesName();
+
+        for (String s : listCategory) {
+            if (s.equalsIgnoreCase(tiedtCategoryName.getText().toString())) {
+                tilCategoryName.setError("This category already exist. Please choose other name");
+                requestFocus(tiedtCategoryName);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Submit method to submit the input from user.
      */
     private void submitForm() {
         if (!validateCategoryName()) {
             return;
         }
-        String categoryIcon = dropdown.getSelectedItem().toString();
+
+        if (!validateIfCategoryNameIsAvailable()) {
+            return;
+        }
+
+        String categoryIcon = "category_icons_" + categoryIconImage;
         int resID = this.getResources().getIdentifier(categoryIcon, "drawable", getContext().getPackageName());
         String categoryName = tiedtCategoryName.getText().toString().trim() + "";
         Category newCategory = new Category(categoryName, resID);
-        //Get CategoryViewModel
-        final CategoryViewModel categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+
+        if (isCategoryPublicCheckbox.isChecked()) {
+            newCategory.setPublic(true);
+        } else {
+            newCategory.setPublic(false);
+        }
+
         //Insert new Category in to the database
         categoryViewModel.insert(newCategory);
 

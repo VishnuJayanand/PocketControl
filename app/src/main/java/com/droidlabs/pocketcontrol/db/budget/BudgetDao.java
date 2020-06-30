@@ -23,8 +23,42 @@ public interface BudgetDao {
 
     /**
      * Retrieve all budgets.
+     * @param ownerId owner id.
+     * @param accountId account id.
      * @return list of budgets saved on db.
      */
-    @Query("SELECT * FROM budgets")
-    List<Budget> getAllBudgets();
+    @Query("SELECT * FROM budgets WHERE owner_id=:ownerId AND account=:accountId")
+    List<Budget> getAllBudgets(String ownerId, String accountId);
+
+    /**
+     * Delete budget.
+     * @param budgetId budget id.
+     * @param ownerId owner id.
+     * @param accountId account id.
+     */
+    @Query("DELETE FROM budgets WHERE id=:budgetId AND owner_id=:ownerId AND "
+            + "account=:accountId")
+    void deleteBudget(int budgetId, String ownerId, String accountId);
+
+    /**
+     * Retrieve all budgets.
+     * @param category is the category.
+     * @param accountId account id.
+     * @param ownerId owner id.
+     * @return list of budgets saved on db.
+     */
+    @Query("SELECT * FROM budgets WHERE category=:category AND owner_id=:ownerId AND account=:accountId")
+    Budget getBudgetForCategory(String category, String ownerId, String accountId);
+
+    /**
+     * Update budget amounts default currency.
+     * @param conversionRate conversion rate.
+     * @param ownerId owner id.
+     */
+    @Query("UPDATE budgets SET "
+            + "max_amount=:conversionRate * max_amount "
+            + "WHERE owner_id=:ownerId;"
+    )
+    void updateBudgetAmountsDefaultCurrency(float conversionRate, String ownerId);
+
 }

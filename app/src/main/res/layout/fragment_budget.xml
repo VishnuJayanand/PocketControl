@@ -3,7 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_budget"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:id="@+id/emptyPageViewWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="clip_horizontal|top"
+        android:layout_marginTop="100dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/emptyPageView"
+            android:layout_width="wrap_content"
+            android:layout_height="240dp"
+            android:layout_weight="0"
+            app:srcCompat="@drawable/empty_page" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_horizontal"
+            android:paddingStart="30sp"
+            android:paddingEnd="30sp"
+            android:text="You have no budgets yet! Add budget above :)"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +51,9 @@
         <ListView
             android:id="@+id/budget_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+        </ListView>
     </LinearLayout>
 
     <LinearLayout
@@ -33,18 +65,18 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="300dp"
-            android:layout_marginTop="20dp"
-            android:text="Add" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="143dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="-45dp"
-            android:text="BUDGET"
-            android:textSize="30dp" />
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/pill_button"
+            style="@style/basePrimaryRoundedButton"
+            android:paddingStart="30sp"
+            android:paddingTop="10sp"
+            android:paddingEnd="30sp"
+            android:paddingBottom="10sp"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false"
+            android:text="Add Budget" />
 
     </LinearLayout>
 </RelativeLayout>
