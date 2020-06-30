@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -37,6 +36,15 @@ import java.util.List;
  * status bar and navigation/system bar) with user interaction.
  */
 public class SignInActivity extends AppCompatActivity {
+
+    public static final String EMAIL_ADDRESS_PATTERN =
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}"
+                    + "\\@"
+                    + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}"
+                    + "("
+                    + "\\."
+                    + "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}"
+                    + ")+";
 
     private View signInContainer;
     private View signUpContainer;
@@ -180,7 +188,7 @@ public class SignInActivity extends AppCompatActivity {
      * Execute sign in and move to home screen.
      */
     private void signUp() {
-        if (!Patterns.EMAIL_ADDRESS.matcher(emailInputText.getText().toString()).matches()) {
+        if (!emailInputText.getText().toString().matches(EMAIL_ADDRESS_PATTERN)) {
             emailInputGroup.setError("Please enter a valid email address.");
             return;
         } else {
