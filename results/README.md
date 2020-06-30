@@ -42,10 +42,13 @@ For each weekly report, there is one grade. The grade relates to mainly content 
 ## Graded Presentations
 
 1. ![Team Presentation Results](./team.png)
+2. ![Basic Prototype Presentation Results](./basic_prototype.png)
 
 ## Graded Blogs
 
+
 1. ![Team Presentation Blog Results](./team_blog.png)
+2. ![Basic Prototype Blog Results](./basic_prototype_blog.png)
 
 ## Weekly Report Grades
 
