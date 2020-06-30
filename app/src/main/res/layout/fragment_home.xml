@@ -1,98 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
     >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:id="@+id/homeScreenTop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/homescreentop_png"
-            android:fontFamily="sans-serif"
-            android:paddingTop="30dp"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textColorHighlight="#EDF4F6"
-            android:textColorLink="#337BB5"
-            android:textSize="@dimen/home_text_net_balance" />
-
-        <TextView
-            android:id="@+id/homeScreenNetBalanceText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-80dp"
-            android:text="@string/home_screen_net_balance"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textSize="@dimen/home_text_income_expense"
-            android:visibility="visible" />
-
-    </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="240dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/homeScreenTotalExpense"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
-            android:textSize="@dimen/home_text_income_expense" />
+            android:layout_height="150dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/homeScreenTotalIncome"
+
+            <TextView
+                android:id="@+id/homeScreenTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/homescreentop_png"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:maxLines="1"
+                android:paddingTop="15dp"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#EDF4F6"
+                android:textColorLink="#337BB5"
+                android:textSize="@dimen/home_text_net_balance" />
+
+            <TextView
+                android:id="@+id/homeScreenNetBalanceText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-60dp"
+                android:text="@string/home_screen_net_balance"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/home_text_income_expense"
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/notificationsWrapper"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginStart="20dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/notificationsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="You have X new notifications" />
+
+            <Button
+                android:id="@+id/showAllNotificationsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Show All Notifications" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/accountsWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="40dp"
             android:layout_marginTop="30dp"
-            android:textSize="@dimen/home_text_income_expense" />
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="30dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/selectedAccountColor"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginEnd="10dp"
+                    app:cardCornerRadius="8dp" />
+
+                <TextView
+                    android:id="@+id/selectedAccountTitle"
+                    style="@style/font_family_normal_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="TextView"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/switchAccountButton"
+                    style="@style/baseSmallButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:text="Switch account" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_weight="0"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="Account's incomes"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/accountIncomeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAlignment="textEnd"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Account's expenses"
+                        android:textSize="16dp" />
+
+                    <TextView
+                        android:id="@+id/accountExpenseText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAlignment="textEnd"
+                        android:textSize="16dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Account's balance"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:id="@+id/accountBalanceText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAlignment="textEnd"
+                        android:textSize="20dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/addAccountButton"
+                style="@style/primaryRoundedButtonBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add account" />
+
+        </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="450dp"
-        android:orientation="vertical"
-        >
-
-        <Button
-            android:id="@+id/addCategoryButton"
-            style="@style/featured_add_button"
-            android:background="@drawable/pill_button_filter"
-            android:text="@string/add_category"
-            android:drawableStart="@drawable/ic_add_black_24dp"
-            android:drawablePadding="10sp"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="350dp"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/addTransactionButton"
-            style="@style/featured_add_button"
-            android:background="@drawable/pill_button"
-            android:text="@string/add_transaction"
-            android:drawableStart="@drawable/ic_add_black_24dp"
-            android:drawablePadding="10sp"
-            />
-    </LinearLayout>
-
-</RelativeLayout>
+</ScrollView>

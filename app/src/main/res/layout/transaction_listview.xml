@@ -14,10 +14,10 @@
 
         <Button
             android:id="@+id/addTransactionButton"
-            style="@style/featured_add_button"
+            style="@style/primaryRoundedButton200dp"
             android:drawableStart="@drawable/ic_add_black_24dp"
             android:drawablePadding="10sp"
-            android:text="@string/add_transaction" />
+            android:text="@string/addTransaction" />
 
         <SearchView
             android:layout_width="match_parent"
@@ -29,10 +29,10 @@
 
         <Button
             android:id="@+id/expandFilterButton"
-            style="@style/expand_filters_button"
+            style="@style/secondaryRoundedButton200dp"
             android:drawableStart="@drawable/ic_filter_list_white_24dp"
             android:drawablePadding="10sp"
-            android:text="Filters" />
+            android:text="@string/buttonFilters" />
 
         <TextView
             android:id="@+id/allTransactionsText"
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10sp"
             android:layout_marginTop="20dp"
-            android:text="All Transactions"
+            android:text="@string/allTransactionsHeader"
             android:textColor="#000000"
             android:textSize="20sp" />
 

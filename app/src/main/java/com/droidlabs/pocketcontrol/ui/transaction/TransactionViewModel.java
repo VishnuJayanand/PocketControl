@@ -103,6 +103,51 @@ public class TransactionViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get all transactions.
+     * @param catId category id
+     * @return LiveData of transaction list.
+     */
+    public Float getTotalIAmountByCategoryId(final String catId) {
+
+        Float totalIncome = repository.getTotalIncomeByCategoryId(catId);
+        Float totalExpenses = repository.getTotalIExpenseByCategoryId(catId);
+
+        return totalExpenses - totalIncome;
+    }
+
+    /**
+     * Get total income by account id.
+     * @return total income.
+     */
+    public Float getTotalIncomeByAccountId() {
+        return repository.getTotalIncomeByAccountId();
+    }
+
+    /**
+     * Get total expense by account id.
+     * @return total expense.
+     */
+    public Float getTotalExpenseByAccountId() {
+        return repository.getTotalIExpenseByAccountId();
+    }
+
+    /**
+     * Get total income by user id.
+     * @return total income.
+     */
+    public Float getTotalIncomeByUserId() {
+        return repository.getTotalIncomeByUserId();
+    }
+
+    /**
+     * Get total expense by user id.
+     * @return total expense.
+     */
+    public Float getTotalExpenseByUserId() {
+        return repository.getTotalIExpenseByUserId();
+    }
+
+    /**
      * Get single transaction by is.
      * @param id id.
      * @return transaction
@@ -138,6 +183,26 @@ public class TransactionViewModel extends AndroidViewModel {
                 isRecurring,
                 recurringIntervalType,
                 recurringIntervalDays
+        );
+    }
+
+    /**
+     * Update transaction amounts.
+     * @param conversionRate conversion rate.
+     */
+    public void updateTransactionAmountsDefaultCurrency(final float conversionRate) {
+        repository.updateTransactionAmountsDefaultCurrency(conversionRate);
+    }
+
+    /**
+     * Update transaction recurring fields.
+     * @param transactionId id.
+     */
+    public void deleteTransaction(
+            final int transactionId
+    ) {
+        repository.deleteTransaction(
+                transactionId
         );
     }
 

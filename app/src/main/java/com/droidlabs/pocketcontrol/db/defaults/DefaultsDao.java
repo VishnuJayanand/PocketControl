@@ -19,22 +19,49 @@ public interface DefaultsDao {
 
     /**
      * Delete all defaults.
+     * @param ownerId owner ID
+     */
+    @Query("DELETE FROM defaults WHERE owner_id=:ownerId")
+    void deleteAll(String ownerId);
+
+    /**
+     * Retrieve all defaults values.
+     * @param ownerId owner id.
+     * @return list of defaults.
+     */
+    @Query("SELECT * FROM defaults WHERE owner_id=:ownerId")
+    List<Defaults> getAllDefaults(String ownerId);
+
+    /**
+     * Retrieve all defaults category.
+     * @param name entity name.
+     * @param ownerId owner id.
+     * @return string of defaults.
+     */
+    @Query("SELECT default_value FROM defaults WHERE default_entity=:name AND owner_id=:ownerId")
+    String getDefaultValue(String name, String ownerId);
+
+    /**
+     * Retrieve all defaults category.
+     * string of defaults.
      */
     @Query("DELETE FROM defaults")
     void deleteAll();
 
     /**
-     * Retrieve all defaults values.
-     * @return list of defaults.
+     * Retrieve default currency symbol.
+     * @param currency three letter currency code
+     * @return string of currency symbol
      */
-    @Query("SELECT * FROM defaults")
-    List<Defaults> getAllDefaults();
+    @Query("SELECT symbol from currencies WHERE three_letter_code=:currency")
+    String getCurrencySymbol(String currency);
 
     /**
-     * Retrieve all defaults category.
-     * @return string of defaults.
-     * @param name entity name
+     * Update default value.
+     * @param defaultName default name.
+     * @param newDefaultValue new value.
+     * @param ownerId owner id.
      */
-    @Query("SELECT default_value FROM defaults WHERE default_entity=:name")
-    String getDefaultValue(String name);
+    @Query("UPDATE defaults SET default_value=:newDefaultValue WHERE default_entity=:defaultName AND owner_id=:ownerId")
+    void updateDefaultValue(String defaultName, String newDefaultValue, String ownerId);
 }

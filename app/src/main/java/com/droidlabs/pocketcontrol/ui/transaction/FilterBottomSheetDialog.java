@@ -1,19 +1,17 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +21,8 @@ import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -72,35 +72,56 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
             final @Nullable ViewGroup container,
             final @Nullable Bundle savedInstanceState
     ) {
-        super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.transaction_listfilterbottomsheet, null, false);
+        View view = inflater.inflate(R.layout.transaction_listfilterbottomsheet, container, false);
 
-        Spinner categoryFilterSpinner = view.findViewById(R.id.category_filter_spinner);
+        TextInputEditText categoryFilterSpinner = view.findViewById(R.id.categoryFilterSpinner);
+
         ArrayAdapter<Category> categoryFilterAdapter = new ArrayAdapter<>(
                 getActivity(),
-                android.R.layout.simple_spinner_item,
+                R.layout.mtrl_alert_select_dialog_item,
                 buildCategoryFilterList()
         );
 
-        // Category filter
-        categoryFilterAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        categoryFilterSpinner.setAdapter(categoryFilterAdapter);
-        categoryFilterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(
-                    final AdapterView<?> parent,
-                    final View view,
-                    final int position,
-                    final long id) {
-                categoryFilter = (Category) parent.getItemAtPosition(position);
-                categoryFilterEnabled = categoryFilter.getId() != -1;
-            }
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getActivity())
+                .setAdapter(categoryFilterAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        Category selectedCategory = categoryFilterAdapter.getItem(which);
 
+                        categoryFilterSpinner.setText(selectedCategory.getName());
+                        categoryFilter = selectedCategory;
+                        categoryFilterEnabled = categoryFilter.getId() != -1;
+                    }
+                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(final DialogInterface dialog) {
+                        if (categoryFilter == null) {
+                            Category selectedCategory = categoryFilterAdapter.getItem(0);
+
+                            categoryFilterSpinner.setText(selectedCategory.getName());
+                            categoryFilter = selectedCategory;
+                            categoryFilterEnabled = categoryFilter.getId() != -1;
+                        }
+                    }
+                });
+
+        categoryFilterSpinner.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onNothingSelected(final AdapterView<?> parent) {
-                Log.v("SPINNER", "NOTHING SELECTED");
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
             }
         });
+
+        categoryFilterSpinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialogBuilder.show();
+            }
+        });
+
+        categoryFilterSpinner.setInputType(0);
 
         // Amount filter
         editTextFromAmount = view.findViewById(R.id.fromAmount);
@@ -195,7 +216,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
                 if (categoryFilterEnabled) {
                     transactionViewModel.setCategoryFilter(true, categoryFilter.getId().toString());
                 } else {
-                    transactionViewModel.setCategoryFilter(false, categoryFilter.getId().toString());
+                    transactionViewModel.setCategoryFilter(false, "-1");
                 }
 
                 if (dateFilterEnabled) {

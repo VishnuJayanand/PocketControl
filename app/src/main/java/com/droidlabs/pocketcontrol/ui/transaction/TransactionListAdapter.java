@@ -2,7 +2,8 @@ package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.util.Log;
+import android.content.DialogInterface;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,30 +14,36 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.droidlabs.pocketcontrol.R;
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.category.Category;
-import com.droidlabs.pocketcontrol.db.category.CategoryDao;
+import com.droidlabs.pocketcontrol.db.currency.CurrencyDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.Calendar;
 import java.util.List;
-
-import static java.lang.Integer.parseInt;
 
 public final class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.TransactionViewHolder> {
 
     private List<Transaction> transactions; // Cached copy of transactions
     private final LayoutInflater layoutInflater;
-    private final CategoryDao categoryDao;
+    private final CategoryViewModel categoryViewModel;
     private final TransactionViewModel transactionViewModel;
+    private CurrencyDao currencyDao;
+    private final DefaultsViewModel defaultsViewModel;
     private final OnTransactionNoteListener mOnNoteListener;
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
 
@@ -45,16 +52,21 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
      * @param context context
      * @param onNoteListener the onNotelistener
      * @param transactionVM the view model for creating new transactions
+     * @param categoryVM  category viewmodel.
+     * @param defaultVM default viewmodel.
      */
     public TransactionListAdapter(
             final @NonNull Context context,
             final OnTransactionNoteListener onNoteListener,
-            final TransactionViewModel transactionVM
+            final TransactionViewModel transactionVM,
+            final CategoryViewModel categoryVM,
+            final DefaultsViewModel defaultVM
     ) {
         layoutInflater = LayoutInflater.from(context);
-        categoryDao = PocketControlDB.getDatabase(context).categoryDao();
+        categoryViewModel = categoryVM;
         transactionViewModel = transactionVM;
         mOnNoteListener = onNoteListener;
+        defaultsViewModel = defaultVM;
     }
 
     @NonNull
@@ -62,6 +74,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
     public TransactionViewHolder onCreateViewHolder(final @NonNull ViewGroup parent, final int viewType) {
         View itemView = layoutInflater.inflate(R.layout.transaction_listitem, parent, false);
         return new TransactionViewHolder(itemView, mOnNoteListener);
+
     }
 
     /**
@@ -83,7 +96,12 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             Boolean recurring = current.getFlagIconRecurring();
 
             // turn float to string
-            String amountToString = CurrencyUtils.formatAmount(amount, "€");
+            String stringCurrencyCode = defaultsViewModel.getDefaultValue("Currency");
+            String stringCurrency = defaultsViewModel.getCurrencySymbol(stringCurrencyCode);
+            //String currencySymbol = currencyDao.getCurrencySymbol(stringCurrency);
+            //Log.d("ADebugTag", "Value: " + stringCurrency);
+            //Log.d("ADebugTag", "Value: " + currencySymbol);
+            String amountToString = CurrencyUtils.formatAmount(amount, stringCurrency);
 
             if (recurring != null && recurring) {
                 holder.recurringTransactionWrapper.setVisibility(View.VISIBLE);
@@ -100,8 +118,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             }
 
             if (category != null) {
-
-                Category category1 = categoryDao.getSingleCategory(parseInt(category));
+                Category category1 = categoryViewModel.getSingleCategory(Integer.parseInt(category));
                 holder.transactionCategoryTitle.setText(category1.getName());
                 holder.transactionCategoryImage.setImageResource(category1.getIcon());
             }
@@ -112,14 +129,44 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
             holder.deleteTransactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show();
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+                    builder.setTitle("Delete Transaction?");
+                    builder.setMessage("Are you sure you want to delete the transaction?");
+                    builder.setBackground(context.getDrawable(
+                            (R.drawable.alert_dialogue_box)));
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            Integer transactionId = current.getId();
+                            transactionViewModel.deleteTransaction(transactionId);
+                            Toast.makeText(context, "Transaction Deleted!", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(final DialogInterface dialog, final int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    builder.show();
                 }
+
             });
 
             holder.updateTransactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    Toast.makeText(context, "Coming soon!", Toast.LENGTH_SHORT).show();
+                    Bundle result = new Bundle();
+                    result.putString("BundleKey", current.getId().toString());
+
+                    Fragment fragment = new UpdateTransaction();
+                    FragmentManager manager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction fragmentBudget = manager.beginTransaction();
+                    fragment.setArguments(result);
+                    fragmentBudget.replace(R.id.fragment_container, fragment);
+                    fragmentBudget.addToBackStack(null);
+                    fragmentBudget.commit();
                 }
             });
 
@@ -163,7 +210,6 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
      * @param transactionList transactions from db.
      */
     public void setTransactions(final List<Transaction> transactionList) {
-        Log.v("TRANSACTIONS", String.valueOf(transactionList.size()));
         this.transactions = transactionList;
         notifyDataSetChanged();
     }
@@ -277,6 +323,14 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
 
         if (oldTransaction.getCategory() != null) {
             newTransaction.setCategory(oldTransaction.getCategory());
+        }
+
+        if (oldTransaction.getFriend() != null) {
+            newTransaction.setFriend(oldTransaction.getFriend());
+        }
+
+        if (oldTransaction.getMethodForFriend() != null) {
+            newTransaction.setMethodForFriend(oldTransaction.getMethodForFriend());
         }
 
         return newTransaction;

@@ -5,7 +5,7 @@ import java.util.Locale;
 public final class CurrencyUtils {
 
     private static final Locale DEFAULT_LOCALE = Locale.GERMANY;
-    private static final String DEFAULT_CURRENCY = "€";
+    public static final String DEFAULT_CURRENCY = "€";
 
     /**
      * Private constructor to prevent extending utility classes.

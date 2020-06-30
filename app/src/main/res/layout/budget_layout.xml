@@ -14,14 +14,16 @@
         android:layout_height="wrap_content"
         android:textSize="20.0sp" />
 
-    <TextView
-        android:id="@+id/budgetCategory"
-        style="@style/font_family_normal_text"
-        android:layout_width="174dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="200dp"
+    <Button
+        android:id="@+id/delete_budget"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="300dp"
         android:layout_marginTop="-27dp"
-        android:textSize="20.0sp" />
+        android:backgroundTint="#00000000"
+        android:drawableEnd="@drawable/ic_delete_forever_black"
+        android:outlineProvider="none"
+        android:textColor="@color/colorPrimary"  />
 
     <LinearLayout android:orientation="horizontal"
                   android:padding="5.0dp"

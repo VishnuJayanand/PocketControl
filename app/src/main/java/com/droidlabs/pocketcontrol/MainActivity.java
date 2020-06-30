@@ -1,34 +1,29 @@
 package com.droidlabs.pocketcontrol;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Handler;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.recurrent.Recurrent;
 import com.droidlabs.pocketcontrol.db.recurrent.RecurrentDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
-import com.droidlabs.pocketcontrol.ui.budget.BudgetFragment;
-import com.droidlabs.pocketcontrol.ui.categories.CategoriesFragment;
-import com.droidlabs.pocketcontrol.ui.home.HomeFragment;
-import com.droidlabs.pocketcontrol.ui.settings.SettingsFragment;
-import com.droidlabs.pocketcontrol.ui.transaction.TransactionFragment;
+import com.droidlabs.pocketcontrol.ui.intro.AppIntro;
+import com.droidlabs.pocketcontrol.ui.signin.SignInActivity;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView appImage, teamImage;
     private static final int TIMER = 4000;
     private TransactionViewModel transactionViewModel;
+    private SharedPreferencesUtils sharedPreferencesUtils;
+    public static final String EXTRA_MESSAGE = "com.droidlabs.pocketcontrol.SIGNIN";
 
     /**
      * Method to create an app instance.
@@ -55,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash_screen);
 
+        sharedPreferencesUtils = new SharedPreferencesUtils(getApplication());
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
         //Animation
@@ -71,51 +69,26 @@ public class MainActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                setContentView(R.layout.activity_main);
-                BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-                bottomNav.setOnNavigationItemSelectedListener(navListener);
+                //Checking if the app is running for the 1st time
+                boolean isFirstTime = sharedPreferencesUtils.getFirstTime();
 
-                getSupportFragmentManager().beginTransaction().replace(
-                        R.id.fragment_container, new HomeFragment()).commit();
+                if (isFirstTime) {
+                    sharedPreferencesUtils.setFirstTime(false);
+
+                    Intent intent = new Intent(getApplication(), AppIntro.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Intent intent = new Intent(getApplication(), SignInActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         }, TIMER);
 
         PocketControlDB db = PocketControlDB.getDatabase(this);
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(
-                final @NonNull MenuItem menuItem) {
-            Fragment selecetedFragment = null;
-
-            switch (menuItem.getItemId()) {
-                case R.id.nav_budget:
-                    selecetedFragment = new BudgetFragment();
-                    break;
-                case R.id.nav_categories:
-                    selecetedFragment = new CategoriesFragment();
-                    break;
-                case R.id.nav_home:
-                    selecetedFragment = new HomeFragment();
-                    break;
-                case R.id.nav_settings:
-                    selecetedFragment = new SettingsFragment();
-                    break;
-                case R.id.nav_transaction:
-                    selecetedFragment = new TransactionFragment();
-                    break;
-                default :
-                    break;
-            }
-
-            getSupportFragmentManager().beginTransaction().replace(
-                    R.id.fragment_container, selecetedFragment).commit();
-
-            return true;
-        }
-    };
 
     /**
      * Executed every time the app opens.
@@ -133,9 +106,20 @@ public class MainActivity extends AppCompatActivity {
     private void createRecurringTransactions() {
         long startOfDay = DateUtils.getStartOfCurrentDay().getTimeInMillis();
 
+        SharedPreferences sharedPreferences = getApplication().getSharedPreferences(
+                getApplication().getString(R.string.shared_preferences_file_key),
+                Context.MODE_PRIVATE
+        );
+
+        String currentUserId = sharedPreferences.getString("currentUserId", "");
+
+        if (currentUserId.equals("")) {
+            return;
+        }
+
         RecurrentDao recurrentDao = PocketControlDB.getDatabase(this).recurrentDao();
 
-        Recurrent today = recurrentDao.getRecurrentByDate(startOfDay);
+        Recurrent today = recurrentDao.getRecurrentByDate(startOfDay, currentUserId);
 
         if (today == null) {
             transactionViewModel.getTransactions().observe(this, new Observer<List<Transaction>>() {
