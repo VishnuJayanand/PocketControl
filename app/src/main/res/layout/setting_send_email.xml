@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@drawable/email_bg_round">
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To Support Email: "
+            android:textSize="15sp"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/email_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:gravity="left"
+            android:textSize="15sp"
+            android:text="droidlabs2020@gmail.com"/>
+
+    </LinearLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/email_subject"
+        android:hint="Subject"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/email_bg_round" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/email_message"
+        android:hint="Message"
+        android:padding="10dp"
+        android:gravity="top"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/email_bg_round"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/email_send"
+        android:text="Send"
+        android:textSize="25sp"
+        android:textColor="@color/inputBackground"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/email_bg_round"/>
+
+
+
+</LinearLayout>

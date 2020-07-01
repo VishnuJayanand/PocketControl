@@ -17,8 +17,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.Request;
@@ -165,7 +168,18 @@ public class SettingsFragment extends Fragment {
         setDefaultCategorySpinner();
         setDefaultCurrencySpinner();
         setDefaultPaymentModeSpinner();
-
+        AppCompatButton sendEmailButton = v.findViewById(R.id.send_email_button);
+        sendEmailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v)  {
+                Fragment fragment = new SendEmailFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
         return v;
     }
     /**
