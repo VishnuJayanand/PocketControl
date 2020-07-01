@@ -1,6 +1,7 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,6 +10,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.Network;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -26,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
@@ -33,10 +37,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.currency.CurrencyDao;
 import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
@@ -44,9 +55,13 @@ import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.droidlabs.pocketcontrol.utils.FormatterUtils;
+import com.droidlabs.pocketcontrol.utils.NetworkUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -74,6 +89,13 @@ public class AddTransactionFragment extends Fragment {
     private TransactionViewModel transactionViewModel;
     private CategoryViewModel categoryViewModel;
     private DefaultsViewModel defaultsViewModel;
+    private RequestQueue requestQueue;
+    private Float exchangeRate = 1f;
+    private Activity activity;
+    private static final String CURRENCY_DEFAULT_NAME = "Currency";
+    private TextInputEditText defaultCurrency;
+    private LinearLayout networkStatusWrapper;
+    private CurrencyDao currencyDao;
 
     private Switch recurringSwitch;
     private Switch addFriendSwitch;
@@ -120,6 +142,65 @@ public class AddTransactionFragment extends Fragment {
         Button btnAdd50 = view.findViewById(R.id.addAmount50);
         Button btnAdd75 = view.findViewById(R.id.addAmount75);
         Button btnAdd100 = view.findViewById(R.id.addAmount100);
+
+        //net connection
+        requestQueue = Volley.newRequestQueue(getContext());
+        activity = getActivity();
+
+        defaultCurrency = view.findViewById(R.id.defaultCurrencySpinnerTransaction);
+        networkStatusWrapper = view.findViewById(R.id.networkStatusWrapperTransaction);
+
+        NetworkUtils
+                .getConnectivityManager(getContext())
+                .registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
+
+                    @Override
+                    public void onAvailable(final @NonNull Network network) {
+                        super.onAvailable(network);
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                defaultCurrency.setEnabled(true);
+                                networkStatusWrapper.setVisibility(View.INVISIBLE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onLost(final @NonNull Network network) {
+                        super.onLost(network);
+
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                defaultCurrency.setEnabled(false);
+                                networkStatusWrapper.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onLosing(final @NonNull Network network, final int maxMsToLive) {
+                        super.onLosing(network, maxMsToLive);
+
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                defaultCurrency.setEnabled(false);
+                                networkStatusWrapper.setVisibility(View.VISIBLE);
+                            }
+                        });
+                    }
+                });
+
+        if (!NetworkUtils.isNetworkConnectionAvailable(getContext())) {
+            defaultCurrency.setEnabled(false);
+            networkStatusWrapper.setVisibility(View.VISIBLE);
+        }
+
+        currencyDao = PocketControlDB.getDatabase(getContext()).currencyDao();
+
+        setDefaultCurrencySpinner();
 
         //Check for android version and request a permission from the user
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -277,6 +358,136 @@ public class AddTransactionFragment extends Fragment {
         });
 
         return view;
+    }
+
+    /**
+     * This method to set the default currency.
+     */
+    private void setDefaultCurrencySpinner() {
+        String[] dropdownItems = currencyDao.getAllCurrencyCodes();
+
+        //set currency spinner value
+
+        String stringCurrency = defaultsViewModel.getDefaultValue(CURRENCY_DEFAULT_NAME);
+        defaultCurrency.setText(stringCurrency);
+
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Select the transaction currency")
+                .setItems(dropdownItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        updateDefaultCurrency(dropdownItems[which]);
+                    }
+                });
+
+        defaultCurrency.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    dialogBuilder.show();
+                }
+            }
+        });
+
+        defaultCurrency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                dialogBuilder.show();
+            }
+        });
+        defaultCurrency.setInputType(0);
+    }
+
+    /**
+     * Method to update default currency.
+     * @param newCurrency new currency.
+     */
+    private void updateDefaultCurrency(final String newCurrency) {
+        if (!NetworkUtils.isNetworkConnectionAvailable(getContext())) {
+            Toast.makeText(
+                    getContext(),
+                    "No network connectivity, can't change the currency!",
+                    Toast.LENGTH_LONG
+            ).show();
+            return;
+        }
+
+        requestExchangeRate(newCurrency);
+    }
+
+    /**
+     * Exchange rate conversion.
+     * @param targetCurrency target currency.
+     */
+    private void requestExchangeRate(final String targetCurrency) {
+        String originalCurrency = defaultsViewModel.getDefaultValue(CURRENCY_DEFAULT_NAME);
+
+        MaterialAlertDialogBuilder exchangeRateDialogBuilder = new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Update currency?")
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        Toast.makeText(getContext(), "Update of currency cancelled", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        if (exchangeRate != null) {
+                            defaultCurrency.setText(targetCurrency);
+                        }
+                    }
+                });
+
+        String requestUrl = "https://api.exchangeratesapi.io/latest?base="
+                + originalCurrency
+                + "&symbols="
+                + targetCurrency;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                requestUrl,
+                null,
+                new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(final JSONObject response) {
+                        try {
+                            exchangeRate = Float.parseFloat(
+                                    response.getJSONObject("rates").get(targetCurrency).toString()
+                            );
+                            Float invExchangeRate = 1 / exchangeRate;
+                            exchangeRateDialogBuilder
+                                    .setMessage("Exchange rate: 1 "
+                                            + targetCurrency
+                                            + " = "
+                                            + FormatterUtils.roundToFourDecimals(invExchangeRate)
+                                            + " "
+                                            + originalCurrency
+                                    ).show();
+                        } catch (final JSONException e) {
+                            Toast.makeText(
+                                    getContext(),
+                                    "Something went wrong, please try again!",
+                                    Toast.LENGTH_LONG
+                            ).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(final VolleyError error) {
+                // TODO: Handle error
+                Toast.makeText(
+                        getContext(),
+                        "Something went wrong, please try again!",
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+
+
+        requestQueue.add(jsonObjectRequest);
     }
 
     /**
@@ -790,6 +1001,7 @@ public class AddTransactionFragment extends Fragment {
         Log.d("String Text", "Value:" + transactionMethod);
 
         float transactionAmount = Float.parseFloat(tiedtTransactionAmount.getText().toString());
+        transactionAmount = transactionAmount / exchangeRate;
         String transactionNote  = tiedtTransactionNote.getText().toString().trim() + "";
         String transactionMethodForFriend = dropdownTransactionMethodForFriend.getText().toString();
         String friend = dropdownTransactionFriend.getText().toString();
