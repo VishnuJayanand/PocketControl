@@ -75,11 +75,12 @@ public class UpdateTransaction extends Fragment {
     private LinearLayout customDaysIntervalWrapper;
     private Transaction lastAddedTransaction;
     private LinearLayout addFriendWrapper;
-    private LinearLayout methodForFriendWrapper;
+    private LinearLayout methodForFriendWrapper, currency;
     private static final int PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     private String[] contactArray;
     private View currentView;
     private Transaction updateTransaction;
+    private TextInputEditText defaultCurrency;
 
     @Nullable
     @Override
@@ -109,6 +110,9 @@ public class UpdateTransaction extends Fragment {
         customRecurringDaysInterval = view.findViewById(R.id.customRecurringDaysInterval);
         addFriendWrapper = view.findViewById(R.id.addFriendWrapper);
         methodForFriendWrapper = view.findViewById(R.id.MethodForFriendWrapper);
+        defaultCurrency = view.findViewById(R.id.defaultCurrencySpinnerTransaction);
+        currency = view.findViewById(R.id.currencyTransactionLayout);
+        currency.setVisibility(view.GONE);
 
         Button btnAdd = view.findViewById(R.id.addNewTransaction);
         btnAdd.setText("Update");
