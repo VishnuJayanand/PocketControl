@@ -166,7 +166,15 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
-
+            <Button
+                android:id="@+id/send_email_button"
+                style="@style/primaryRoundedButton200dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_add_black_24dp"
+                android:drawablePadding="20dp"
+                android:paddingTop="20dp"
+                android:text="Send an email to support center" />
         </LinearLayout>
 
     </LinearLayout>
