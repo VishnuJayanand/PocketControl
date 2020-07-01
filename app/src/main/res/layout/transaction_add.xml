@@ -284,6 +284,41 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="Set currency:"
+                android:textSize="18sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCurrencySpinnerTransaction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:hint="Select Currency">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/defaultCurrencySpinnerTransaction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:minHeight="50dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
     <LinearLayout
         android:id="@+id/addFriendWrapper"
