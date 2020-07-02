@@ -63,8 +63,11 @@ public interface CategoryDao {
      * Get all categories name from the database.
      * @param ownerId owner id.
      * @param accountId account id.
+     * @param income income category.
      * @return list of categories name.
      */
-    @Query("SELECT name FROM categories WHERE owner_id=:ownerId AND (account=:accountId OR is_public = 1)")
-    String[] getCategoriesName(String ownerId, String accountId);
+    @Query("SELECT name FROM categories WHERE owner_id=:ownerId AND (account=:accountId OR is_public = 1)"
+            +
+            "AND name != :income")
+    String[] getCategoriesName(String ownerId, String accountId, String income);
 }

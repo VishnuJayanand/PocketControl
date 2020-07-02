@@ -113,12 +113,13 @@ public class CategoryRepository {
     public String[] getCategoriesName() {
         String currentUserId = sharedPreferencesUtils.getCurrentUserId();
         String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+        String income = "Income";
 
         if (currentUserId.equals("")) {
             return null;
         }
 
-        return categoryDao.getCategoriesName(currentUserId, currentAccountId);
+        return categoryDao.getCategoriesName(currentUserId, currentAccountId, income);
     }
 
 }

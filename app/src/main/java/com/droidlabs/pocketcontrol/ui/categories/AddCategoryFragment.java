@@ -163,6 +163,12 @@ public class AddCategoryFragment extends Fragment {
     private boolean validateIfCategoryNameIsAvailable() {
         String[] listCategory = categoryViewModel.getCategoriesName();
 
+        if (tiedtCategoryName.getText().toString().equalsIgnoreCase("Income")) {
+            tilCategoryName.setError("This category already exist. Please choose other name");
+            requestFocus(tiedtCategoryName);
+            return false;
+        }
+
         for (String s : listCategory) {
             if (s.equalsIgnoreCase(tiedtCategoryName.getText().toString())) {
                 tilCategoryName.setError("This category already exist. Please choose other name");
