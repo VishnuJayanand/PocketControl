@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/faqTitle"
+        android:minHeight="40dp"
+        android:text="Title Example"
+        android:textColor="#B1000000"
+        android:background="@drawable/alert_dialogue_box"
+        android:textSize="18dp"
+        android:textStyle="normal"
+        android:fontFamily="sans-serif"
+        android:gravity="left"
+        />
+
+
+</LinearLayout>

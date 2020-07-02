@@ -37,32 +37,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="20dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="Export my user profile data to Google Drive"
-                    android:textSize="18dp" />
-
-                <Button
-                    android:id="@+id/button"
-                    style="@style/primaryRoundedButtonBlock"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_margin="0dp"
-                    android:layout_weight="0"
-                    android:text="Export" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
@@ -132,6 +106,8 @@
 
             </LinearLayout>
 
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -165,17 +141,93 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+
+
             </LinearLayout>
-            <Button
-                android:id="@+id/send_email_button"
-                style="@style/primaryRoundedButton200dp"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_add_black_24dp"
-                android:drawablePadding="20dp"
-                android:paddingTop="20dp"
-                android:text="Send an email to support center" />
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Export my user profile data to Google Drive"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/button"
+                    style="@style/primaryRoundedButtonBlock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="0dp"
+                    android:layout_weight="0"
+                    android:text=" Export" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Answers to frequently asked questions"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/helpButton"
+                    style="@style/primaryRoundedButtonBlock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="0dp"
+                    android:layout_weight="0"
+                    android:text="   Help  " />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="Contact development team for support"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/send_email_button"
+                    style="@style/primaryRoundedButtonBlock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="0dp"
+                    android:layout_weight="0"
+                    android:text="Contact" />
+
+            </LinearLayout>
+
         </LinearLayout>
+
+
 
     </LinearLayout>
 </ScrollView>

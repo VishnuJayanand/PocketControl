@@ -31,6 +31,25 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.droidlabs.pocketcontrol.R;
+import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.account.Account;
+import com.droidlabs.pocketcontrol.db.budget.Budget;
+import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.currency.CurrencyDao;
+import com.droidlabs.pocketcontrol.db.defaults.Defaults;
+import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
+import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
+import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.home.AccountViewModel;
+import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
+import com.droidlabs.pocketcontrol.utils.FormatterUtils;
+import com.droidlabs.pocketcontrol.utils.NetworkUtils;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,28 +58,6 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-
-import com.droidlabs.pocketcontrol.db.PocketControlDB;
-import com.droidlabs.pocketcontrol.db.account.Account;
-import com.droidlabs.pocketcontrol.db.budget.Budget;
-import com.droidlabs.pocketcontrol.db.category.Category;
-import com.droidlabs.pocketcontrol.db.currency.CurrencyDao;
-
-import com.droidlabs.pocketcontrol.db.defaults.Defaults;
-import com.droidlabs.pocketcontrol.db.paymentmode.PaymentModeDao;
-import com.droidlabs.pocketcontrol.db.transaction.Transaction;
-import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
-import com.droidlabs.pocketcontrol.ui.home.AccountViewModel;
-import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
-import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
-import com.droidlabs.pocketcontrol.utils.FormatterUtils;
-import com.droidlabs.pocketcontrol.utils.NetworkUtils;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputEditText;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class SettingsFragment extends Fragment {
 
@@ -158,7 +155,18 @@ public class SettingsFragment extends Fragment {
                 });
             }
         });
-
+        Button helpButton = v.findViewById(R.id.helpButton);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v)  {
+                Fragment fragment = new HelpScreenFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
 
         if (!NetworkUtils.isNetworkConnectionAvailable(getContext())) {
             defaultCurrency.setEnabled(false);
@@ -168,6 +176,7 @@ public class SettingsFragment extends Fragment {
         setDefaultCategorySpinner();
         setDefaultCurrencySpinner();
         setDefaultPaymentModeSpinner();
+
         AppCompatButton sendEmailButton = v.findViewById(R.id.send_email_button);
         sendEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +189,7 @@ public class SettingsFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+
         return v;
     }
     /**
