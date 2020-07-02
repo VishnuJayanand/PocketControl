@@ -1,9 +1,5 @@
 package com.droidlabs.pocketcontrol.ui.signin;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +9,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.account.Account;
@@ -338,6 +338,7 @@ public class SignInActivity extends AppCompatActivity {
         Category food = new Category("Food", R.drawable.category_icons_food);
         Category study = new Category("Study", R.drawable.category_icons_study);
         Category rent = new Category("Rent", R.drawable.category_icons_rent);
+        Category income = new Category("Income", R.drawable.category_icons_saving);
 
         health.setPublic(true);
         transport.setPublic(true);
@@ -345,6 +346,7 @@ public class SignInActivity extends AppCompatActivity {
         food.setPublic(true);
         study.setPublic(true);
         rent.setPublic(true);
+        income.setPublic(true);
 
         health.setPublic(true);
         transport.setPublic(true);
@@ -352,6 +354,7 @@ public class SignInActivity extends AppCompatActivity {
         food.setPublic(true);
         study.setPublic(true);
         rent.setPublic(true);
+        income.setPublic(true);
 
         categoryViewModel.insert(health);
         categoryViewModel.insert(transport);
@@ -359,6 +362,7 @@ public class SignInActivity extends AppCompatActivity {
         categoryViewModel.insert(food);
         categoryViewModel.insert(study);
         categoryViewModel.insert(rent);
+        categoryViewModel.insert(income);
 
     }
 

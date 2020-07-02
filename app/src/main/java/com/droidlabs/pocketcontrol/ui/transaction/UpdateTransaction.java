@@ -1,4 +1,5 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
+
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.NotificationChannel;
@@ -23,6 +24,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -38,6 +40,7 @@ import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.droidlabs.pocketcontrol.utils.FormatterUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -54,6 +57,7 @@ import java.util.Locale;
 public class UpdateTransaction extends Fragment {
     private TextInputEditText tiedtTransactionAmount, tiedtTransactionNote;
     private TextInputEditText customRecurringDaysInterval;
+    private TextView textCategory;
     private TextInputLayout tilTransactionAmount, tilTransactionNote, tilCustomRecurringDaysInterval, tilCategory;
     private boolean isTransactionRecurring;
     private int transactionType;
@@ -69,6 +73,7 @@ public class UpdateTransaction extends Fragment {
     private Long transactionDate;
     private TransactionViewModel transactionViewModel;
     private CategoryViewModel categoryViewModel;
+    private DefaultsViewModel defaultsViewModel;
     private Switch recurringSwitch;
     private Switch addFriendSwitch;
     private LinearLayout recurringTransactionWrapper;
@@ -89,6 +94,7 @@ public class UpdateTransaction extends Fragment {
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
+        defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
 
         // fetching the transcation id and getting the transaction from it.
         String transactionID = getArguments().getString("BundleKey");
@@ -102,6 +108,7 @@ public class UpdateTransaction extends Fragment {
         tilTransactionAmount = view.findViewById(R.id.til_transactionAmount);
         tilTransactionNote = view.findViewById(R.id.til_transactionNote);
         tilCategory = view.findViewById(R.id.tilCategory);
+        textCategory = view.findViewById(R.id.categoryText);
         tilCustomRecurringDaysInterval = view.findViewById(R.id.til_customRecurringDaysInterval);
         recurringSwitch = view.findViewById(R.id.recurringSwitch);
         addFriendSwitch = view.findViewById(R.id.transactionFriendSwitch);
@@ -302,13 +309,27 @@ public class UpdateTransaction extends Fragment {
         String[] dropdownItems = new String[]{"Expense", "Income"};
         dropdownTransactionType.setText(dropdownItems[updateTransaction.getType() - 1]);
 
+        if (updateTransaction.getType() == 2) {
+            tilCategory.setVisibility(view.GONE);
+            textCategory.setVisibility(view.GONE);
+        }
+
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Select the transaction type")
                 .setItems(dropdownItems, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
                         dropdownTransactionType.setText(dropdownItems[which]);
-
+                        if (dropdownTransactionType.getText().toString().equals("Income")) {
+                            tilCategory.setVisibility(view.GONE);
+                            textCategory.setVisibility(view.GONE);
+                            dropdownTransactionCategory.setText("Income");
+                        } else {
+                            tilCategory.setVisibility(view.VISIBLE);
+                            textCategory.setVisibility(view.VISIBLE);
+                            String defaultCategory = defaultsViewModel.getDefaultValue("Category");
+                            dropdownTransactionCategory.setText(defaultCategory);
+                        }
                     }
                 });
 
@@ -724,9 +745,7 @@ public class UpdateTransaction extends Fragment {
         if (!checkTransactionDate()) {
             return;
         }
-        if (!checkTransactionCategory()) {
-            return;
-        }
+
         convertTransactionType();
         convertTransactionMethod();
 

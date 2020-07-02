@@ -27,6 +27,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -73,6 +74,7 @@ import java.util.Locale;
 public class AddTransactionFragment extends Fragment {
     private TextInputEditText tiedtTransactionAmount, tiedtTransactionNote;
     private TextInputEditText customRecurringDaysInterval;
+    private TextView textCategory;
     private TextInputLayout tilTransactionAmount, tilTransactionNote, tilCustomRecurringDaysInterval, tilCategory;
     private boolean isTransactionRecurring;
     private int transactionType;
@@ -123,6 +125,7 @@ public class AddTransactionFragment extends Fragment {
         tilTransactionAmount = view.findViewById(R.id.til_transactionAmount);
         tilTransactionNote = view.findViewById(R.id.til_transactionNote);
         tilCategory = view.findViewById(R.id.tilCategory);
+        textCategory = view.findViewById(R.id.categoryText);
         tilCustomRecurringDaysInterval = view.findViewById(R.id.til_customRecurringDaysInterval);
         recurringSwitch = view.findViewById(R.id.recurringSwitch);
         addFriendSwitch = view.findViewById(R.id.transactionFriendSwitch);
@@ -532,7 +535,16 @@ public class AddTransactionFragment extends Fragment {
                     @Override
                     public void onClick(final DialogInterface dialog, final int which) {
                         dropdownTransactionType.setText(dropdownItems[which]);
-
+                        if (dropdownTransactionType.getText().toString().equals("Income")) {
+                            tilCategory.setVisibility(view.GONE);
+                            textCategory.setVisibility(view.GONE);
+                            dropdownTransactionCategory.setText("Income");
+                        } else {
+                            tilCategory.setVisibility(view.VISIBLE);
+                            textCategory.setVisibility(view.VISIBLE);
+                            String defaultCategory = defaultsViewModel.getDefaultValue("Category");
+                            dropdownTransactionCategory.setText(defaultCategory);
+                        }
                     }
                 });
 
@@ -986,8 +998,10 @@ public class AddTransactionFragment extends Fragment {
         if (!checkRecurringConditions()) {
             return;
         }
-        if (!checkTransactionCategory()) {
-            return;
+        if (!dropdownTransactionType.getText().toString().equals("Income")) {
+            if (!checkTransactionCategory()) {
+                return;
+            }
         }
         convertTransactionType();
         convertTransactionMethod();
