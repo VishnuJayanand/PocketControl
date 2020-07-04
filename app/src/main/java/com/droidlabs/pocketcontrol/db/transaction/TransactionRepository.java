@@ -147,6 +147,36 @@ public class TransactionRepository {
     }
 
     /**
+     * Retrieve the highest transaction amount..
+     * @return the highest transaction amount.
+     */
+    public Float getTransactionIdByHighestExpenseAmount() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTransactionIdByHighestExpenseAmount(currentUserId, currentAccountId);
+    }
+
+    /**
+     * Retrieve the highest transaction amount..
+     * @return the highest transaction amount.
+     */
+    public Float getTransactionIdByHighestIncomeAmount() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTransactionIdByHighestIncomeAmount(currentUserId, currentAccountId);
+    }
+
+    /**
      * Get sum of transaction income amount by categoryID.
      * @return sum of transaction income amount with matching categoryId
      */

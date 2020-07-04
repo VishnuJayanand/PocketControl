@@ -147,6 +147,30 @@ public interface TransactionDao {
     float getTotalIExpenseByAccountId(String ownerId, String accountId);
 
     /**
+     * Retrieve the highest transaction amount.
+     * @param ownerId owner id.
+     * @param accountId account id.
+     * @return the transaction id.
+     */
+    @Query("SELECT id, MAX(amount) FROM transactions "
+            + "WHERE owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "AND type = 1")
+    float getTransactionIdByHighestExpenseAmount(String ownerId, String accountId);
+
+    /**
+     * Retrieve the highest transaction amount.
+     * @param ownerId owner id.
+     * @param accountId account id.
+     * @return the transaction id.
+     */
+    @Query("SELECT id, MAX(amount) FROM transactions "
+            + "WHERE owner_id=:ownerId "
+            + "AND account=:accountId "
+            + "AND type = 2")
+    float getTransactionIdByHighestIncomeAmount(String ownerId, String accountId);
+
+    /**
      * Retrieve sum of transaction income amount for a specified category.
      * @param ownerId owner id.
      * @return sum of transaction income amount with matching categoryId

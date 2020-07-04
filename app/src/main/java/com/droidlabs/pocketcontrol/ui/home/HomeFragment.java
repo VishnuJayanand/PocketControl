@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,9 +19,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.account.Account;
+import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.ui.signin.UserViewModel;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
@@ -30,12 +34,13 @@ import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
 
     private Animation topAnimation;
-    private TextView textViewAmount, textViewNetBalance, selectedAccountTitle;
+    private TextView textViewAmount, textViewNetBalance, selectedAccountTitle, summary;
     private TextView accountIncomeText, accountExpenseText, accountBalanceText;
     private CardView selectedAccountColor;
     private List<Account> accountList;
@@ -46,8 +51,11 @@ public class HomeFragment extends Fragment {
     private MaterialAlertDialogBuilder dialogBuilder;
     private SharedPreferencesUtils sharedPreferencesUtils;
     private TransactionViewModel transactionViewModel;
+    private CategoryViewModel categoryViewModel;
     private DefaultsViewModel defaultsViewModel;
     private String stringCurrency;
+    private RecyclerView featuredRecycler;
+    private RecyclerView.Adapter adapter;
 
     @Nullable
     @Override
@@ -78,6 +86,9 @@ public class HomeFragment extends Fragment {
         textViewAmount.setAnimation(topAnimation);
         textViewNetBalance.setAnimation(topAnimation);
 
+        summary = view.findViewById(R.id.home_summary);
+        summary.setVisibility(view.GONE);
+
         String stringCurrencyCode = defaultsViewModel.getDefaultValue("Currency");
         stringCurrency = defaultsViewModel.getCurrencySymbol(stringCurrencyCode);
 
@@ -96,6 +107,7 @@ public class HomeFragment extends Fragment {
         });
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
 
         transactionViewModel.setCategoryFilter(false, "-1");
         calculateAccountBalances();
@@ -121,7 +133,84 @@ public class HomeFragment extends Fragment {
 
         updateSelectedAccountInformation();
 
+        //Hooks
+        featuredRecycler = view.findViewById(R.id.featured_recycler);
+
+        featuredRecycler(view);
+
         return view;
+    }
+
+    /**
+     * Populate card view.
+     * @param rView view
+     */
+    private void featuredRecycler(final View rView) {
+
+        featuredRecycler.setHasFixedSize(true);
+        featuredRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        ArrayList<FeaturedHelperClass> featuredLocation = new ArrayList<>();
+
+        //Top Spent Transaction
+        Float transactionExpenseId = 0f;
+        transactionExpenseId = transactionViewModel.getTransactionIdByHighestExpenseAmount();
+
+        if (transactionExpenseId != 0) {
+            Transaction transaction = transactionViewModel.getTransactionById(transactionExpenseId.longValue());
+            Category category = categoryViewModel.getSingleCategory(Integer.parseInt(transaction.getCategory()));
+
+            String amount = CurrencyUtils.formatAmount(transaction.getAmount(), stringCurrency);
+            String categoryName = category.getName();
+            int icon = category.getIcon();
+
+            summary.setVisibility(rView.VISIBLE);
+            featuredLocation.add(new FeaturedHelperClass("Top Spent Transaction", categoryName, amount, icon));
+
+        }
+
+        //Top spend Category
+        Float sumTotal = 0f;
+        String name = "";
+        int iconc = 0;
+        List<Category> listCat = categoryViewModel.getAllCategories();
+        if (listCat != null) {
+            for (Category cat : listCat) {
+                if (!cat.getName().equalsIgnoreCase("Income")) {
+                    if (sumTotal <= transactionViewModel.getTotalIAmountByCategoryId(cat.getId().toString())) {
+                        sumTotal = transactionViewModel.getTotalIAmountByCategoryId(cat.getId().toString());
+                        name = cat.getName();
+                        iconc = cat.getIcon();
+                    }
+                }
+            }
+            if (sumTotal != 0) {
+                summary.setVisibility(rView.VISIBLE);
+                String amount = CurrencyUtils.formatAmount(sumTotal, stringCurrency);
+                featuredLocation.add(new FeaturedHelperClass("Top Spent Category", name, amount, iconc));
+            }
+
+        }
+
+        //Highest Income
+        Float transactionIncomeId = 0f;
+        transactionIncomeId = transactionViewModel.getTransactionIdByHighestIncomeAmount();
+
+        if (transactionIncomeId != 0) {
+            Transaction transaction = transactionViewModel.getTransactionById(transactionIncomeId.longValue());
+
+            String amount = CurrencyUtils.formatAmount(transaction.getAmount(), stringCurrency);
+            String categoryName = "Income";
+            int icon = R.drawable.category_icons_saving;
+
+            summary.setVisibility(rView.VISIBLE);
+            featuredLocation.add(new FeaturedHelperClass("Highest Income", categoryName, amount, icon));
+
+        }
+
+        adapter = new FeaturedAdapter(featuredLocation);
+
+        featuredRecycler.setAdapter(adapter);
     }
 
     /**
@@ -159,6 +248,12 @@ public class HomeFragment extends Fragment {
 
                         updateSelectedAccountInformation();
                         calculateAccountBalances();
+
+                        Fragment fragment = new HomeFragment();
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment_container, fragment);
+                        fragmentTransaction.commit();
                     }
                 });
     }

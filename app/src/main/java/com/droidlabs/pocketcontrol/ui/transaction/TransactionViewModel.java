@@ -140,6 +140,22 @@ public class TransactionViewModel extends AndroidViewModel {
     }
 
     /**
+     * Get transaction id for highest expense amount.
+     * @return transaction id.
+     */
+    public Float getTransactionIdByHighestExpenseAmount() {
+        return repository.getTransactionIdByHighestExpenseAmount();
+    }
+
+    /**
+     * Get transaction id for highest expense amount.
+     * @return transaction id.
+     */
+    public Float getTransactionIdByHighestIncomeAmount() {
+        return repository.getTransactionIdByHighestIncomeAmount();
+    }
+
+    /**
      * Get total income by user id.
      * @return total income.
      */
