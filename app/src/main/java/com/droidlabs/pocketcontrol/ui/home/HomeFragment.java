@@ -25,16 +25,36 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.account.Account;
 import com.droidlabs.pocketcontrol.db.category.Category;
+import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerCategory;
+import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerDay;
+import com.droidlabs.pocketcontrol.db.chartdata.TotalIncomePerDay;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.ui.signin.UserViewModel;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
+import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -54,8 +74,15 @@ public class HomeFragment extends Fragment {
     private CategoryViewModel categoryViewModel;
     private DefaultsViewModel defaultsViewModel;
     private String stringCurrency;
+    private LinearLayout summaryContainer;
     private RecyclerView featuredRecycler;
     private RecyclerView.Adapter adapter;
+
+    private LinearLayout barChartContainer;
+    private HorizontalBarChart barChartCategoryExpenditure;
+
+    private LinearLayout lineChartContainer;
+    private LineChart lineChartIncomeExpenditure;
 
     @Nullable
     @Override
@@ -64,6 +91,12 @@ public class HomeFragment extends Fragment {
         View view = inf.inflate(R.layout.fragment_home, container, false);
 
         defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
+
+        barChartContainer = view.findViewById(R.id.chartContainer);
+        barChartCategoryExpenditure = view.findViewById(R.id.barChartCategoryExpenditure);
+
+        lineChartContainer = view.findViewById(R.id.lineChartContainer);
+        lineChartIncomeExpenditure = view.findViewById(R.id.lineChartIncomeExpenditure);
 
         LinearLayout accountsWrapper = view.findViewById(R.id.accountsWrapper);
         Button switchAccount = accountsWrapper.findViewById(R.id.switchAccountButton);
@@ -86,6 +119,7 @@ public class HomeFragment extends Fragment {
         textViewAmount.setAnimation(topAnimation);
         textViewNetBalance.setAnimation(topAnimation);
 
+        summaryContainer = view.findViewById(R.id.summaryContainer);
         summary = view.findViewById(R.id.home_summary);
         summary.setVisibility(view.GONE);
 
@@ -138,6 +172,9 @@ public class HomeFragment extends Fragment {
 
         featuredRecycler(view);
 
+        initializeBarChartCategoryExpenditure();
+        initializeLineChartExpenditureIncomes();
+
         return view;
     }
 
@@ -165,6 +202,7 @@ public class HomeFragment extends Fragment {
             int icon = category.getIcon();
 
             summary.setVisibility(rView.VISIBLE);
+            summaryContainer.setVisibility(View.VISIBLE);
             featuredLocation.add(new FeaturedHelperClass("Top Spent Transaction", categoryName, amount, icon));
 
         }
@@ -186,6 +224,7 @@ public class HomeFragment extends Fragment {
             }
             if (sumTotal != 0) {
                 summary.setVisibility(rView.VISIBLE);
+                summaryContainer.setVisibility(View.VISIBLE);
                 String amount = CurrencyUtils.formatAmount(sumTotal, stringCurrency);
                 featuredLocation.add(new FeaturedHelperClass("Top Spent Category", name, amount, iconc));
             }
@@ -204,6 +243,7 @@ public class HomeFragment extends Fragment {
             int icon = R.drawable.category_icons_saving;
 
             summary.setVisibility(rView.VISIBLE);
+            summaryContainer.setVisibility(View.VISIBLE);
             featuredLocation.add(new FeaturedHelperClass("Highest Income", categoryName, amount, icon));
 
         }
@@ -275,5 +315,215 @@ public class HomeFragment extends Fragment {
             selectedAccountColor.setCardBackgroundColor(getResources().getColor(R.color.projectColorDefault, null));
         }
 
+    }
+
+    /**
+     * Initialize bar chart.
+     */
+    private void initializeBarChartCategoryExpenditure() {
+        List<BarEntry> barChartData = new ArrayList<>();
+        List<TotalExpenditurePerCategory> listTotalExpenditurePerCategory = transactionViewModel
+                .getTotalExpenditurePerCategory();
+
+        if (listTotalExpenditurePerCategory.size() == 0) {
+            barChartContainer.setVisibility(View.GONE);
+            return;
+        } else {
+            barChartContainer.setVisibility(View.VISIBLE);
+        }
+
+        HashMap<Integer, TotalExpenditurePerCategory> parsedCategories = parseCategoryAmounts(
+                listTotalExpenditurePerCategory
+        );
+
+        for (HashMap.Entry<Integer, TotalExpenditurePerCategory> entry : parsedCategories.entrySet()) {
+            barChartData.add(new BarEntry(entry.getKey(), entry.getValue().getCategoryAmount()));
+        }
+
+        BarDataSet barDataSet = new BarDataSet(barChartData, "");
+        barDataSet.setForm(Legend.LegendForm.NONE);
+        barDataSet.setColor(getContext().getColor(R.color.colorExpense));
+
+        BarData barData = new BarData(barDataSet);
+        barData.setBarWidth(0.9f);
+        barData.setValueTextSize(12f);
+        barData.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(final float value) {
+                String stringCurrencyCode = defaultsViewModel.getDefaultValue("Currency");
+                String currency = defaultsViewModel.getCurrencySymbol(stringCurrencyCode);
+                return CurrencyUtils.formatAmount(value, currency, value > 999999);
+            }
+        });
+
+        //to hide right Y and top X border
+        YAxis rightYAxis = barChartCategoryExpenditure.getAxisRight();
+        rightYAxis.setAxisMinimum(0f);
+        rightYAxis.setAxisMaximum(barData.getYMax() * 1.5f);
+        rightYAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(final float value) {
+                String stringCurrencyCode = defaultsViewModel.getDefaultValue("Currency");
+                String currency = defaultsViewModel.getCurrencySymbol(stringCurrencyCode);
+                return CurrencyUtils.formatAmount(value, currency, value > 999999);
+            }
+        });
+
+        YAxis leftYAxis = barChartCategoryExpenditure.getAxisLeft();
+        leftYAxis.setEnabled(false);
+        leftYAxis.setDrawGridLines(false);
+        leftYAxis.setAxisMinimum(0f);
+        leftYAxis.setAxisMaximum(barData.getYMax() * 1.5f);
+
+        XAxis xAxis = barChartCategoryExpenditure.getXAxis();
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f);
+
+        // X-Axis styling
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(final float value) {
+                TotalExpenditurePerCategory totalExpenditure = parsedCategories.get((int) value);
+
+                if (totalExpenditure != null) {
+                    String categoryIndex = String.valueOf(totalExpenditure.getCategoryId());
+                    return StringUtils
+                            .abbreviate(
+                                    categoryViewModel.getSingleCategory(
+                                            Integer.parseInt(categoryIndex)
+                                    ).getName(),
+                                    15
+                            );
+                }
+
+                return "";
+            }
+        });
+
+        if (parsedCategories.size() * 100 < 250) {
+            barChartCategoryExpenditure.setMinimumHeight(250);
+        } else {
+            barChartCategoryExpenditure.setMinimumHeight(parsedCategories.size() * 100);
+        }
+
+        barChartCategoryExpenditure.setData(barData);
+        barChartCategoryExpenditure.getDescription().setEnabled(false);
+        barChartCategoryExpenditure.setNoDataText("No data available! Add transactions to visualize the chart");
+        barChartCategoryExpenditure.invalidate();
+    }
+
+    /**
+     * HashMap category amount parser.
+     * @param expenditures list of expenditures.
+     * @return hashmap with continuous integer keys.
+     */
+    private HashMap<Integer, TotalExpenditurePerCategory> parseCategoryAmounts(
+            final List<TotalExpenditurePerCategory> expenditures
+    ) {
+        HashMap<Integer, TotalExpenditurePerCategory> finalHashMap = new HashMap<>();
+        int counter = 0;
+
+        for (TotalExpenditurePerCategory expenditure : expenditures) {
+            finalHashMap.put(counter, expenditure);
+            counter++;
+        }
+
+        return finalHashMap;
+    }
+
+    /**
+     * Initialize line chart.
+     */
+    private void initializeLineChartExpenditureIncomes() {
+        Calendar endDate = DateUtils.getStartOfCurrentDay();
+        Calendar startDate = DateUtils.getStartOfCurrentDay();
+
+        startDate.add(Calendar.DAY_OF_YEAR, -30);
+
+        List<TotalExpenditurePerDay> listTotalExpenditurePerDay = transactionViewModel
+                .getTotalExpenditurePerDay(startDate.getTimeInMillis(), endDate.getTimeInMillis());
+        List<TotalIncomePerDay> listTotalIncomePerDay = transactionViewModel
+                .getTotalIncomePerDay(startDate.getTimeInMillis(), endDate.getTimeInMillis());
+
+        HashMap<Long, Float> expenditureHashMap = new HashMap<>();
+        HashMap<Long, Float> incomeHashMap = new HashMap<>();
+
+        for (TotalExpenditurePerDay expenditurePerDay : listTotalExpenditurePerDay) {
+            expenditureHashMap.put(expenditurePerDay.getDate(), expenditurePerDay.getTotalExpenditure());
+        }
+
+        for (TotalIncomePerDay incomePerDay : listTotalIncomePerDay) {
+            incomeHashMap.put(incomePerDay.getDate(), incomePerDay.getTotalIncome());
+        }
+
+        List<Entry> lineDataTotalIncome = new ArrayList<>();
+        List<Entry> lineDataTotalExpenditure = new ArrayList<>();
+
+        float sumTotalIncome = 0;
+        float sumTotalExpenditure = 0;
+        Calendar currentDate = startDate;
+
+        for (int i = 30; i >= 0; i--) {
+            Float expenditurePerDay = expenditureHashMap.get(currentDate.getTimeInMillis());
+            Float incomePerDay = incomeHashMap.get(currentDate.getTimeInMillis());
+
+            if (expenditurePerDay != null) {
+                sumTotalExpenditure += expenditurePerDay;
+            }
+
+            if (incomePerDay != null) {
+                sumTotalIncome += incomePerDay;
+            }
+
+            lineDataTotalExpenditure.add(new Entry(currentDate.getTimeInMillis(), sumTotalExpenditure));
+            lineDataTotalIncome.add(new Entry(currentDate.getTimeInMillis(), sumTotalIncome));
+
+            currentDate.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        LineDataSet incomeDataSet = new LineDataSet(lineDataTotalIncome, "Cumulative income");
+        LineDataSet expenditureDataSet = new LineDataSet(lineDataTotalExpenditure, "Cumulative expenditure");
+
+        incomeDataSet.setDrawValues(false);
+        incomeDataSet.setColor(getContext().getColor(R.color.colorIncome));
+        incomeDataSet.setCircleColor(getContext().getColor(R.color.colorIncome));
+
+        expenditureDataSet.setDrawValues(false);
+        expenditureDataSet.setColor(getContext().getColor(R.color.colorExpense));
+        expenditureDataSet.setCircleColor(getContext().getColor(R.color.colorExpense));
+
+        LineData lineData = new LineData(incomeDataSet, expenditureDataSet);
+
+        YAxis rightYAxis = lineChartIncomeExpenditure.getAxisRight();
+        rightYAxis.setEnabled(false);
+        rightYAxis.setDrawGridLines(false);
+        rightYAxis.setAxisMinimum(0);
+
+        YAxis leftYAxis = lineChartIncomeExpenditure.getAxisLeft();
+        leftYAxis.setAxisMinimum(0);
+        leftYAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(final float value) {
+                String stringCurrencyCode = defaultsViewModel.getDefaultValue("Currency");
+                String currency = defaultsViewModel.getCurrencySymbol(stringCurrencyCode);
+                return CurrencyUtils.formatAmount(value, currency, value > 999999);
+            }
+        });
+
+        XAxis xAxis = lineChartIncomeExpenditure.getXAxis();
+
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(final float value) {
+                return DateUtils.formatDate((long) value, "dd-MM");
+            }
+        });
+
+        lineChartIncomeExpenditure.setMinimumHeight(600);
+        lineChartIncomeExpenditure.setData(lineData);
+        lineChartIncomeExpenditure.getDescription().setEnabled(false);
+        lineChartIncomeExpenditure.invalidate();
     }
 }

@@ -30,4 +30,19 @@ public final class CurrencyUtils {
     public static String formatAmount(final float amount, final String currency) {
         return String.format(DEFAULT_LOCALE, currency + " %.2f", amount);
     }
+
+    /**
+     * Formats amount with custom currency.
+     * @param amount amount to be formatted.
+     * @param currency currency to be used.
+     * @param scientificNotation whether to return result in scientific notation.
+     * @return formatted amount.
+     */
+    public static String formatAmount(final float amount, final String currency, final boolean scientificNotation) {
+        if (scientificNotation) {
+            return String.format(DEFAULT_LOCALE, currency + " %.2e", amount);
+        } else {
+            return String.format(DEFAULT_LOCALE, currency + " %.2f", amount);
+        }
+    }
 }

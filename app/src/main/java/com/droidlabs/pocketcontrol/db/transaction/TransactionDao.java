@@ -6,6 +6,10 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerCategory;
+import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerDay;
+import com.droidlabs.pocketcontrol.db.chartdata.TotalIncomePerDay;
+
 import java.util.List;
 
 @Dao
@@ -364,4 +368,51 @@ public interface TransactionDao {
             String ownerId,
             String accountId
     );
+
+    /**
+     * Get total expenditure per category.
+     * @param ownerId owner id.
+     * @param accountId account id.
+     * @return total expenditure.
+     */
+    @Query("SELECT category as categoryId, SUM(amount) as categoryAmount "
+            + "FROM transactions "
+            + "WHERE owner_id=:ownerId AND account=:accountId AND type = 1 "
+            + "GROUP BY category ORDER BY categoryAmount ASC LIMIT 5")
+    List<TotalExpenditurePerCategory> getTotalExpenditurePerCategory(String ownerId, String accountId);
+
+    /**
+     * Get total expenditure per day for a day interval.
+     * @param ownerId owner id.
+     * @param accountId account id.
+     * @param startDate start date.
+     * @param endDate end date.
+     * @return total expenditure.
+     */
+    @Query("SELECT date, SUM(amount) as totalExpenditure "
+            + "FROM transactions "
+            + "WHERE owner_id=:ownerId AND account=:accountId AND type = 1 "
+            + "AND date BETWEEN :startDate AND :endDate "
+            + "GROUP BY date ORDER BY date DESC LIMIT 30")
+    List<TotalExpenditurePerDay> getTotalExpenditurePerDay(
+            String ownerId,
+            String accountId,
+            Long startDate,
+            Long endDate
+    );
+
+    /**
+     * Get total income per day for a day interval.
+     * @param ownerId owner id.
+     * @param accountId account id.
+     * @param startDate start date.
+     * @param endDate end date.
+     * @return total income.
+     */
+    @Query("SELECT date, SUM(amount) as totalIncome "
+            + "FROM transactions "
+            + "WHERE owner_id=:ownerId AND account=:accountId AND type = 2 "
+            + "AND date BETWEEN :startDate AND :endDate "
+            + "GROUP BY date ORDER BY date DESC LIMIT 30")
+    List<TotalIncomePerDay> getTotalIncomePerDay(String ownerId, String accountId, Long startDate, Long endDate);
 }
