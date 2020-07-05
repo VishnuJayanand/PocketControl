@@ -29,7 +29,6 @@ import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerCategory;
 import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerDay;
 import com.droidlabs.pocketcontrol.db.chartdata.TotalIncomePerDay;
-import com.droidlabs.pocketcontrol.db.defaults.Defaults;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
@@ -267,9 +266,8 @@ public class HomeFragment extends Fragment {
         ArrayList<InfoTipHelperClass> infoTipLocation = new ArrayList<>();
 
         List<Transaction> listTransaction = transactionViewModel.getTransactionsForExport();
-        List<Budget> listBudget = budgetViewModel.getBudgetsForExport();
-        List<Category> listCategory = categoryViewModel.getCategoriesForExport();
-        List<Defaults> listDefaults = defaultsViewModel.getAllDefaults();
+        List<Budget> listBudget = budgetViewModel.getAllBudgets();
+        List<Category> listCategory = categoryViewModel.getAllCategories();
 
         if (listBudget.isEmpty()) {
             infoTipContainer.setVisibility(rView.VISIBLE);
