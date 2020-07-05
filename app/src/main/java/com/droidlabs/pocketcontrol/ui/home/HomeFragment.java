@@ -29,7 +29,6 @@ import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerCategory;
 import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerDay;
 import com.droidlabs.pocketcontrol.db.chartdata.TotalIncomePerDay;
-import com.droidlabs.pocketcontrol.db.defaults.Defaults;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
@@ -57,6 +56,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -267,9 +267,8 @@ public class HomeFragment extends Fragment {
         ArrayList<InfoTipHelperClass> infoTipLocation = new ArrayList<>();
 
         List<Transaction> listTransaction = transactionViewModel.getTransactionsForExport();
-        List<Budget> listBudget = budgetViewModel.getBudgetsForExport();
-        List<Category> listCategory = categoryViewModel.getCategoriesForExport();
-        List<Defaults> listDefaults = defaultsViewModel.getAllDefaults();
+        List<Budget> listBudget = budgetViewModel.getAllBudgets();
+        List<Category> listCategory = categoryViewModel.getAllCategories();
 
         if (listBudget.isEmpty()) {
             infoTipContainer.setVisibility(rView.VISIBLE);
@@ -310,8 +309,8 @@ public class HomeFragment extends Fragment {
         defaultCategoryList.add("Food");
         defaultCategoryList.add("Transport");
         defaultCategoryList.add("Shopping");
-        defaultCategoryList.add("Study");
         defaultCategoryList.add("Rent");
+        defaultCategoryList.add("Study");
         defaultCategoryList.add("Income");
 
         for (Category category : listCategory) {
@@ -320,10 +319,13 @@ public class HomeFragment extends Fragment {
 
         }
 
+        Collections.sort(defaultCategoryList);
+        Collections.sort(defaultCategoryListObtained);
+
         if (defaultCategoryList.equals(defaultCategoryListObtained)) {
             infoTipContainer.setVisibility(rView.VISIBLE);
             infoTipLocation.add(new InfoTipHelperClass("Custom Category",
-                    "Try setting defaults in settings screen to ease transaction addition"));
+                    "Create custom categories and add transactions to it"));
         }
 
         String defaultCurrency = defaultsViewModel.getDefaultValue("Currency");
