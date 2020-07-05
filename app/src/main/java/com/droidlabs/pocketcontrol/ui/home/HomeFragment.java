@@ -60,7 +60,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private Animation topAnimation;
-    private TextView textViewAmount, textViewNetBalance, selectedAccountTitle, summary;
+    private TextView textViewAmount, textViewNetBalance, selectedAccountTitle;
     private TextView accountIncomeText, accountExpenseText, accountBalanceText;
     private CardView selectedAccountColor;
     private List<Account> accountList;
@@ -74,9 +74,9 @@ public class HomeFragment extends Fragment {
     private CategoryViewModel categoryViewModel;
     private DefaultsViewModel defaultsViewModel;
     private String stringCurrency;
-    private LinearLayout summaryContainer;
-    private RecyclerView featuredRecycler;
-    private RecyclerView.Adapter adapter;
+    private LinearLayout summaryContainer, infoTipContainer;
+    private RecyclerView featuredRecycler, infoTipRecycler;
+    private RecyclerView.Adapter adapter, infoAdapter;
 
     private LinearLayout barChartContainer;
     private HorizontalBarChart barChartCategoryExpenditure;
@@ -120,8 +120,7 @@ public class HomeFragment extends Fragment {
         textViewNetBalance.setAnimation(topAnimation);
 
         summaryContainer = view.findViewById(R.id.summaryContainer);
-        summary = view.findViewById(R.id.home_summary);
-        summary.setVisibility(view.GONE);
+        infoTipContainer = view.findViewById(R.id.home_infoTips);
 
         String stringCurrencyCode = defaultsViewModel.getDefaultValue("Currency");
         stringCurrency = defaultsViewModel.getCurrencySymbol(stringCurrencyCode);
@@ -169,8 +168,10 @@ public class HomeFragment extends Fragment {
 
         //Hooks
         featuredRecycler = view.findViewById(R.id.featured_recycler);
+        infoTipRecycler = view.findViewById(R.id.infoTips_recycler);
 
         featuredRecycler(view);
+        infoTipRecycler(view);
 
         initializeBarChartCategoryExpenditure();
         initializeLineChartExpenditureIncomes();
@@ -201,7 +202,6 @@ public class HomeFragment extends Fragment {
             String categoryName = category.getName();
             int icon = category.getIcon();
 
-            summary.setVisibility(rView.VISIBLE);
             summaryContainer.setVisibility(View.VISIBLE);
             featuredLocation.add(new FeaturedHelperClass("Top Spent Transaction", categoryName, amount, icon));
 
@@ -223,7 +223,6 @@ public class HomeFragment extends Fragment {
                 }
             }
             if (sumTotal != 0) {
-                summary.setVisibility(rView.VISIBLE);
                 summaryContainer.setVisibility(View.VISIBLE);
                 String amount = CurrencyUtils.formatAmount(sumTotal, stringCurrency);
                 featuredLocation.add(new FeaturedHelperClass("Top Spent Category", name, amount, iconc));
@@ -242,7 +241,6 @@ public class HomeFragment extends Fragment {
             String categoryName = "Income";
             int icon = R.drawable.category_icons_saving;
 
-            summary.setVisibility(rView.VISIBLE);
             summaryContainer.setVisibility(View.VISIBLE);
             featuredLocation.add(new FeaturedHelperClass("Highest Income", categoryName, amount, icon));
 
@@ -251,6 +249,27 @@ public class HomeFragment extends Fragment {
         adapter = new FeaturedAdapter(featuredLocation);
 
         featuredRecycler.setAdapter(adapter);
+    }
+
+    /**
+     * Populate card view.
+     * @param rView view
+     */
+    private void infoTipRecycler(final View rView) {
+
+        infoTipContainer.setVisibility(rView.VISIBLE);
+
+        infoTipRecycler.setHasFixedSize(true);
+        infoTipRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+
+        ArrayList<InfoTipHelperClass> infoTipLocation = new ArrayList<>();
+        infoTipLocation.add(new InfoTipHelperClass("Budget", "Try setting a budget to monitor your expenses"));
+
+
+        infoAdapter = new InfoTipAdapter(infoTipLocation);
+
+        infoTipRecycler.setAdapter(infoAdapter);
+
     }
 
     /**
