@@ -5,6 +5,9 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import com.droidlabs.pocketcontrol.db.PocketControlDB;
+import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerCategory;
+import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerDay;
+import com.droidlabs.pocketcontrol.db.chartdata.TotalIncomePerDay;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 
 import java.util.List;
@@ -421,5 +424,54 @@ public class TransactionRepository {
         transactionDao.deleteTransaction(
                 transactionId, currentUserId, currentAccountId
         );
+    }
+
+    /**
+     * Get total expenditure per category.
+     * @return total expenditure.
+     */
+    public List<TotalExpenditurePerCategory> getTotalExpenditurePerCategory() {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTotalExpenditurePerCategory(currentUserId, currentAccountId);
+    }
+
+    /**
+     * Get total income per day for a day interval.
+     * @param startDate start date.
+     * @param endDate end date.
+     * @return total income.
+     */
+    public List<TotalIncomePerDay> getTotalIncomePerDay(final Long startDate, final Long endDate) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTotalIncomePerDay(currentUserId, currentAccountId, startDate, endDate);
+    }
+
+    /**
+     * Get total expenditure per day for a day interval.
+     * @param startDate start date.
+     * @param endDate end date.
+     * @return total expenditure.
+     */
+    public List<TotalExpenditurePerDay> getTotalExpenditurePerDay(final Long startDate, final Long endDate) {
+        String currentUserId = sharedPreferencesUtils.getCurrentUserId();
+        String currentAccountId = sharedPreferencesUtils.getCurrentAccountIdKey();
+
+        if (currentUserId.equals("")) {
+            return null;
+        }
+
+        return transactionDao.getTotalExpenditurePerDay(currentUserId, currentAccountId, startDate, endDate);
     }
 }

@@ -8,6 +8,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
+import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerCategory;
+import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerDay;
+import com.droidlabs.pocketcontrol.db.chartdata.TotalIncomePerDay;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.db.transaction.TransactionRepository;
 
@@ -228,6 +231,34 @@ public class TransactionViewModel extends AndroidViewModel {
         repository.deleteTransaction(
                 transactionId
         );
+    }
+
+    /**
+     * Get total expenditure by category.
+     * @return total expenditure.
+     */
+    public List<TotalExpenditurePerCategory> getTotalExpenditurePerCategory() {
+        return repository.getTotalExpenditurePerCategory();
+    }
+
+    /**
+     * Get total expenditure by day.
+     * @param startDate start date.
+     * @param endDate end date.
+     * @return total expenditure.
+     */
+    public List<TotalExpenditurePerDay> getTotalExpenditurePerDay(final Long startDate, final Long endDate) {
+        return repository.getTotalExpenditurePerDay(startDate, endDate);
+    }
+
+    /**
+     * Get total income by day.
+     * @param startDate start date.
+     * @param endDate end date.
+     * @return total income.
+     */
+    public List<TotalIncomePerDay> getTotalIncomePerDay(final Long startDate, final Long endDate) {
+        return repository.getTotalIncomePerDay(startDate, endDate);
     }
 
     /**
