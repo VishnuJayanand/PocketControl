@@ -56,6 +56,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -308,8 +309,8 @@ public class HomeFragment extends Fragment {
         defaultCategoryList.add("Food");
         defaultCategoryList.add("Transport");
         defaultCategoryList.add("Shopping");
-        defaultCategoryList.add("Study");
         defaultCategoryList.add("Rent");
+        defaultCategoryList.add("Study");
         defaultCategoryList.add("Income");
 
         for (Category category : listCategory) {
@@ -317,6 +318,9 @@ public class HomeFragment extends Fragment {
             defaultCategoryListObtained.add(catName);
 
         }
+
+        Collections.sort(defaultCategoryList);
+        Collections.sort(defaultCategoryListObtained);
 
         if (defaultCategoryList.equals(defaultCategoryListObtained)) {
             infoTipContainer.setVisibility(rView.VISIBLE);
