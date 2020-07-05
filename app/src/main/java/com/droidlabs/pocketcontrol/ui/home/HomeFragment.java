@@ -24,11 +24,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.account.Account;
+import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
 import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerCategory;
 import com.droidlabs.pocketcontrol.db.chartdata.TotalExpenditurePerDay;
 import com.droidlabs.pocketcontrol.db.chartdata.TotalIncomePerDay;
+import com.droidlabs.pocketcontrol.db.defaults.Defaults;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
+import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.ui.signin.UserViewModel;
@@ -73,6 +76,7 @@ public class HomeFragment extends Fragment {
     private TransactionViewModel transactionViewModel;
     private CategoryViewModel categoryViewModel;
     private DefaultsViewModel defaultsViewModel;
+    private BudgetViewModel budgetViewModel;
     private String stringCurrency;
     private LinearLayout summaryContainer, infoTipContainer;
     private RecyclerView featuredRecycler, infoTipRecycler;
@@ -91,6 +95,7 @@ public class HomeFragment extends Fragment {
         View view = inf.inflate(R.layout.fragment_home, container, false);
 
         defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
+        budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
 
         barChartContainer = view.findViewById(R.id.chartContainer);
         barChartCategoryExpenditure = view.findViewById(R.id.barChartCategoryExpenditure);
@@ -257,17 +262,94 @@ public class HomeFragment extends Fragment {
      */
     private void infoTipRecycler(final View rView) {
 
-        infoTipContainer.setVisibility(rView.VISIBLE);
-
         infoTipRecycler.setHasFixedSize(true);
         infoTipRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
         ArrayList<InfoTipHelperClass> infoTipLocation = new ArrayList<>();
-        infoTipLocation.add(new InfoTipHelperClass("Budget", "Try setting a budget to monitor your expenses"));
+
+        List<Transaction> listTransaction = transactionViewModel.getTransactionsForExport();
+        List<Budget> listBudget = budgetViewModel.getBudgetsForExport();
+        List<Category> listCategory = categoryViewModel.getCategoriesForExport();
+        List<Defaults> listDefaults = defaultsViewModel.getAllDefaults();
+
+        if (listBudget.isEmpty()) {
+            infoTipContainer.setVisibility(rView.VISIBLE);
+            infoTipLocation.add(new InfoTipHelperClass("Budget", "Try setting a budget to monitor your expenses"));
+        } else {
+            if (!listTransaction.isEmpty()) {
+
+                for (Category category : listCategory) {
+                    String catId = category.getId().toString();
+                    Budget budget = budgetViewModel.getBudgetForCategory(catId);
+                    String catName = category.getName();
+
+                    if (budget != null) {
+                        Float budgetAmount = budget.getMaxAmount();
+                        Float totalAmount = transactionViewModel.getTotalIAmountByCategoryId(catId);
+
+                        if (budgetAmount - totalAmount < 0) {
+                            infoTipContainer.setVisibility(rView.VISIBLE);
+                            infoTipLocation.add(new InfoTipHelperClass("Budget Exceeded",
+                                    "Budget limit exceeded for  " + catName));
+                        } else if (budgetAmount - totalAmount == 0) {
+                            infoTipContainer.setVisibility(rView.VISIBLE);
+                            infoTipLocation.add(new InfoTipHelperClass("Budget Full",
+                                    "Budget limit is full for " + catName));
+                        } else if (budgetAmount - totalAmount <= 50) {
+                            infoTipContainer.setVisibility(rView.VISIBLE);
+                            infoTipLocation.add(new InfoTipHelperClass("Low Budget",
+                                    "Monitor your expenses for " + catName));
+                        }
+                    }
+                }
+            }
+        }
+
+        ArrayList<String> defaultCategoryList = new ArrayList<String>();
+        ArrayList<String> defaultCategoryListObtained = new ArrayList<String>();
+        defaultCategoryList.add("Health");
+        defaultCategoryList.add("Food");
+        defaultCategoryList.add("Transport");
+        defaultCategoryList.add("Shopping");
+        defaultCategoryList.add("Study");
+        defaultCategoryList.add("Rent");
+        defaultCategoryList.add("Income");
+
+        for (Category category : listCategory) {
+            String catName = category.getName();
+            defaultCategoryListObtained.add(catName);
+
+        }
+
+        if (defaultCategoryList.equals(defaultCategoryListObtained)) {
+            infoTipContainer.setVisibility(rView.VISIBLE);
+            infoTipLocation.add(new InfoTipHelperClass("Custom Category",
+                    "Try setting defaults in settings screen to ease transaction addition"));
+        }
+
+        String defaultCurrency = defaultsViewModel.getDefaultValue("Currency");
+        String defaultPaymentMode = defaultsViewModel.getDefaultValue("Payment Mode");
+        String defaultCategory = defaultsViewModel.getDefaultValue("Category");
+
+        if (defaultCurrency.equals("EUR") && defaultPaymentMode.equals("Cash") && defaultCategory.equals("Health")) {
+            infoTipContainer.setVisibility(rView.VISIBLE);
+            infoTipLocation.add(new InfoTipHelperClass("Set Defaults",
+                    "Try setting defaults in settings screen to ease transaction addition"));
+        } else if (defaultCurrency.equals("EUR")) {
+            infoTipContainer.setVisibility(rView.VISIBLE);
+            infoTipLocation.add(new InfoTipHelperClass("Set Default Currency",
+                    "Try setting defaults in settings screen to ease transaction addition"));
+        } else if (defaultPaymentMode.equals("Cash")) {
+            infoTipContainer.setVisibility(rView.VISIBLE);
+            infoTipLocation.add(new InfoTipHelperClass("Set Default Payment Mode",
+                    "Try setting defaults in settings screen to ease transaction addition"));
+        } else if (defaultCategory.equals("Health")) {
+            infoTipContainer.setVisibility(rView.VISIBLE);
+            infoTipLocation.add(new InfoTipHelperClass("Set Default Category",
+                    "Try setting defaults in settings screen to ease transaction addition"));
+        }
 
 
         infoAdapter = new InfoTipAdapter(infoTipLocation);
-
         infoTipRecycler.setAdapter(infoAdapter);
 
     }
