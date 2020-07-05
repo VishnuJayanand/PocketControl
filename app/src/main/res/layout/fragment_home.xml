@@ -274,5 +274,27 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/home_infoTips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="Information Tips"
+                android:textSize="20dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/infoTips_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="130dp" />
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
