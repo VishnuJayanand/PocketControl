@@ -325,7 +325,7 @@ public class HomeFragment extends Fragment {
         if (defaultCategoryList.equals(defaultCategoryListObtained)) {
             infoTipContainer.setVisibility(rView.VISIBLE);
             infoTipLocation.add(new InfoTipHelperClass("Custom Category",
-                    "Try setting defaults in settings screen to ease transaction addition"));
+                    "Create custom categories and add transactions to it"));
         }
 
         String defaultCurrency = defaultsViewModel.getDefaultValue("Currency");
