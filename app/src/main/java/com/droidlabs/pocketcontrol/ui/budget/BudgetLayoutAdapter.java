@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.droidlabs.pocketcontrol.R;
 import com.droidlabs.pocketcontrol.db.budget.Budget;
 import com.droidlabs.pocketcontrol.db.category.Category;
@@ -37,6 +38,7 @@ public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
     private List<Budget> arrayList;
     private int mViewResourceId;
     private View convertView;
+    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
 
     /**
      * Creating adapter for Budget.
@@ -108,9 +110,8 @@ public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
                 budgetvalue.setText(CurrencyUtils.formatAmount(budget.getMaxAmount(), stringCurrency));
             }
 
-            Button button = convertView.findViewById(R.id.delete_budget);
-            button.setOnClickListener(new View.OnClickListener() {
-
+            LinearLayout deleteTransactionButton = convertView.findViewById(R.id.delete_Budget);
+            deleteTransactionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
                     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
@@ -140,7 +141,6 @@ public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
                         }
                     });
                     builder.show();
-
                 }
             });
 
