@@ -184,7 +184,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/transactionDate"
-                    style="@style/font_family_normal_text"
+                    android:textStyle="normal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
@@ -202,12 +202,42 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiedt_transactionNote"
-                style="@style/font_family_normal_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Transaction Note">
 
             </com.google.android.material.textfield.TextInputEditText>
+
+            <LinearLayout
+                android:layout_height="40dp"
+                android:layout_width="160dp"
+                android:layout_marginTop="-20dp"
+                android:layout_marginStart="201dp">
+
+                <Button
+                    android:id="@+id/textStyle_normal"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:text="T"
+                    android:textStyle="normal"/>
+
+                <Button
+                    android:id="@+id/textStyle_bold"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:text="B"
+                    android:textStyle="bold"/>
+
+                <Button
+                    android:id="@+id/textStyle_italic"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="10dp"
+                    android:text="I"
+                    android:textStyle="italic"/>
+
+            </LinearLayout>
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -50,6 +50,9 @@ public class Transaction {
     @ColumnInfo(name = "amount")
     private Float amount;
 
+    @ColumnInfo(name = "style", defaultValue = "NORMAL")
+    private String textStyle;
+
     @ColumnInfo(name = "text_note", defaultValue = "")
     @Nullable
     private String textNote;
@@ -107,6 +110,7 @@ public class Transaction {
      * Transaction constructor with amount, type, category and date.
      * @param transactionAmount float transaction amount
      * @param transactionType int transaction type
+     * @param style String transaction style
      * @param transactionCategory String transaction String
      * @param transactionDate Date transaction date
      * @param transactionNote String transaction note
@@ -117,6 +121,7 @@ public class Transaction {
     public Transaction(
             final Float transactionAmount,
             final Integer transactionType,
+            final String style,
             final @Nullable String transactionCategory,
             final Long transactionDate,
             final @Nullable String transactionNote,
@@ -126,6 +131,7 @@ public class Transaction {
     ) {
         this.amount = transactionAmount;
         this.type = transactionType;
+        this.textStyle = style;
         this.category = transactionCategory;
         this.date = transactionDate;
         this.textNote = transactionNote;
@@ -176,6 +182,7 @@ public class Transaction {
      * Transaction constructor with note and recurring.
      * @param transAmount transaction amount.
      * @param note transaction note.
+     * @param style text style
      * @param recurring whether transaction is recurring.
      * @param recIntDays interval in days of recurring.
      * @param transType transaction type.
@@ -184,11 +191,13 @@ public class Transaction {
     public Transaction(
             final float transAmount,
             final @Nullable String note,
+            final @Nullable String style,
             final @Nullable Boolean recurring,
             final int transType,
             final @Nullable Integer recIntDays
     ) {
         this.textNote = note;
+        this.textStyle = style;
         this.amount = transAmount;
         this.isRecurring = recurring;
         this.recurringIntervalDays = recIntDays;
@@ -217,6 +226,14 @@ public class Transaction {
      */
     public String getTextNote() {
         return textNote;
+    }
+
+    /**
+     * Note getter.
+     * @return transaction text note.
+     */
+    public String getTextStyle() {
+        return textStyle;
     }
 
     /**
@@ -313,6 +330,14 @@ public class Transaction {
      */
     public void setTextNote(final @Nullable String note) {
         this.textNote = note;
+    }
+
+    /**
+     * Note setter.
+     * @param style transaction text note.
+     */
+    public void setTextStyle(final @Nullable String style) {
+        this.textStyle = style;
     }
 
     /**
@@ -456,6 +481,7 @@ public class Transaction {
                 + ", " + this.amount
                 + ", " + this.date
                 + ", " + this.textNote
+                + ", " + this.textStyle
                 + ", " + this.category
                 + ", " + this.method
                 + ", " + this.type

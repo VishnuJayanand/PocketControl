@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.os.Build;
@@ -98,6 +99,8 @@ public class AddTransactionFragment extends Fragment {
     private TextInputEditText defaultCurrency;
     private LinearLayout networkStatusWrapper;
     private CurrencyDao currencyDao;
+    private String textStyle = "NORMAL";
+    private Button normal, bold, italic;
 
     private Switch recurringSwitch;
     private Switch addFriendSwitch;
@@ -135,6 +138,33 @@ public class AddTransactionFragment extends Fragment {
         addFriendWrapper = view.findViewById(R.id.addFriendWrapper);
         methodForFriendWrapper = view.findViewById(R.id.MethodForFriendWrapper);
 
+        normal = view.findViewById(R.id.textStyle_normal);
+        bold = view.findViewById(R.id.textStyle_bold);
+        italic = view.findViewById(R.id.textStyle_italic);
+
+        normal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                textStyle = "NORMAL";
+                tiedtTransactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            }
+        });
+
+        bold.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                textStyle = "BOLD";
+                tiedtTransactionNote.setTypeface(Typeface.DEFAULT_BOLD);
+            }
+        });
+
+        italic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                textStyle = "ITALIC";
+                tiedtTransactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+            }
+        });
 
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
@@ -1021,6 +1051,7 @@ public class AddTransactionFragment extends Fragment {
         String friend = dropdownTransactionFriend.getText().toString();
         Transaction newTransaction = new Transaction((float) transactionAmount,
                 transactionType,
+                textStyle,
                 Integer.toString(categoryId),
                 DateUtils.getStartOfDayInMS(transactionDate),
                 transactionNote,

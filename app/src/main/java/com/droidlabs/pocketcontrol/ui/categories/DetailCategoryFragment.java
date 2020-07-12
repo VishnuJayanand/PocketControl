@@ -95,6 +95,7 @@ public class DetailCategoryFragment extends Fragment implements TransactionListA
         bundle.putLong("transactionDate", transaction.getDate());
         bundle.putFloat("transactionAmount", transaction.getAmount());
         bundle.putString("transactionNote", transaction.getTextNote());
+        bundle.putString("transactionStyle", transaction.getTextStyle());
         bundle.putInt("transactionType", transaction.getType());
         bundle.putString("transactionCategory", transaction.getCategory());
         //Move to transaction detail fragment
