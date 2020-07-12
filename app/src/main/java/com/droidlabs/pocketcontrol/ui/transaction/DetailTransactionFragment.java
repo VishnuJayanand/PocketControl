@@ -1,5 +1,6 @@
 package com.droidlabs.pocketcontrol.ui.transaction;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ public class DetailTransactionFragment extends Fragment {
         Long date = bundle.getLong("transactionDate");
         float amount = bundle.getFloat("transactionAmount");
         String note = bundle.getString("transactionNote");
+        String textStyle = bundle.getString("transactionStyle");
         int type = bundle.getInt("transactionType");
         String category = bundle.getString("transactionCategory");
         String friend = bundle.getString("transactionFriend");
@@ -116,6 +118,15 @@ public class DetailTransactionFragment extends Fragment {
         transactionAmount.setText(amountToString);
         transactionType.setText(typeAsString);
         transactionNote.setText(note);
+        if (textStyle != null) {
+            if (textStyle.equals("NORMAL")) {
+                transactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            } else if (textStyle.equals("BOLD")) {
+                transactionNote.setTypeface(Typeface.DEFAULT_BOLD);
+            } else {
+                transactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+            }
+        }
         transactionMethodForFriend.setText(methodForFriend);
 
         return view;

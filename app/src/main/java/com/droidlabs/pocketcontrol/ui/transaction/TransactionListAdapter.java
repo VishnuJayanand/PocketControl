@@ -307,6 +307,7 @@ public final class TransactionListAdapter extends RecyclerView.Adapter<Transacti
 
         if (oldTransaction.getTextNote() != null) {
             newTransaction.setTextNote(oldTransaction.getTextNote());
+            newTransaction.setTextStyle(oldTransaction.getTextStyle());
         }
 
         if (oldTransaction.getType() != null) {

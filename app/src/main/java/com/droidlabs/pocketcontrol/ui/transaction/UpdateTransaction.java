@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -86,6 +87,8 @@ public class UpdateTransaction extends Fragment {
     private View currentView;
     private Transaction updateTransaction;
     private TextInputEditText defaultCurrency;
+    private String textStyle = "NORMAL";
+    private Button normal, bold, italic;
 
     @Nullable
     @Override
@@ -121,6 +124,34 @@ public class UpdateTransaction extends Fragment {
         currency = view.findViewById(R.id.currencyTransactionLayout);
         currency.setVisibility(view.GONE);
 
+        normal = view.findViewById(R.id.textStyle_normal);
+        bold = view.findViewById(R.id.textStyle_bold);
+        italic = view.findViewById(R.id.textStyle_italic);
+
+        normal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                textStyle = "NORMAL";
+                tiedtTransactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            }
+        });
+
+        bold.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                textStyle = "BOLD";
+                tiedtTransactionNote.setTypeface(Typeface.DEFAULT_BOLD);
+            }
+        });
+
+        italic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                textStyle = "ITALIC";
+                tiedtTransactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+            }
+        });
+
         Button btnAdd = view.findViewById(R.id.addNewTransaction);
         btnAdd.setText("Update");
 
@@ -141,6 +172,16 @@ public class UpdateTransaction extends Fragment {
         }
 
         tiedtTransactionNote.setText(updateTransaction.getTextNote());
+        String tStyle = updateTransaction.getTextStyle();
+        if (tStyle != null) {
+            if (tStyle.equals("NORMAL")) {
+                tiedtTransactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            } else if (tStyle.equals("BOLD")) {
+                tiedtTransactionNote.setTypeface(Typeface.DEFAULT_BOLD);
+            } else {
+                tiedtTransactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+            }
+        }
 
         //set the spinner for transactionType from the xml.
         setTransactionTypeSpinner(view);
@@ -759,6 +800,7 @@ public class UpdateTransaction extends Fragment {
         String friend = dropdownTransactionFriend.getText().toString();
         Transaction newTransaction = new Transaction((float) transactionAmount,
                 transactionType,
+                textStyle,
                 Integer.toString(categoryId),
                 DateUtils.getStartOfDayInMS(transactionDate),
                 transactionNote,
