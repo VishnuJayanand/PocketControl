@@ -51,93 +51,38 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:layout_width="290dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:layout_marginTop="-20dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/addAmount25"
-                style="@style/basePrimaryRoundedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:autoSizeMaxTextSize="15sp"
-                android:backgroundTint="#7eacc4"
-                android:gravity="center"
-                android:paddingStart="25sp"
-                android:paddingTop="10sp"
-                android:paddingEnd="25sp"
-                android:paddingBottom="10sp"
-                android:text="25"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:textSize="12dp" />
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:text="25" />
 
             <Button
                 android:id="@+id/addAmount50"
-                style="@style/basePrimaryRoundedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:autoSizeMaxTextSize="15sp"
-                android:backgroundTint="#7eacc4"
-                android:gravity="center"
-                android:paddingStart="25sp"
-                android:paddingTop="10sp"
-                android:paddingEnd="25sp"
-                android:paddingBottom="10sp"
-                android:text="50"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:textSize="12dp" />
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:text="50" />
 
             <Button
                 android:id="@+id/addAmount75"
-                style="@style/basePrimaryRoundedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:autoSizeMaxTextSize="15sp"
-                android:backgroundTint="#7eacc4"
-                android:gravity="center"
-                android:paddingStart="25sp"
-                android:paddingTop="10sp"
-                android:paddingEnd="25sp"
-                android:paddingBottom="10sp"
-                android:text="75"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:textSize="12dp" />
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:text="75" />
 
             <Button
                 android:id="@+id/addAmount100"
-                style="@style/basePrimaryRoundedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="0dp"
-                android:layout_weight="1"
-                android:autoSizeMaxTextSize="15sp"
-                android:backgroundTint="#7eacc4"
-                android:gravity="center"
-                android:paddingStart="25sp"
-                android:paddingTop="10sp"
-                android:paddingEnd="25sp"
-                android:paddingBottom="10sp"
-                android:text="100"
-                android:textAllCaps="false"
-                android:textColor="#FFFFFF"
-                android:textSize="12dp" />
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:text="100" />
 
         </LinearLayout>
         <LinearLayout
@@ -212,7 +157,7 @@
                 android:layout_height="40dp"
                 android:layout_width="160dp"
                 android:layout_marginTop="-20dp"
-                android:layout_marginStart="201dp">
+                android:layout_gravity="end">
 
                 <Button
                     android:id="@+id/textStyle_normal"
