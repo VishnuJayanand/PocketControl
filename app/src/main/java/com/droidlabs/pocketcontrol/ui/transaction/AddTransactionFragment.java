@@ -265,7 +265,12 @@ public class AddTransactionFragment extends Fragment {
             public void onCheckedChanged(final CompoundButton buttonView, final boolean isChecked) {
                 if (isChecked) {
                     recurringTransactionWrapper.setVisibility(View.VISIBLE);
+                    dropdownRecurringTransaction = view.findViewById(R.id.spinnerRecurringInterval);
+                    if (dropdownRecurringTransaction.getText().toString().trim().equals("Custom")) {
+                        customDaysIntervalWrapper.setVisibility(View.VISIBLE);
+                    }
                 } else {
+                    customDaysIntervalWrapper.setVisibility(View.GONE);
                     recurringTransactionWrapper.setVisibility(View.GONE);
                 }
             }
