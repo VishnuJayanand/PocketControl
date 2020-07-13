@@ -121,8 +121,8 @@ public class HomeFragment extends Fragment {
         accountBalanceText = view.findViewById(R.id.accountBalanceText);
 
         topAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.top_animation);
-        textViewAmount.setAnimation(topAnimation);
-        textViewNetBalance.setAnimation(topAnimation);
+        // textViewAmount.setAnimation(topAnimation);
+        // textViewNetBalance.setAnimation(topAnimation);
 
         summaryContainer = view.findViewById(R.id.summaryContainer);
         infoTipContainer = view.findViewById(R.id.home_infoTips);
@@ -371,7 +371,7 @@ public class HomeFragment extends Fragment {
         accountExpenseText.setText(CurrencyUtils.formatAmount(accountExpense, stringCurrency));
         accountBalanceText.setText(CurrencyUtils.formatAmount(accountBalance, stringCurrency));
 
-        textViewAmount.setText(CurrencyUtils.formatAmount(totalBalance, stringCurrency));
+        textViewAmount.setText(CurrencyUtils.formatAmount(accountBalance, stringCurrency));
     }
 
     /**
