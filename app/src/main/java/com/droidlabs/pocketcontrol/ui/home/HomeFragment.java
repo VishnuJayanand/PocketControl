@@ -121,8 +121,8 @@ public class HomeFragment extends Fragment {
         accountBalanceText = view.findViewById(R.id.accountBalanceText);
 
         topAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.top_animation);
-        // textViewAmount.setAnimation(topAnimation);
-        // textViewNetBalance.setAnimation(topAnimation);
+        textViewAmount.setAnimation(topAnimation);
+        textViewNetBalance.setAnimation(topAnimation);
 
         summaryContainer = view.findViewById(R.id.summaryContainer);
         infoTipContainer = view.findViewById(R.id.home_infoTips);
@@ -389,8 +389,8 @@ public class HomeFragment extends Fragment {
                         userViewModel.updateUserSelectedAccount(String.valueOf(selectedAccount.getId()));
                         sharedPreferencesUtils.setCurrentAccountId(String.valueOf(selectedAccount.getId()));
 
-                        updateSelectedAccountInformation();
-                        calculateAccountBalances();
+                        /*updateSelectedAccountInformation();
+                        calculateAccountBalances();*/
 
                         Fragment fragment = new HomeFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
