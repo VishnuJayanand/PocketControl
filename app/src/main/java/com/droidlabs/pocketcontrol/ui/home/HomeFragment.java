@@ -539,11 +539,11 @@ public class HomeFragment extends Fragment {
             final List<TotalExpenditurePerCategory> expenditures
     ) {
         HashMap<Integer, TotalExpenditurePerCategory> finalHashMap = new HashMap<>();
-        int counter = 0;
+        int counter = expenditures.size();
 
         for (TotalExpenditurePerCategory expenditure : expenditures) {
             finalHashMap.put(counter, expenditure);
-            counter++;
+            counter--;
         }
 
         return finalHashMap;

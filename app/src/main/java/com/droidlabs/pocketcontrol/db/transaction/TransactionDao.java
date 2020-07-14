@@ -378,7 +378,7 @@ public interface TransactionDao {
     @Query("SELECT category as categoryId, SUM(amount) as categoryAmount "
             + "FROM transactions "
             + "WHERE owner_id=:ownerId AND account=:accountId AND type = 1 "
-            + "GROUP BY category ORDER BY categoryAmount ASC LIMIT 5")
+            + "GROUP BY category ORDER BY categoryAmount DESC LIMIT 5")
     List<TotalExpenditurePerCategory> getTotalExpenditurePerCategory(String ownerId, String accountId);
 
     /**
