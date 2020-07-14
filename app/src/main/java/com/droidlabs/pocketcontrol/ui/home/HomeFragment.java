@@ -32,6 +32,7 @@ import com.droidlabs.pocketcontrol.db.chartdata.TotalIncomePerDay;
 import com.droidlabs.pocketcontrol.db.transaction.Transaction;
 import com.droidlabs.pocketcontrol.ui.budget.BudgetViewModel;
 import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
+import com.droidlabs.pocketcontrol.ui.categories.DetailCategoryFragment;
 import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.ui.signin.UserViewModel;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
@@ -40,6 +41,7 @@ import com.droidlabs.pocketcontrol.utils.DateUtils;
 import com.droidlabs.pocketcontrol.utils.SharedPreferencesUtils;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -49,7 +51,12 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.apache.commons.lang3.StringUtils;
@@ -63,7 +70,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private Animation topAnimation;
-    private TextView textViewAmount, textViewNetBalance, selectedAccountTitle;
+    private TextView textViewAmount, textViewNetBalance, selectedAccountTitle, pirChartTitle;
     private TextView accountIncomeText, accountExpenseText, accountBalanceText;
     private CardView selectedAccountColor;
     private List<Account> accountList;
@@ -88,6 +95,8 @@ public class HomeFragment extends Fragment {
     private LinearLayout lineChartContainer;
     private LineChart lineChartIncomeExpenditure;
 
+    private PieChart pieChart;
+
     @Nullable
     @Override
     public final View onCreateView(
@@ -102,6 +111,8 @@ public class HomeFragment extends Fragment {
 
         lineChartContainer = view.findViewById(R.id.lineChartContainer);
         lineChartIncomeExpenditure = view.findViewById(R.id.lineChartIncomeExpenditure);
+
+        pieChart = view.findViewById(R.id.pieChart);
 
         LinearLayout accountsWrapper = view.findViewById(R.id.accountsWrapper);
         Button switchAccount = accountsWrapper.findViewById(R.id.switchAccountButton);
@@ -180,6 +191,9 @@ public class HomeFragment extends Fragment {
 
         initializeBarChartCategoryExpenditure();
         initializeLineChartExpenditureIncomes();
+
+        // Pie Chart
+        initializePieChart(view);
 
         return view;
     }
@@ -629,4 +643,128 @@ public class HomeFragment extends Fragment {
         lineChartIncomeExpenditure.getDescription().setEnabled(false);
         lineChartIncomeExpenditure.invalidate();
     }
-}
+
+    /**
+     * Initialize line chart.
+     * @param view view
+     */
+    private void initializePieChart(final View view) {
+
+        String[] xDataS = categoryViewModel.getCategoriesName();
+        int length = 0;
+        for (String nameCat : xDataS) {
+            Category catCategory = categoryViewModel.getSingleCategory(nameCat);
+            if (transactionViewModel.getTotalIAmountByCategoryId(catCategory.getId().toString()) > 0f) {
+                length++;
+            }
+        }
+
+        LinearLayout pieLayout = view.findViewById(R.id.pieChartContainer);
+        pirChartTitle = view.findViewById(R.id.pieChartTitle);
+        pirChartTitle.setText("This chart shows all categories in terms of cumulative expenditure in "
+                +
+                defaultsViewModel.getDefaultValue("Currency") + "  " + stringCurrency);
+
+        if (length == 0) {
+            pieLayout.setVisibility(view.GONE);
+        } else {
+            pieLayout.setVisibility(view.VISIBLE);
+        }
+        float[] yData = new float[length];
+        String[] xData = new String[length];
+        int i = 0;
+        for (String name : xDataS) {
+            Category cat = categoryViewModel.getSingleCategory(name);
+            if (transactionViewModel.getTotalIAmountByCategoryId(cat.getId().toString()) > 0f) {
+                yData[i] = transactionViewModel.getTotalIAmountByCategoryId(cat.getId().toString());
+                xData[i] = name;
+                i++;
+            }
+        }
+
+        pieChart.setRotationEnabled(true);
+        //pieChart.setUsePercentValues(true);
+        //pieChart.setHoleColor(Color.BLUE);
+        //pieChart.setCenterTextColor(Color.BLACK);
+        //pieChart.setHoleRadius(0f);
+        pieChart.setTransparentCircleAlpha(0);
+        //pieChart.setDrawEntryLabels(true);
+        //pieChart.setEntryLabelTextSize(20);
+        //More options just check out the documentation!
+
+        addDataSet(yData, xData);
+
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(final Entry e, final Highlight h) {
+
+                int index = (int) h.getX();
+                Category cat = categoryViewModel.getSingleCategory(xData[index]);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("categoryTitle", cat.getName());
+                bundle.putInt("categoryImage", cat.getIcon());
+                bundle.putInt("categoryId", cat.getId());
+                //Move to category detail fragment
+                Fragment fragment = new DetailCategoryFragment();
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+
+
+    }
+
+    /**
+     * Initialize pie chart.
+     * @param xData x values
+     * @param yData y values
+     */
+    private void addDataSet(final float[] yData, final String[] xData) {
+        ArrayList<PieEntry> yEntrys = new ArrayList<>();
+        ArrayList<String> xEntrys = new ArrayList<>();
+
+        for (int i = 0; i < yData.length; i++) {
+            yEntrys.add(new PieEntry(yData[i], xData[i]));
+        }
+
+        for (int i = 1; i < xData.length; i++) {
+            xEntrys.add(xData[i]);
+        }
+
+        //create the data set
+        PieDataSet pieDataSet = new PieDataSet(yEntrys, "Categories");
+        pieDataSet.setSliceSpace(2);
+        pieDataSet.setValueTextSize(12);
+
+        //add colors to dataset
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(getResources().getColor(R.color.colorPrimary));
+        colors.add(getResources().getColor(R.color.projectColorOrange));
+        colors.add(getResources().getColor(R.color.projectColorPurple));
+        colors.add(getResources().getColor(R.color.projectColorGreen));
+        colors.add(getResources().getColor(R.color.projectColorDarkBlue));
+        colors.add(getResources().getColor(R.color.projectColorDarkOrange));
+        colors.add(getResources().getColor(R.color.colorExpense));
+        colors.add(getResources().getColor(R.color.projectColorDarkGreen));
+        colors.add(getResources().getColor(R.color.projectColorDarkPurple));
+        colors.add(getResources().getColor(R.color.projectColorDefault));
+
+        pieDataSet.setColors(colors);
+
+        //create pie data object
+        PieData pieData = new PieData(pieDataSet);
+        pieChart.setData(pieData);
+        pieChart.invalidate();
+    }
+    }
+

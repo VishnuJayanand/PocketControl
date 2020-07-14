@@ -234,9 +234,10 @@
             <TextView
                 android:id="@+id/textView9"
                 style="@style/font_family_normal_text"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cumulative expenses per category"
+                android:text="Cumulative expenses per category \n"
+                android:layout_gravity="center"
                 android:textSize="20dp" />
 
             <TextView
@@ -250,6 +251,29 @@
                 android:id="@+id/barChartCategoryExpenditure"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pieChartContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pieChartTitle"
+                style="@style/font_family_normal_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This chart shows all categories in terms of cumulative expenditure."
+                />
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
 

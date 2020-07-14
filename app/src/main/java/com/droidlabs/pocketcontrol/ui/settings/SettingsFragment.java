@@ -190,6 +190,31 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        Button exitButton = v.findViewById(R.id.exit_button);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+                builder.setTitle("Exit Application?");
+                builder.setMessage("Are you sure you want to logout and exit from Pocket Control?");
+                builder.setBackground(getContext().getDrawable(
+                        (R.drawable.alert_dialogue_box)));
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        getActivity().finish();
+                        System.exit(0);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+            }
+        });
         return v;
     }
     /**
