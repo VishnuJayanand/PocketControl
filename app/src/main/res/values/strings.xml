@@ -69,9 +69,9 @@
     <string name="intro_app_second_sentence">Sign in and we will guide you through the application!</string>
 
 
-    <string name="first_slide_desc">Money control helps you to add your everday transactions. </string>
-    <string name="second_slide_desc">Create your own custom categories with unique icons to assign your transcations.</string>
-    <string name="third_slide_desc">Have separate accounts for monitoring your home, buisness and personal transactions.</string>
+    <string name="first_slide_desc">Pocket control helps you to add your everyday transactions. </string>
+    <string name="second_slide_desc">Create your own custom categories with unique icons to assign your transactions.</string>
+    <string name="third_slide_desc">Have separate accounts for monitoring your home, business and personal transactions.</string>
     <string name="fourth_slide_desc">Set a budget and monitor your overall transactions.  </string>
 
     <!--Buttons-->

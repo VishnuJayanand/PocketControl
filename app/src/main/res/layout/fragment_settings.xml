@@ -166,11 +166,11 @@
                 <Button
                     android:id="@+id/button"
                     style="@style/primaryRoundedButtonBlock"
-                    android:layout_width="110dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="0dp"
                     android:layout_weight="0"
-                    android:text="Export" />
+                    android:text=" Export " />
 
             </LinearLayout>
 
@@ -192,11 +192,11 @@
                 <Button
                     android:id="@+id/helpButton"
                     style="@style/primaryRoundedButtonBlock"
-                    android:layout_width="110dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="0dp"
                     android:layout_weight="0"
-                    android:text="Help" />
+                    android:text="   Help  " />
 
             </LinearLayout>
 
@@ -219,7 +219,7 @@
                 <Button
                     android:id="@+id/send_email_button"
                     style="@style/primaryRoundedButtonBlock"
-                    android:layout_width="110dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="0dp"
                     android:layout_weight="0"
@@ -246,11 +246,11 @@
                 <Button
                     android:id="@+id/exit_button"
                     style="@style/secondaryRoundedButton200dp"
-                    android:layout_width="110dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_margin="0dp"
                     android:layout_weight="0"
-                    android:text="Logout" />
+                    android:text="Logout " />
 
             </LinearLayout>
 
