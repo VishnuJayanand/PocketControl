@@ -721,6 +721,7 @@ public class HomeFragment extends Fragment {
         //pieChart.setHoleColor(Color.BLUE);
         //pieChart.setCenterTextColor(Color.BLACK);
         //pieChart.setHoleRadius(0f);
+        pieChart.setDescription(null);
         pieChart.setTransparentCircleAlpha(0);
         //pieChart.setDrawEntryLabels(true);
         //pieChart.setEntryLabelTextSize(20);
@@ -776,7 +777,7 @@ public class HomeFragment extends Fragment {
         }
 
         //create the data set
-        PieDataSet pieDataSet = new PieDataSet(yEntrys, "Categories");
+        PieDataSet pieDataSet = new PieDataSet(yEntrys, "");
         pieDataSet.setSliceSpace(2);
         pieDataSet.setValueTextSize(12);
 
