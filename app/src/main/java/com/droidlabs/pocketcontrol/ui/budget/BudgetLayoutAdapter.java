@@ -2,6 +2,7 @@ package com.droidlabs.pocketcontrol.ui.budget;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,6 +101,16 @@ public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
 
             TextView budgetname = (TextView) convertView.findViewById(R.id.budgetName);
             TextView budgetvalue = (TextView) convertView.findViewById(R.id.budgetValue);
+            TextView budgetPercent = convertView.findViewById(R.id.budget_percent);
+
+            float percent = (totalAmount / budgetAmount) * 100;
+
+            budgetPercent.setText(String.valueOf(percent) + "%");
+            if (percent >= 95) {
+                budgetPercent.setTextColor(Color.RED);
+            } else {
+                budgetPercent.setTextColor(Color.LTGRAY);
+            }
 
             if (budgetname != null) {
                 budgetname.setText(category.getName());
