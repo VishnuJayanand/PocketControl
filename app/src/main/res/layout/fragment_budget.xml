@@ -63,19 +63,7 @@
 
         <Button
             android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/pill_button"
-            style="@style/basePrimaryRoundedButton"
-            android:paddingStart="30sp"
-            android:paddingTop="10sp"
-            android:paddingEnd="30sp"
-            android:paddingBottom="10sp"
-            android:textSize="20sp"
-            android:textColor="#FFFFFF"
-            android:textAllCaps="false"
+            style="@style/primaryRoundedButton200dp"
             android:text="Add Budget" />
 
     </LinearLayout>

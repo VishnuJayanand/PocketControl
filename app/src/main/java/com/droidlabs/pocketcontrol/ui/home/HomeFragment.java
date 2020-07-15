@@ -528,6 +528,40 @@ public class HomeFragment extends Fragment {
         barChartCategoryExpenditure.getDescription().setEnabled(false);
         barChartCategoryExpenditure.setNoDataText("No data available! Add transactions to visualize the chart");
         barChartCategoryExpenditure.invalidate();
+
+        barChartCategoryExpenditure.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(final Entry e, final Highlight h) {
+
+                float index = h.getY();
+                String catId = "";
+                for (HashMap.Entry<Integer, TotalExpenditurePerCategory> entry : parsedCategories.entrySet()) {
+                    if (entry.getValue().getCategoryAmount() == index) {
+                        catId = entry.getValue().getCategoryId();
+                    }
+                }
+
+                Category cat = categoryViewModel.getSingleCategory(Integer.parseInt(catId));
+
+                Bundle bundle = new Bundle();
+                bundle.putString("categoryTitle", cat.getName());
+                bundle.putInt("categoryImage", cat.getIcon());
+                bundle.putInt("categoryId", cat.getId());
+                //Move to category detail fragment
+                Fragment fragment = new DetailCategoryFragment();
+                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
     }
 
     /**
@@ -687,6 +721,7 @@ public class HomeFragment extends Fragment {
         //pieChart.setHoleColor(Color.BLUE);
         //pieChart.setCenterTextColor(Color.BLACK);
         //pieChart.setHoleRadius(0f);
+        pieChart.setDescription(null);
         pieChart.setTransparentCircleAlpha(0);
         //pieChart.setDrawEntryLabels(true);
         //pieChart.setEntryLabelTextSize(20);
@@ -742,7 +777,7 @@ public class HomeFragment extends Fragment {
         }
 
         //create the data set
-        PieDataSet pieDataSet = new PieDataSet(yEntrys, "Categories");
+        PieDataSet pieDataSet = new PieDataSet(yEntrys, "");
         pieDataSet.setSliceSpace(2);
         pieDataSet.setValueTextSize(12);
 
