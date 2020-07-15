@@ -25,6 +25,7 @@ import com.droidlabs.pocketcontrol.ui.categories.CategoryViewModel;
 import com.droidlabs.pocketcontrol.ui.settings.DefaultsViewModel;
 import com.droidlabs.pocketcontrol.ui.transaction.TransactionViewModel;
 import com.droidlabs.pocketcontrol.utils.CurrencyUtils;
+import com.droidlabs.pocketcontrol.utils.FormatterUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
@@ -105,7 +106,7 @@ public class BudgetLayoutAdapter extends ArrayAdapter<Budget> {
 
             float percent = (totalAmount / budgetAmount) * 100;
 
-            budgetPercent.setText(String.valueOf(percent) + "%");
+            budgetPercent.setText(String.valueOf(FormatterUtils.roundToOneDecimals(percent)) + "%");
             if (percent >= 95) {
                 budgetPercent.setTextColor(Color.RED);
             } else {
