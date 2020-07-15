@@ -77,6 +77,7 @@ public class AddTransactionFragment extends Fragment {
     private TextInputEditText customRecurringDaysInterval;
     private TextView textCategory;
     private TextInputLayout tilTransactionAmount, tilTransactionNote, tilCustomRecurringDaysInterval, tilCategory;
+    private TextInputLayout tilTransactionMethodForFriend;
     private boolean isTransactionRecurring;
     private int transactionType;
     private int transactionMethod;
@@ -136,6 +137,7 @@ public class AddTransactionFragment extends Fragment {
         tiedtTransactionAmount = view.findViewById(R.id.tiedt_transactionAmount);
         tiedtTransactionNote = view.findViewById(R.id.tiedt_transactionNote);
         tilTransactionAmount = view.findViewById(R.id.til_transactionAmount);
+        tilTransactionMethodForFriend = view.findViewById(R.id.til_methodForFriend);
         tilTransactionNote = view.findViewById(R.id.til_transactionNote);
         tilCategory = view.findViewById(R.id.tilCategory);
         textCategory = view.findViewById(R.id.categoryText);
@@ -1062,6 +1064,12 @@ public class AddTransactionFragment extends Fragment {
         String transactionNote  = tiedtTransactionNote.getText().toString().trim() + "";
         String transactionMethodForFriend = dropdownTransactionMethodForFriend.getText().toString();
         String friend = dropdownTransactionFriend.getText().toString();
+        if (!friend.isEmpty()) {
+            if (transactionMethodForFriend.isEmpty())  {
+                tilTransactionMethodForFriend.setError("Please select if it is borrowed or lent");
+                return;
+            }
+        }
         Transaction newTransaction = new Transaction((float) transactionAmount,
                 transactionType,
                 textStyle,
