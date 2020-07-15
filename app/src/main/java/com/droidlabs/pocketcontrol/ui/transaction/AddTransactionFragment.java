@@ -100,7 +100,7 @@ public class AddTransactionFragment extends Fragment {
     private LinearLayout networkStatusWrapper;
     private CurrencyDao currencyDao;
     private String textStyle = "NORMAL";
-    private Button normal, bold, italic;
+    private Button normal, bold, italic, btnAdd, btnAdd25, btnAdd50, btnAdd75, btnAdd100;
 
     private Switch recurringSwitch;
     private Switch addFriendSwitch;
@@ -121,6 +121,16 @@ public class AddTransactionFragment extends Fragment {
             final LayoutInflater inf, final @Nullable ViewGroup container, final @Nullable Bundle savedInstanceState) {
         View view = inf.inflate(R.layout.transaction_add, container, false);
 
+        return view;
+    }
+
+    /**
+     * Initializes view elements.
+     * @param view view
+     * @param savedInstanceState instance state
+     */
+    @Override
+    public void onViewCreated(final @NonNull View view, final @Nullable Bundle savedInstanceState) {
         paymentModeDao = PocketControlDB.getDatabase(getContext()).paymentModeDao();
 
         tiedtTransactionAmount = view.findViewById(R.id.tiedt_transactionAmount);
@@ -142,39 +152,16 @@ public class AddTransactionFragment extends Fragment {
         bold = view.findViewById(R.id.textStyle_bold);
         italic = view.findViewById(R.id.textStyle_italic);
 
-        normal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                textStyle = "NORMAL";
-                tiedtTransactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-            }
-        });
-
-        bold.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                textStyle = "BOLD";
-                tiedtTransactionNote.setTypeface(Typeface.DEFAULT_BOLD);
-            }
-        });
-
-        italic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                textStyle = "ITALIC";
-                tiedtTransactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
-            }
-        });
-
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
         defaultsViewModel = new ViewModelProvider(this).get(DefaultsViewModel.class);
+        currencyDao = PocketControlDB.getDatabase(getContext()).currencyDao();
 
-        Button btnAdd = view.findViewById(R.id.addNewTransaction);
-        Button btnAdd25 = view.findViewById(R.id.addAmount25);
-        Button btnAdd50 = view.findViewById(R.id.addAmount50);
-        Button btnAdd75 = view.findViewById(R.id.addAmount75);
-        Button btnAdd100 = view.findViewById(R.id.addAmount100);
+        btnAdd = view.findViewById(R.id.addNewTransaction);
+        btnAdd25 = view.findViewById(R.id.addAmount25);
+        btnAdd50 = view.findViewById(R.id.addAmount50);
+        btnAdd75 = view.findViewById(R.id.addAmount75);
+        btnAdd100 = view.findViewById(R.id.addAmount100);
 
         //net connection
         requestQueue = Volley.newRequestQueue(getContext());
@@ -231,9 +218,32 @@ public class AddTransactionFragment extends Fragment {
             networkStatusWrapper.setVisibility(View.VISIBLE);
         }
 
-        currencyDao = PocketControlDB.getDatabase(getContext()).currencyDao();
+        normal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                textStyle = "NORMAL";
+                tiedtTransactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            }
+        });
+
+        bold.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                textStyle = "BOLD";
+                tiedtTransactionNote.setTypeface(Typeface.DEFAULT_BOLD);
+            }
+        });
+
+        italic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                textStyle = "ITALIC";
+                tiedtTransactionNote.setTypeface(Typeface.defaultFromStyle(Typeface.ITALIC));
+            }
+        });
 
         setDefaultCurrencySpinner();
+
 
         //Check for android version and request a permission from the user
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -394,8 +404,6 @@ public class AddTransactionFragment extends Fragment {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-
-        return view;
     }
 
     /**
